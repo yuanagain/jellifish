@@ -1,0 +1,33 @@
+The design document is for describing the implementation of the core ordering
+and optimization algorithm
+
+Primary Goals:
+Tractability
+Topologically sorted tasks
+Optimal ordering of tasks w.r.t. final completion time
+
+Secondary Goals:
+Dynamic 
+
+
+Some general thoughts:
+Set dependencies to NULL whenever possible (important for live systems)
+
+
+Some inspirations:
+Precedence scheduling (topological sort)
+Notes: N^2 complexity
+Requires that there be a single initial node (i.e join all ingredients)
+
+Strengths: tractable, simple to implement
+Weaknesses: 
+
+A* search
+Notes:
+Requires different ordering
+
+May allow for easier transition into a live feed system 
+
+Strengths: Easy modification via heuristic and objective function
+Weaknesses: Extensive modification require, heuristic and objective functions
+tricky to develop.
