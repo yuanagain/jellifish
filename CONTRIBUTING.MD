@@ -8,6 +8,7 @@ In addition, it should help to structure our code and provide a universal format
 ## Contents
 
 1. [Repository Guidelines](#repository-guidelines)
+2. [Environment Setup](#environment-setup)
 
 ### Repository Guidelines
 
@@ -20,6 +21,8 @@ Finally, try to commit small changes frequently. For example, do not have "batch
 
 #### Git Workflow
 In essence, our workflow will model the [Git Branching Workflow](https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows); we have separate branches for production (`master`), development (`dev`), and features/bug fixing. Merging is strategically timed such that only working and tested code is merged into `master`, and finished features are merged into `dev`.
+
+In general, do not force push (`git push -f` or `git push --force`) to any branch. This can overwrite changes and cause tons of headaches later on.
 
 This ensures that the `master` branch is always stable and ready for production, and should only be merged into by the project leader(s). This branch should **not** be modified directly at any time; only merges will change it. In addition, **never** force push to this branch.
 
@@ -49,3 +52,18 @@ All changes:
     - Update task dependencies in realtime
 ```
 
+### Environment Setup
+
+An important aspect of working on a production-ready application is to maintain a standard development environment. To facilitate this, we will be using a tool called `virtualenv` in Python. Essentially, it isolates your project folder and Python installation from any other project, thus ensuring that you do not have dependency clashes. In addition, it will guarantee that we use the same Python version, which is important.
+
+Once you have `pip` (check out the [installation guide here](http://pip.readthedocs.org/en/stable/installing/)) installed, follow this guide with the current directory set to the **project folder**:
+
+1. Install `virtualenv` using pip: `pip install virtualenv`
+3. Create the virtual environment: `virtualenv venv`
+4. Activate the virtual environment: `source venv/bin/activate`
+
+Whenever you install a new library via pip, such as by running `pip install flask`, make sure to export all of your dependencies. This is easily done by running `pip freeze > requirements.txt`. To install dependencies from a requirements file, run `pip install -r requirements.txt`.
+
+If you ever need to deactivate your virtual environment, you can either exit the shell or run  the `deactivate` command.
+
+*Note: the guide above assumes you are using a Unix or Unix-based environment, whether that's OS X or a Linux distribution.*
