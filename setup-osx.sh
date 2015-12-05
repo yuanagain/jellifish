@@ -19,3 +19,9 @@ echo 'eval "$(pyenv init -)"' >> $SHELL_PATH
 # Install Python 3.5
 pyenv install 3.5.0
 pyenv rehash
+
+pyenv local 3.5.0
+
+# Setup the virtual environment
+sudo pip install virtualenv
+virtualenv --python=python env
