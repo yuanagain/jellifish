@@ -1,19 +1,18 @@
 # Rushy Panchal
-# Jelli.fish environment setup (for OS X)
+# Jelli.fish environment setup (for Debian-based systems)
 # To run, execute the following in your terminal:
-# ./setup-osx.sh {SHELL PROFILE LOCATION}
-# For Bash, your shell profile is located at ~/.bash_profile
-
-# NOTE: this setup script assumes you have Home brew installed
-# If you do not, install it with the instructions found on brew.sh
+# ./setup-debian.sh {SHELL PROFILE LOCATION}
+# For Bash, this is ~/.bashrc
 
 # Configuration here
 SHELL_PATH=$1
 if [ $# -eq 0 ]; then
-	SHELL_PATH="~/.bash_profile"
+	SHELL_PATH="~/.bashrc"
 
 # Install pyenv to manage Python versions
-brew install pyenv
+sudo apt-get install git python-pip make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
+
+git clone https://github.com/yyuu/pyenv.git ~/.pyenv
 
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> $SHELL_PATH
 echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> $SHELL_PATH
