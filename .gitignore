@@ -1,6 +1,16 @@
 
 # Created by https://www.gitignore.io/api/python,osx,windows,sublimetext,sass,pycharm
 
+### Custom ###
+# Images
+*.png
+*.jpg
+*.svg
+
+# Compiled SASS/extra files
+*.map
+*.css
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

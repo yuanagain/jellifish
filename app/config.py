@@ -4,11 +4,14 @@
 
 import os
 
-NAME = "jellifish"
-
 ENVIRONMENT = os.environ.get("PYTHONENV", "dev")
 
 DEV_MODE = (ENVIRONMENT == "dev")
+
+NAME = "jellifish"
+PROTOCOL = "http://"
+BASE_URL = "localhost:8080" if DEV_MODE else "app.jelli.fish"
+FULL_URL = PROTOCOL + BASE_URL
 
 class FlaskSettings(object):
 	'''Settings for Flask server'''
@@ -17,11 +20,12 @@ class FlaskSettings(object):
 	SECRET_KEY = "NtaTRKcZKw256RNMwp25Xqvw"
 	SESSION_COOKIE_NAME = NAME
 
-	SERVER_NAME = "localhost:8080" if DEV_MODE else "app.jelli.fish"
-	PREFERRED_URL_SCHEME = "http://"
+	SERVER_NAME = BASE_URL
+	PREFERRED_URL_SCHEME = PROTOCOL
 
 RECIPES = ["Blondies", "Canapes", "Turkish Coffee"]
 
 VIEW_GLOBALS = {
-	"name": "Jellifish"
+	"name": "Jellifish",
+	"static": "/".join([FULL_URL, "static"])
 	}

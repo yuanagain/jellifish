@@ -24,10 +24,10 @@ class Application(object):
 
 	def setup(self):
 		'''Set up the application'''
-		options = {"template_folder": os.path.join("web", "views")}
+		options = {"template_folder": "views"}
 
 		if config.DEV_MODE:
-			options["static_folder"] = os.path.join("web", "static")
+			options["static_folder"] = os.path.join("..", "static")
 			options["static_url_path"] = "/static"
 
 		self.server = server.Server("config.FlaskSettings", **options)
