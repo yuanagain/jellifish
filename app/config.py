@@ -1,5 +1,5 @@
 # Rushy Panchal
-# Jelli.fish
+# jellifish
 # app/config.py
 
 import os
