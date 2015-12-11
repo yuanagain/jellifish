@@ -11,10 +11,10 @@ sys.path.append("app")
 import config
 
 @task(name = "build")
-def build():
+def build(all = True):
 	'''Run all build tasks'''
 	build_react()
-	build_sass()
+	build_sass(all)
 
 @task(name = "build-react")
 def build_react():
@@ -24,22 +24,30 @@ def build_react():
 
 	combined_file = open(os.path.join(static_path, "js", "react-components.jsx"), "w")
 
+	other_paths = []
 	for path in os.listdir(react_path):
+		if path.startswith("_"):
+			other_paths.append(path)
+			continue
+		with open(os.path.join(react_path, path)) as open_file:
+			combined_file.write(open_file.read() + "\n")
+	for path in other_paths:
 		with open(os.path.join(react_path, path)) as open_file:
 			combined_file.write(open_file.read() + "\n")
 
 	combined_file.close()
 
 @task(name = "build-sass")
-def build_sass():
+def build_sass(bootstrap = False):
 	'''Compile SASS files'''
 	static_path = os.path.join(os.getcwd(), "static")
 	sass_path = lambda *paths: os.path.join(static_path, "sass", *paths)
 	css_path = lambda *paths: os.path.join(static_path, "css", *paths)
 
-	run("scss --style compressed {sass_path} {css_path}".format(
-		sass_path = sass_path("bootstrap.scss"),
-		css_path = css_path("bootstrap.css")))
+	if bootstrap:
+		run("scss --style compressed {sass_path} {css_path}".format(
+			sass_path = sass_path("bootstrap.scss"),
+			css_path = css_path("bootstrap.css")))
 	run("scss --style compressed {sass_path} {css_path}".format(
 		sass_path = sass_path("custom-styles.scss"),
 		css_path = css_path("custom-styles.css")))
