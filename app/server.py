@@ -2,7 +2,7 @@
 # jellifish
 # app/server.py
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 import config
 
@@ -19,4 +19,10 @@ class Server(Flask):
 		@self.route("/")
 		def recipe_selection():
 			'''GET index'''
-			return render_template("index.html")
+			return render_template("index.html", recipes = ["test", "derp"])
+
+		@self.route("/ingredients", methods = ["POST"])
+		def get_ingredients():
+			'''GET ingredients'''
+			print(request.form)
+			return redirect(url_for(".recipe_selection"))

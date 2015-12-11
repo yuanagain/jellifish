@@ -6,6 +6,6 @@ function staticPath(path) {
 	return STATIC_PATH + "/" + path;
 	}
 
-function e(selector) {
+function getElem(selector) {
 	return jQuery(selector).get(0);
 	}

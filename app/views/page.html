@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 	{% include "partials/head.html" %}
+	{% block prebody %}{% endblock %}
 	<body>
 		{% include "partials/header.html" %}
 		{% block content %}{% endblock %}
 	</body>
+	{% block postbody %}{% endblock %}
 	{% include "partials/footer.html" %}
 </html>

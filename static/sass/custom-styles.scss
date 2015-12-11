@@ -1,3 +1,37 @@
+// Rushy Panchal
+// Custom Styles
+@import "variables";
+@import "mixins";
+
+$background-color: #2C3E50;
+$background-color-header: rgba(132,132,132,0.5);
+$padding-general: 1em;
+
+body {
+	padding: $padding-general;
+	}
+
+.center-horizontal {
+	@include center-block;
+	text-align: center;
+	}
+
 .logo {
 	max-height: 5em;
+	}
+
+.content {
+	@include center-block;
+	margin-top: $padding-general;
+	padding-top: $padding-general;
+	padding-bottom: $padding-general;
+	background-color: $background-color;
+	border-radius: $padding-general;
+	max-width: 70vw;
+	@include media-breakpoint-down(md) {
+		max-width: 100vw;
+		}
+	}
+
+input[type=checkbox], input[type=radio] {
 	}
