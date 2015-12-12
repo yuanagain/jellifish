@@ -1,4 +1,4 @@
-
+from databasecaller import DatabaseCaller
 #boolean defining type of ingredient
 basic = True;
 compound = False;
@@ -56,6 +56,8 @@ class Operator:
 
 #Testing
 def main():
+	db_caller = DatabaseCaller()
+
 	print('\n')
 	print('Welcome to the Recipe Database Generator')
 	print('\n')
@@ -78,6 +80,9 @@ def main():
 
 	#TODO make method or something to print list of available
 	#operators
+	list_of_operators = db_caller.get_operators()
+	for i in list_of_operators:
+		print(i)
 
 	end_loop = False
 	while (end_loop == False):
@@ -91,7 +96,12 @@ def main():
 			end_loop = True
 
 		#TODO check thru list of available operators
-		elif (operator_name != 'put' and operator_name != 'chop'):
+		operator_valid = False
+		for k in list_of_operators:
+			if (operator_name == k):
+				operator_valid = True
+				break
+		if (operator_valid == False):
 			print('Please Enter a Valid Operator!')
 		else:#(operator_name != 'stop'):
 			#TODO Implement range of operands for each operator
@@ -114,7 +124,7 @@ def main():
 						#Print list of available operands (existing ingredients)
 						print ('Please Enter a Valid Operand!')
 			ing_name = input('Describe what just happened : ')
-			ing = Ingredient(ing_name, operator_name, operand_list)
+			ing = Ingredient(ing_name, operator, operand_list)
 			ing_list.append(ing)
 
 	print('\n')
@@ -123,6 +133,7 @@ def main():
 
 	for i in ing_list:
 		print (i.name)
+	db_caller.add_ingredients(ing_list)
 		#print (i.operator.name)
 		#for j in i.operands:
 		#	print (j.name)
