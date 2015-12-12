@@ -18,6 +18,9 @@ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> $SHELL_PATH
 echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> $SHELL_PATH
 echo 'eval "$(pyenv init -)"' >> $SHELL_PATH
 
+# Restart shell so pyenv installation takes place
+exec $SHELL
+
 # Install Python 3.5
 pyenv install 3.5.0
 pyenv rehash
