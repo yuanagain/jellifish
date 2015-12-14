@@ -23,6 +23,9 @@ class FlaskSettings(object):
 	SERVER_NAME = BASE_URL
 	PREFERRED_URL_SCHEME = PROTOCOL
 
+if DEV_MODE:
+	FlaskSettings.SEND_FILE_MAX_AGE_DEFAULT = 0
+
 RECIPES = ["Blondies", "Canapes", "Turkish Coffee"]
 
 VIEW_GLOBALS = {

@@ -24,5 +24,15 @@ class Server(Flask):
 		@self.route("/ingredients", methods = ["POST"])
 		def get_ingredients():
 			'''GET ingredients'''
-			print(request.form)
-			return redirect(url_for(".recipe_selection"))
+			selected_recipes = request.form.getlist("recipe")
+			# TODO fetch ingredients from backend
+			ingredients = ["Pasta", "Water", "Potatoes", "Tomatoes"]
+			return render_template("ingredients.html", ingredients = ingredients, selected_recipes = selected_recipes)
+
+		@self.route("/timers", methods = ["POST"])
+		def get_timers():
+			'''GET timers'''
+			selected_recipes = request.form.getlist("recipe")
+			# TODO fetch data from backend cache
+			data = {}
+			return render_template("timers.html", data = data)

@@ -7,6 +7,9 @@
 *.jpg
 *.svg
 
+# Compiled JSX
+static/js/react-components.jsx
+
 # Compiled SASS/extra files
 *.map
 *.css

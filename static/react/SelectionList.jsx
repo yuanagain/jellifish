@@ -3,8 +3,8 @@ A SelectionList essentially holds a list of selections, with a given type
 (radio or checkbox).
 */
 
-const SelectionList = React.createClass({
-	render: function() {
+class SelectionList extends React.Component {
+	render() {
 		var props = this.props;
 		return (
 			<ul>
@@ -20,4 +20,4 @@ const SelectionList = React.createClass({
 			</ul>
 			);
 		}
-	});
+	}
