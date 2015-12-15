@@ -1,0 +1,9 @@
+{% extends "page.html" %}
+{% block content %}
+	<div id = "timers"></div>
+{% endblock %}
+{% block postbody %}
+	<script type="text/babel">
+		timersPage({{ data|safe }});
+	</script>
+{% endblock %}

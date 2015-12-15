@@ -29,7 +29,7 @@ function timersPage(data) {
 		);
 	}
 
-exportFunctions([selectionPage, ingredientsPage]);
+exportFunctions([selectionPage, ingredientsPage, timersPage]);
 
 const Grid = ReactBootstrap.Grid;
 const Col = ReactBootstrap.Col;
