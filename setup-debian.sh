@@ -8,6 +8,7 @@
 SHELL_PATH=$1
 if [ $# -eq 0 ]; then
 	SHELL_PATH="~/.bashrc"
+fi
 
 # Install pyenv to manage Python versions
 sudo apt-get install git python-pip make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev

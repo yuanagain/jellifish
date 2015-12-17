@@ -11,6 +11,7 @@
 SHELL_PATH=$1
 if [ $# -eq 0 ]; then
 	SHELL_PATH="~/.bash_profile"
+fi
 
 # Install pyenv to manage Python versions
 brew install pyenv
