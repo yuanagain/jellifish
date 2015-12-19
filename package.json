@@ -1,0 +1,33 @@
+{
+  "name": "jellifish",
+  "version": "0.1.0",
+  "description": "A GPS for the kitchen",
+  "main": "index.js",
+  "dependencies": {
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "jquery": "^2.1.4",
+    "react": "^0.14.3",
+    "react-bootstrap": "^0.28.1",
+    "react-dom": "^0.14.3",
+    "react-progressbar": "^1.1.0",
+    "react-progressbar.js": "^0.1.2",
+    "reactify": "^1.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "npm install -g browserify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuanagain/jellifish.git"
+  },
+  "author": "Rushy Panchal, Yuan Wang, Hector Solis, Aana Bansal, Ilya Krasnovsky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuanagain/jellifish/issues"
+  },
+  "homepage": "https://github.com/yuanagain/jellifish#readme",
+  "private": true
+}

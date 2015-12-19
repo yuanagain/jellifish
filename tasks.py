@@ -10,6 +10,8 @@ import os
 sys.path.append("app")
 import config
 
+STATIC_PATH = os.path.join(os.getcwd(), "static")
+
 @task(name = "build")
 def build(all = True):
 	'''Run all build tasks'''
@@ -19,23 +21,13 @@ def build(all = True):
 @task(name = "build-react")
 def build_react():
 	'''Build ReactJS files into a single file'''
-	static_path = os.path.join(os.getcwd(), "static")
-	react_path = os.path.join(static_path, "react")
+	input_path = os.path.join(STATIC_PATH, "js", "main.js")
+	output_path = os.path.join(STATIC_PATH, "js", "bundle.js")
 
-	combined_file = open(os.path.join(static_path, "js", "react-components.jsx"), "w")
-
-	other_paths = []
-	for path in os.listdir(react_path):
-		if path.startswith("_"):
-			other_paths.append(path)
-			continue
-		with open(os.path.join(react_path, path)) as open_file:
-			combined_file.write(open_file.read() + "\n")
-	for path in other_paths:
-		with open(os.path.join(react_path, path)) as open_file:
-			combined_file.write(open_file.read() + "\n")
-
-	combined_file.close()
+	run("browserify {in_path} -t [ reactify --everything --es6 ] -o {out_path}".format(
+		in_path = input_path,
+		out_path = output_path
+		))
 
 @task(name = "build-sass")
 def build_sass(bootstrap = False):

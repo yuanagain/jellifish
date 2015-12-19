@@ -7,6 +7,9 @@ Required Props:
 	logoSrc: String // URL location of the logo image
 */
 
+var React = require("react"),
+	ReactBootstrap = require("react-bootstrap");
+
 class GlobalHeader extends React.Component {
 	render() {
 		return (
@@ -16,3 +19,5 @@ class GlobalHeader extends React.Component {
 			);
 		}
 	}
+
+module.exports = GlobalHeader;

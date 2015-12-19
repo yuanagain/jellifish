@@ -13,6 +13,12 @@ Optional Props:
 	type: String // button type to use
 */
 
+var React = require("react"),
+	ReactBootstrap = require("react-bootstrap"),
+	Row = ReactBootstrap.Row,
+	Col = ReactBootstrap.Col,
+	Grid = ReactBootstrap.Grid;
+
 class SectionHeaderButton extends React.Component {
 	render() {
 		return (
@@ -27,3 +33,5 @@ class SectionHeaderButton extends React.Component {
 			);
 		}
 	}
+
+module.exports = SectionHeaderButton;

@@ -6,6 +6,16 @@ Required Props:
 	ingredients: [String, ...] // list of ingredients
 */
 
+var React = require("react"),
+	ReactBootstrap = require("react-bootstrap"),
+	Row = ReactBootstrap.Row,
+	Col = ReactBootstrap.Col,
+	Grid = ReactBootstrap.Grid;
+
+// React components
+var Content = require("./Content.jsx"),
+	SectionHeaderButton = require("./SectionHeaderButton.jsx");
+
 class IngredientsPage extends React.Component {
 	render() {
 		function renderIngredient(ingredient, index) {
@@ -19,3 +29,5 @@ class IngredientsPage extends React.Component {
 			);
 		}
 	}
+
+module.exports = IngredientsPage;

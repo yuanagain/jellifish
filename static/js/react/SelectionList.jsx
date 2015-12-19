@@ -9,6 +9,9 @@ Required Props:
 	selections: [String, ...] // list of selection options
 */
 
+var React = require("react"),
+	ReactBootstrap = require("react-bootstrap");
+
 class SelectionList extends React.Component {
 	render() {
 		var props = this.props;
@@ -27,3 +30,5 @@ class SelectionList extends React.Component {
 			);
 		}
 	}
+
+module.exports = SelectionList;

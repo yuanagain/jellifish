@@ -6,6 +6,17 @@ Required Props:
 	selections: [String, ...] // list of recipe selections
 */
 
+var React = require("react"),
+	ReactBootstrap = require("react-bootstrap"),
+	Row = ReactBootstrap.Row,
+	Col = ReactBootstrap.Col,
+	Grid = ReactBootstrap.Grid;
+
+// React components
+var Content = require("./Content.jsx"),
+	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
+	SelectionList = require("./SelectionList.jsx");
+
 class SelectionPage extends React.Component {
 	render() {
 		return (
@@ -19,3 +30,5 @@ class SelectionPage extends React.Component {
 			);
 		}
 	}
+
+module.exports = SelectionPage;
