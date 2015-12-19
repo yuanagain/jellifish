@@ -1,6 +1,6 @@
 """
-A battery of tests to test and demonstrate TaskNode usage
-Author: Yuan Wang
+A battery of tests to test and demonstrate OpNode usage
+Author: Aana Bansal
 Copyright Jellifish 2015
 """
 
