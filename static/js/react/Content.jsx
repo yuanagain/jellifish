@@ -11,6 +11,7 @@ var React = require("react");
 
 class Content extends React.Component {
 	render() {
+		// Render the component
 		return (
 			<div className = "content">{this.props.children}</div>
 			);

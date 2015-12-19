@@ -21,6 +21,7 @@ var React = require("react"),
 
 class SectionHeaderButton extends React.Component {
 	render() {
+		// Render the component
 		return (
 			<Row className = "section-header">
 				<Col md={6} className="center-horizontal"><h3>{this.props.header}</h3></Col>

@@ -14,10 +14,18 @@ var React = require("react"),
 
 class SelectionList extends React.Component {
 	render() {
-		var props = this.props;
+		// Render the component
+		var props = this.props; // allow for future references
 		return (
 			<ul>
 				{this.props.selections.map(function(item) {
+					/* render each selection
+
+					Arguments:
+						item (String) - item value to display (also set as input value)
+
+					Returns rendered component
+					*/
 					var input_id = props.name + Math.ceil(Math.random() * 100000);
 					return (
 						<div>

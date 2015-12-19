@@ -19,6 +19,7 @@ var Content = require("./Content.jsx"),
 
 class SelectionPage extends React.Component {
 	render() {
+		// Render the component
 		return (
 			<Content><Grid fluid>
 				<SectionHeaderButton header="Recipe Selection" button="Generate Meal" type="submit" />

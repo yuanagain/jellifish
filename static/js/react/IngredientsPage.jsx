@@ -18,9 +18,19 @@ var Content = require("./Content.jsx"),
 
 class IngredientsPage extends React.Component {
 	render() {
+		// Render the component
 		function renderIngredient(ingredient, index) {
+			/* Internal - render a specific ingredient
+
+			Arguments:
+				ingredient (String) - ingredient name to display
+				index (int) - index of the current ingredient
+
+			Returns rendered component
+			*/
 			return <Row><Col md={12}>{index + 1}. {ingredient}</Col></Row>;
 			}
+
 		return (
 			<Content><Grid fluid>
 				<SectionHeaderButton header="Ingredients" button="Continue" type="submit" />

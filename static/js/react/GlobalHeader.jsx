@@ -12,6 +12,7 @@ var React = require("react"),
 
 class GlobalHeader extends React.Component {
 	render() {
+		// Render the component
 		return (
 			<header className = "header">
 				<a href = "/"><ReactBootstrap.Image src={this.props.logoSrc} responsive rounded className = "logo" /></a>
