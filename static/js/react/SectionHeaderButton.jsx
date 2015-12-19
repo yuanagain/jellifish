@@ -2,15 +2,13 @@
 A SectionHeaderButton provides a header along with a button
 next to the side - with a custom command and type.
 
-Required Props:
+Required Props
+	String header -  header to display on page
+	String button - text to display on button
 
-	header: String // header to display on page
-	button: String // text to display on button
-
-Optional Props:
-
-	onClick: Function // function to call when button is clicked
-	type: String // button type to use
+Optional Props
+	Function onClick - callback when button is clicked
+	String type - button type to use
 */
 
 var React = require("react"),

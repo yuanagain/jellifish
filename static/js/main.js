@@ -5,7 +5,7 @@ Main page script
 var React = require("react"),
 	ReactDOM = require("react-dom"),
 	jQuery = require("jquery"),
-	utils = require("./utils.js");
+	utils = require("./lib/utils.js");
 
 // React components
 var GlobalHeader = require("./react/GlobalHeader.jsx"),
@@ -21,6 +21,12 @@ function main() {
 	}
 
 var page = {
+	/*
+	Render the selection page
+
+	Arguments
+		[String, ...] selections - list of selection options to render
+	*/
 	selection: function(selections) {
 		main();
 		ReactDOM.render(
@@ -28,6 +34,13 @@ var page = {
 			utils.getElem("#selection")
 			);
 		},
+
+	/*
+	Render the ingredients page
+
+	Arguments
+		[String, ...] ingredients - list of ingredients to render
+	*/
 	ingredients: function(ingredients) {
 		main();
 		ReactDOM.render(
@@ -36,6 +49,12 @@ var page = {
 			);
 		},
 
+	/*
+	Render the timers page
+
+	Arguments
+		Object data - list of ingredients to render
+	*/
 	timers: function(data) {
 		main();
 		ReactDOM.render(

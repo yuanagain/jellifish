@@ -1,9 +1,8 @@
 /*
 The IngredientsPage component is primarily used to render the ingredients page.
 
-Required Props:
-	
-	ingredients: [String, ...] // list of ingredients
+Required Props
+	[String, ...] ingredients - list of ingredients
 */
 
 var React = require("react"),
@@ -22,11 +21,12 @@ class IngredientsPage extends React.Component {
 		function renderIngredient(ingredient, index) {
 			/* Internal - render a specific ingredient
 
-			Arguments:
-				ingredient (String) - ingredient name to display
-				index (int) - index of the current ingredient
+			Arguments
+				String ingredient - ingredient name to display
+				int index - index of the current ingredient
 
-			Returns rendered component
+			Returns
+				(HTMLElement) rendered component
 			*/
 			return <Row><Col md={12}>{index + 1}. {ingredient}</Col></Row>;
 			}

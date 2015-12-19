@@ -1,9 +1,8 @@
 /*
 A SelectionPage provides the interface for the selection interface
 
-Required Props:
-	
-	selections: [String, ...] // list of recipe selections
+Required Props
+	[String, ...] selections - list of recipe selections
 */
 
 var React = require("react"),
