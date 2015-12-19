@@ -42,12 +42,13 @@ import sys
 
 class TaskNode:
     def __init__(self, name, short_descr = '', long_descr = '',
-                 time = 0.0):
+                 time = 0.0, quantity = 1.0):
         self.name = name
         self.short_descr = short_descr
         self.long_descr = long_descr
         self.time = time
         self.dependencies = []
+        self.quantity = quantity
         self.flags = {'active': False} 
 
     def status(self):
@@ -61,6 +62,7 @@ class TaskNode:
         status['time'] = self.time
         # returns string of names of dependencies instead
         status['dependencies'] = [d.name for d in self.dependencies]
+        status['quantity'] = self.quantity
         status['flags'] = self.flags
         return status
         

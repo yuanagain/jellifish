@@ -21,6 +21,10 @@ class CoreEngine:
         
         return None
         
+    def computeCPL(tasklist):
+        for tn in tasklist:
+            
+
     def optimize(tasklist):
         """
         Sort the tasklist to minimize completion time of tasks
