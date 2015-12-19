@@ -1,6 +1,12 @@
 /*
 A SelectionList essentially holds a list of selections, with a given type
 (radio or checkbox).
+
+Required Props:
+
+	name: String // input name for form (HTML:form attribute)
+	type: String // type of input (either "radio" or "checkbox")
+	selections: [String, ...] // list of selection options
 */
 
 class SelectionList extends React.Component {

@@ -1,5 +1,9 @@
 /*
-The IngredientsPage is primarily used to render the ingredients page.
+The IngredientsPage component is primarily used to render the ingredients page.
+
+Required Props:
+	
+	ingredients: [String, ...] // list of ingredients
 */
 
 class IngredientsPage extends React.Component {

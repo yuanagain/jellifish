@@ -1,5 +1,9 @@
 /*
 A SelectionPage provides the interface for the selection interface
+
+Required Props:
+	
+	selections: [String, ...] // list of recipe selections
 */
 
 class SelectionPage extends React.Component {

@@ -1,6 +1,16 @@
 /*
 A SectionHeaderButton provides a header along with a button
 next to the side - with a custom command and type.
+
+Required Props:
+
+	header: String // header to display on page
+	button: String // text to display on button
+
+Optional Props:
+
+	onClick: Function // function to call when button is clicked
+	type: String // button type to use
 */
 
 class SectionHeaderButton extends React.Component {
