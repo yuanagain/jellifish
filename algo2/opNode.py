@@ -16,15 +16,15 @@ class opNode:
         status['duration'] = self.duration
         status['involvement'] = self.involvement
         # returns string of names of dependencies instead
-        status['childen'] = self.children
+        status['childen'] = [d.idx for d in self.children]
         return status
 
     def display(self):
         print(self.status())
 
     def add_child(self, child):
-        if child.idx not in self.children:
-            self.children.append(child.idx)
+        if child not in self.children:
+            self.children.append(child)
             return True
         return False
 
