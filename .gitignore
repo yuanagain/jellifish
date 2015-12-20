@@ -7,8 +7,8 @@
 *.jpg
 *.svg
 
-# Compiled JSX
-static/js/react-components.jsx
+# Compiled/Bundled JSX
+static/js/external.js
 static/js/bundle.js
 
 # Compiled SASS/extra files

@@ -26,9 +26,8 @@ class FlaskSettings(object):
 if DEV_MODE:
 	FlaskSettings.SEND_FILE_MAX_AGE_DEFAULT = 0
 
-RECIPES = ["Blondies", "Canapes", "Turkish Coffee"]
-
 VIEW_GLOBALS = {
+	"production": not DEV_MODE,
 	"name": "Jellifish",
 	"static": "/".join([FULL_URL, "static"])
 	}
