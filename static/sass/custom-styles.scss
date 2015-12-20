@@ -33,5 +33,12 @@ body {
 		}
 	}
 
+.timer-text {
+	font-size: 1em;
+	&.primary {
+		font-size: 1em;
+		}
+	}
+
 input[type=checkbox], input[type=radio] {
 	}
