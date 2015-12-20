@@ -15,6 +15,7 @@ Prop data types
 		"name": String, // (short) name of the task
 		"description": String, // human-readable description of task
 		"start_time": double, // time that the task should start
+		"end_time": double, // time when the task will end
 		"duration": double // duration of the task
 		}
 */
@@ -51,6 +52,8 @@ class TimersPage extends React.Component {
 			};
 
 		this._startTimers = this._startTimers.bind(this);
+		this._updateActive = this._updateActive.bind(this);
+		this._updateUpcoming = this._updateUpcoming.bind(this);
 		}
 
 	render() {
@@ -106,20 +109,21 @@ class TimersPage extends React.Component {
 
 	componentDidMount() {
 		// Hook right after component mounts
-		// filter all timer_ references from this.refs
-		var all_tasks = Object.keys(this.refs).filter((key) => key.match(/timer_\w+/)),
-			comp = this;
+		// filter the primary + passive timer references from this.refs
+		var all_tasks = Object.keys(this.refs).filter((key) => key.match(/timer_(active|passive)\d*/)),
+			component = this;
 
 		var globalTimer = new TimerHooker();
 		globalTimer.each(function(elapsed) {
 			// progress each individual timer
 			for (var i = 0; i < all_tasks.length; i++) {
-				comp.refs[all_tasks[i]].step(elapsed);
+				component.refs[all_tasks[i]].step(elapsed);
 				}
 			});
+		globalTimer.once(0, this._updateActive);
 
 		this.setState({
-			timer: globalTimer
+			timer: globalTimer // keep a reference to the timer in the state
 			});
 		}
 
@@ -128,6 +132,61 @@ class TimersPage extends React.Component {
 		var timer = this.state.timer;
 		if (timer != null) timer.stop();
 		this.setState({"timer": null}); // deference the timer
+		}
+	
+	/*
+	Update all active tasks
+	*/
+	_updateActive() {
+		var pointer = this.state.activePointer,
+			activeData = this.props.data.active,
+			task = activeData[pointer],
+			timer_active = this.refs.timer_active,
+			comp = this;
+
+		timer_active.reset(task.name, task.start_time, task.duration);
+		this._updateUpcoming()
+
+		this.state.timer.once(task.end_time + 1, function() {
+			pointer++;
+			// propagate change through the state
+			comp.setState({activePointer: pointer});
+
+			// no more tasks, so remove from the interface
+			if (pointer < activeData.length) {
+				comp._updateActive();
+				}
+			else {
+				timer_active.remove();
+				}
+			});
+		}
+
+	/*
+	Update the upcoming task queue
+	*/
+	_updateUpcoming() {
+		for (var i = 1; i <= 3; i++) {
+			var ref = this.refs["timer_upcoming" + i],
+				pointer = this.state.activePointer + i,
+				activeData = this.props.data.active;
+			
+			// upcoming tasks exist
+			if (pointer < activeData.length) {
+				var task = activeData[pointer];
+				ref.reset(task.name, task.start_time, task.duration);
+				}
+			else {
+				/* next task does not exist, so destroy the reference and move on
+				Note: we do not have to destroy all the other references
+				because they can still exist - when they do not exist anymore,
+				another call of _updateUpcoming will have destroyed them.
+
+				That is, only one reference should be destroyed per call. */
+				ref.remove();
+				break;
+				}
+			}
 		}
 	}
 

@@ -32,7 +32,7 @@ class Timer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			start: 0, // start time of timer
+			end: 0, // end time of the timer
 			delta: 0, // time to run
 			text: "", // text to display
 
@@ -40,18 +40,21 @@ class Timer extends React.Component {
 			_timer_id: Math.random(), // id for timer to identify timer
 			_text_top: 0, // top position of text
 			_progress: 1, // progress (as a decimal) of the timer
+			_display: true, // whether or not to display the timer
 			};
 
 		this._getFormattedTime = this._getFormattedTime.bind(this);
 		this._positionText = this._positionText.bind(this);
 		this.reset = this.reset.bind(this);
 		this.step = this.step.bind(this);
+		this.remove = this.remove.bind(this);
 		}
 
 	render() {
 		// Render the component
 		var styleOptions = { // when time is less than 0, don't display
 			visibility: (this.state.delta > 0) ? "inherit": "hidden",
+			display: (this.state._display) ? "inherit": "none"
 			};
 
 		return (
@@ -126,7 +129,7 @@ class Timer extends React.Component {
 	*/
 	step(elapsedTime) {
 		var state = this.state,
-			newProgress = (state.delta - elapsedTime + state.start) / state.delta;
+			newProgress = (state.end - elapsedTime) / state.delta;
 
 		this.setState({
 			_progress: newProgress
@@ -145,11 +148,18 @@ class Timer extends React.Component {
 	*/
 	reset(display, start_time, delta_time) {
 		this.setState({
-			start: start_time,
+			end: start_time + delta_time,
 			delta: delta_time,
 			text: display,
-			_progress: 1
+			_progress: 1,
 			});
+		}
+
+	/*
+	Remove the timer by setting it as inactive
+	*/
+	remove() {
+		this.setState({_display: false});
 		}
 	}
 

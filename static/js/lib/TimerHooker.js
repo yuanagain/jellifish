@@ -67,8 +67,8 @@ class TimerHooker {
 	*/
 	once(second, callback) {
 		if (second < 0) return; // irrelevant hook, t < 0
-		if (this.hooks.hasOwnProperty(second)) this.hooks[second].push(hook);
-		else this.hooks[second] = [hook];
+		if (this.hooks.hasOwnProperty(second)) this.hooks[second].push(callback);
+		else this.hooks[second] = [callback];
 		}
 
 	/*
