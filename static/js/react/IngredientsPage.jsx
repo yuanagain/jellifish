@@ -13,7 +13,8 @@ var React = require("react"),
 
 // React components
 var Content = require("./Content.jsx"),
-	SectionHeaderButton = require("./SectionHeaderButton.jsx");
+	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
+	FullRow = require("./FullRow.jsx");
 
 class IngredientsPage extends React.Component {
 	render() {
@@ -28,7 +29,7 @@ class IngredientsPage extends React.Component {
 			Returns
 				(HTMLElement) rendered component
 			*/
-			return <Row><Col md={12}>{index + 1}. {ingredient}</Col></Row>;
+			return <FullRow key={Math.random()}>{index + 1}. {ingredient}</FullRow>;
 			}
 
 		return (
