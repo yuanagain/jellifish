@@ -39,7 +39,6 @@ class Timer extends React.Component {
 			// internal state
 			_timer_id: Math.random(), // id for timer to identify timer
 			_text_top: 0, // top position of text
-			_elapsed: 0, // elapsed time
 			_progress: 1, // progress (as a decimal) of the timer
 			};
 
@@ -51,8 +50,12 @@ class Timer extends React.Component {
 
 	render() {
 		// Render the component
+		var styleOptions = { // when time is less than 0, don't display
+			visibility: (this.state.delta > 0) ? "inherit": "hidden",
+			};
+
 		return (
-			<div>
+			<div style={styleOptions}>
 				<Progressbar
 					ref="progressbar"
 					{...this.props}

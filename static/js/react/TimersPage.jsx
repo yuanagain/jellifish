@@ -28,7 +28,8 @@ var React = require("react"),
 // React components
 var Content = require("./Content.jsx"),
 	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
-	Timer = require("./Timer.jsx");
+	Timer = require("./Timer.jsx"),
+	FullRow = require("./FullRow.jsx");
 
 // Other dependencies
 var TimerHooker = require("../lib/TimerHooker.js");
@@ -44,7 +45,9 @@ class TimersPage extends React.Component {
 		// Create a new TimersPage
 		super(props);
 		this.state = {
-			timer: null
+			timer: null, // global timer
+			activePointer: 0, // pointer to current active task
+			passivePointer: 0, // pointer to current passive task
 			};
 
 		this._startTimers = this._startTimers.bind(this);
@@ -57,16 +60,36 @@ class TimersPage extends React.Component {
 				<SectionHeaderButton header="Jelli.fish" button="Start" onClick={this._startTimers} />
 				<br/>
 				<Row>
-					<Col md={6} className="center-horizontal">
-						<header>Active Task</header>
+					<Col md={6} xs={12} className="center-horizontal display-height">
+						<FullRow><header>Active Task</header></FullRow>
 						<br/>
-						<Timer ref="active_timer" />
+						<FullRow><Timer ref="timer_active" strokeColor="red" /></FullRow>
 					</Col>
-					<Col md={3} className="center-horizontal">
-						<header>Upcoming Tasks</header>
+					<Col md={3} xs={6} className="center-horizontal display-height">
+						<FullRow><header>Upcoming Tasks</header></FullRow>
+						<br/>
+						<FullRow>
+							<Timer ref="timer_upcoming1"></Timer>
+						</FullRow>
+						<FullRow>
+							<Timer ref="timer_upcoming2"></Timer>
+						</FullRow>
+						<FullRow>
+							<Timer ref="timer_upcoming3"></Timer>
+						</FullRow>
 					</Col>
-					<Col md={3} className="center-horizontal">
-						<header>Background Tasks</header>
+					<Col md={3} xs={6} className="center-horizontal display-height">
+						<FullRow><header>Background Tasks</header></FullRow>
+						<br/>
+						<FullRow>
+							<Timer ref="timer_passive1"></Timer>
+						</FullRow>
+						<FullRow>
+							<Timer ref="timer_passive2"></Timer>
+						</FullRow>
+						<FullRow>
+							<Timer ref="timer_passive3"></Timer>
+						</FullRow>
 					</Col>
 				</Row>
 			</Grid></Content>
@@ -82,14 +105,20 @@ class TimersPage extends React.Component {
 
 	componentDidMount() {
 		// Hook right after component mounts
+		// filter all timer_ references
+		var all_tasks = Object.keys(this.refs).filter((key) => key.match(/timer_\w+/)),
+			comp = this;	
 		var globalTimer = new TimerHooker();
-		var active_task = this.refs.active_timer;
-		active_task.setState({delta: 60});
 		globalTimer.each(function(elapsed) {
-			var delta = active_task.state.delta;
-			active_task.setState({progress: (delta - elapsed) / delta});
+			// progress each individual timer
+			for (var i = 0; i < all_tasks.length; i++) {
+				comp.refs[all_tasks[i]].step(elapsed);
+				}
 			});
-		this.setState({"timer": globalTimer});
+
+		this.setState({
+			timer: globalTimer
+			});
 		}
 
 	componentWillUnmount() {
