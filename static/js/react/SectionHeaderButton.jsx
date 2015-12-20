@@ -18,18 +18,51 @@ var React = require("react"),
 	Grid = ReactBootstrap.Grid;
 
 class SectionHeaderButton extends React.Component {
+	/*
+	Construct a new SectionHeaderButton
+
+	Arguments
+		Object props - properties for component
+	*/
+	constructor(props) {
+		super(props);
+		this.state = {
+			buttonActive: true,
+			};
+
+		this.changeButtonState = this.changeButtonState.bind(this);
+		}
+
 	render() {
 		// Render the component
 		return (
 			<Row className = "section-header">
 				<Col md={6} className="center-horizontal"><h3>{this.props.header}</h3></Col>
 				<Col md={6} className="center-horizontal">
-					<ReactBootstrap.Button bsStyle="primary" onClick={this.props.onClick} type={this.props.type}>
+					<ReactBootstrap.Button bsStyle="primary" onClick={this.props.onClick} type={this.props.type} disabled={! this.state.buttonActive}>
 						{this.props.button}
 					</ReactBootstrap.Button>
 				</Col>
 			</Row>
 			);
+		}
+	
+	/*
+	Change the button state
+
+	Arguments
+		bool state (optional) - what state to set the button to
+
+	Returns
+		(bool) new state
+	*/
+	changeButtonState(state) {
+		if (state == null || state == undefined) {
+			state = ! this.state.buttonActive;
+			}
+		this.setState({buttonActive: state});
+
+		return state;
 		}
 	}
 

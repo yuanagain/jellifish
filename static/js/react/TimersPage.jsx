@@ -57,13 +57,13 @@ class TimersPage extends React.Component {
 		// Render the component
 		return (
 			<Content><Grid fluid>
-				<SectionHeaderButton header="Jelli.fish" button="Start" onClick={this._startTimers} />
+				<SectionHeaderButton header="Jelli.fish" button="Start" onClick={this._startTimers} ref="button_header" />
 				<br/>
 				<Row>
 					<Col md={6} xs={12} className="center-horizontal display-height">
 						<FullRow><header>Active Task</header></FullRow>
 						<br/>
-						<FullRow><Timer ref="timer_active" strokeColor="red" /></FullRow>
+						<FullRow><Timer ref="timer_active" strokeColor="red" strokeWidth={1} /></FullRow>
 					</Col>
 					<Col md={3} xs={6} className="center-horizontal display-height">
 						<FullRow><header>Upcoming Tasks</header></FullRow>
@@ -101,13 +101,15 @@ class TimersPage extends React.Component {
 	*/
 	_startTimers() {
 		this.state.timer.start();
+		this.refs.button_header.changeButtonState();
 		}
 
 	componentDidMount() {
 		// Hook right after component mounts
-		// filter all timer_ references
+		// filter all timer_ references from this.refs
 		var all_tasks = Object.keys(this.refs).filter((key) => key.match(/timer_\w+/)),
-			comp = this;	
+			comp = this;
+
 		var globalTimer = new TimerHooker();
 		globalTimer.each(function(elapsed) {
 			// progress each individual timer
