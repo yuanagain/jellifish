@@ -5,9 +5,15 @@ from graphGen import genGraph
 
 def calcCPLs(graph):
 	sortedNodes = toposort_flatten(graph.graph_dict)
-	##toplogically sort graph
-	##iterate ovver nodes 
-		##CPL = MAX CPL of CHILDREN + BACKGROUND TIME?
+	for n in sortedNodes:
+		maxcpl = 0
+		for c in n.children:
+			if(c.cpl > maxcpl):
+				maxcpl = c.cpl
+		if(n.involvement == True):
+			n.cpl = n.duration + maxcpl
+		else:
+			n.cpl = maxcpl
 	return sortedNodes
 
 if __name__ == "__main__":
@@ -28,4 +34,4 @@ if __name__ == "__main__":
  result =(calcCPLs(graph))
 
  for s in result:
- 	print(s.idx)
+ 	print("node: " + str(s.idx) + " cpl: " + str(s.cpl))
