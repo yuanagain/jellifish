@@ -2,8 +2,6 @@ from opNode import opNode
 from Graph import Graph
 import Queue
 
-
-
 def genGraph(recipeNode):
     g = {recipeNode: recipeNode.children}
     graph = Graph(g)
@@ -12,7 +10,6 @@ def genGraph(recipeNode):
     curNode = recipeNode
 
     while (not nodeQueue.empty()) or (curNode == recipeNode):
-        print("curNode = " + str(curNode.idx))
         for d in curNode.children:
             nodeQueue.put(d); 
             graph.add_vertex(d);

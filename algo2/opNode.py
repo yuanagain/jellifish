@@ -4,10 +4,13 @@ class opNode:
     def __init__(self, idx, children, duration,
                  involvement):
         self.idx = idx
+        self.cpl = 0
         self.children = []
         self.duration = duration
         self.involvement = involvement
-        self.flags = {'active': False} 
+        self.completed = False;
+        self.flags = {'completed': "False"} 
+
 
 
     def status(self):
