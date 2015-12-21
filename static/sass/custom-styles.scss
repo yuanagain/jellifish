@@ -56,6 +56,23 @@ body {
 		}
 	}
 
+.overflow {
+	&.scroll {
+		overflow-y: scroll;
+		overflow-x: scroll;
+		}
+	&.hidden {
+		overflow-y: hidden;
+		overflow-x: hidden;
+		}
+	}
+
+.passive-tasks {
+	.row:nth-child(n+4) {
+		display: none;
+		}
+	}
+
 .display-height {
 	max-height: 90vh;
 	@include media-breakpoint-down(xs) {

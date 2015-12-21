@@ -163,22 +163,38 @@ class Timer extends React.Component {
 		String description - description of the task
 		int start_time - starting point of the timer
 		int delta_time - elapsed time before timer reaches 0 progress
+		double progress (optional) - timer's initial progress value
 	*/
-	reset(name, description, start_time, delta_time) {
+	reset(name, description, start_time, delta_time, progress) {
 		this.setState({
 			name: name,
 			description: description,
 			end: start_time + delta_time,
 			delta: delta_time,
-			_progress: 1,
+			_progress: (progress != null && progress != undefined) ? progress: 1,
 			});
 		}
 
 	/*
 	Remove the timer by setting it as inactive
+
+	Arguments
+		bool permanent - whether or not to remove the timer permanently
 	*/
-	remove() {
-		this.setState({_display: false});
+	remove(permanent) {
+		var opts = {delta: 0};
+		if (permanent) opts["_display"] = false;
+		this.setState(opts);
+		}
+
+	/*
+	Get the current progress of the timer
+
+	Returns
+		(double) current progress
+	*/
+	getProgress() {
+		return this.state._progress;
 		}
 	}
 

@@ -58,7 +58,10 @@ var page = {
 	timers: function(data) {
 		main();
 		ReactDOM.render(
-			<TimersPage data={data} />,
+			<TimersPage
+				active={data.active}
+				passive={data.passive}
+				recipes={data.recipes} />,
 			utils.getElem("#timers")
 			);
 		}
