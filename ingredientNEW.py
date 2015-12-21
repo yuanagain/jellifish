@@ -1,3 +1,22 @@
+'''
+Command line script for recipe Generation
+
+Instructions : 
+
+1. Follow the installation insructions in 
+databasecaller.py to get ParsePy, and make
+sure to do the line change mentioned there
+as well.
+
+2. Run this file (python ingredientNEW.py)
+and follow the Instructions to generate a
+bunch of tasknodes. These will automatically
+be put in the Parse Database. You can then
+test a query of the database using tester.py
+(Instructions included)
+
+'''
+
 from databasecaller import DatabaseCaller
 from TaskNode import TaskNode
 
@@ -19,6 +38,7 @@ def main():
 	print('Welcome to the Recipe Database Generator')
 	print('\n')
 	task_list = []
+	#recipe_name = input('Give your recipe a name : ')
 	end_loop = False
 	list_of_operators = db_caller.get_operators()
 	
@@ -97,8 +117,14 @@ def main():
 						print ('Please enter a valid operand!')
 				ctr = ctr + 1
 			
-			task_name = operator.parseStyle(operator, task_operand_names)		
-			print('Task Name Processed as : ' + task_name)
+			#Task name provided automatically 
+			#task_name = operator.parseStyle(operator, task_operand_names)		
+			#print('Task Name Processed as : ' + task_name)
+			
+			#Task name provided manually
+			task_name = str.lower(input('Enter the result : '))
+			
+			#Provide short and long task descriptioms
 			task_short = input('Enter task short description : ')
 			task_long = input('Enter long task description : ')
 
@@ -144,6 +170,13 @@ def main():
 		i.display()
 		print
 	db_caller.add_tasknodes(task_list)
+	#db_caller.add_recipe(recipe_name, task_list)
+	
+	#Read back from database
+	
+
+
+	#db_caller.add_recipe(recipe_name, task_list)
 		#print (i.operator.name)
 		#for j in i.operands:
 		#	print (j.name)
