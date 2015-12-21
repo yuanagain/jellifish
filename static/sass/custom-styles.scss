@@ -38,6 +38,29 @@ body {
 	&.primary {
 		font-size: 1em;
 		}
+	&.name {
+		
+		}
+	&.description {
+		font-size: 1em;
+		font-style: italic;
+		}
+	}
+
+.timer {
+	&.secondary svg {
+		height: 5em;
+		}
+	&.primary svg {
+		max-height: 40vh;
+		}
+	}
+
+.display-height {
+	max-height: 90vh;
+	@include media-breakpoint-down(xs) {
+		max-height: none;
+		}
 	}
 
 .clickable-icon {
@@ -57,8 +80,8 @@ body {
 		}
 	}
 
-.display-height {
-	// max-height: 90vh;
+.ingredient {
+	padding-left: 1em;
 	}
 
 input[type=checkbox], input[type=radio] {

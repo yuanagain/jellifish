@@ -67,7 +67,7 @@ class Timer extends React.Component {
 
 		return (
 			<div style={styleOptions}>
-				<h4>{this.state.name}</h4>
+				<h5>{this.state.name}</h5>
 				<Progressbar
 					ref="progressbar"
 					{...this.props}

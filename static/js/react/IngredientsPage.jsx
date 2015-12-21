@@ -29,12 +29,17 @@ class IngredientsPage extends React.Component {
 			Returns
 				(HTMLElement) rendered component
 			*/
-			return <FullRow key={Math.random()}>{index + 1}. {ingredient}</FullRow>;
+			return (
+					<FullRow key={Math.random()}>
+						<h6 className="ingredient">{index + 1}. {ingredient}</h6>
+					</FullRow>
+				);
 			}
 
 		return (
 			<Content><Grid fluid>
 				<SectionHeaderButton header="Ingredients" button="Continue" type="submit" />
+				<br/>
 				{this.props.ingredients.map(renderIngredient)}
 			</Grid></Content>
 			);

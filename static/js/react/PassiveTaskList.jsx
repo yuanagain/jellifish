@@ -34,7 +34,7 @@ class PassiveTaskList extends React.Component {
 			<div>
 				{Object.keys(data).map(function(key) {
 					var item = data[key];
-					return <FullRow key={"row -" + item.id}>
+					return <FullRow key={"row -" + item.id}className="timer secondary">
 						<Timer
 							end={item.end_time}
 							delta={item.duration}

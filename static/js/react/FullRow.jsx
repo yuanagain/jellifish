@@ -13,7 +13,7 @@ var React = require("react"),
 	Col = ReactBootstrap.Col;
 
 function FullRow(props) {
-	return <Row><Col xs={12}>{props.children}</Col></Row>;
+	return <Row {...props}><Col xs={12}>{props.children}</Col></Row>;
 	}
 
 module.exports = FullRow;

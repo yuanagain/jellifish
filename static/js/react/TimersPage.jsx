@@ -78,7 +78,7 @@ class TimersPage extends React.Component {
 					<Col md={6} xs={12} className="center-horizontal display-height">
 						<FullRow><header>Active Task</header></FullRow>
 						<br/>
-						<FullRow><Timer ref="timer_active" primary /></FullRow>
+						<FullRow className="timer primary"><Timer ref="timer_active" primary /></FullRow>
 						<br/>
 						<Row>
 							<Col xs={6}>
