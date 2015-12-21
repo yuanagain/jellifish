@@ -19,8 +19,9 @@ class PassiveTaskList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: {},
-			timer: props.timer
+			data: {}, // data to render
+			timer: props.timer, // timer controlling tasks
+			added: 0 // number of added tasks (total) - see queueTasks for reasoning
 			};
 
 		this.queueTasks = this.queueTasks.bind(this);
@@ -78,6 +79,16 @@ class PassiveTaskList extends React.Component {
 				timer.once(task.start_time, function() {
 					task.id = Math.random(); // random ID for React/data key
 					comp.state.data[task.id] = task;
+
+					/* The "added" state field does not get used anywhere else, so
+					you may be wondering why it's even needed at all. It's essentially
+					a more elegant way of calling comp.forceUpdate(). This is required
+					because the "data" state field is only stored as a reference,
+					and so adding to the data object does not actually cause an explicit
+					state change until another state change occurs. Thus, the simplest way
+					to force React to recognize the state change, and thus rerender the data,
+					is to update another state field - which is our "added" field. */
+					comp.setState({added: comp.state.added + 1});
 
 					// function hack again, because we're creating another function
 					(function(pTask) {

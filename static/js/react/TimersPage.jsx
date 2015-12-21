@@ -220,6 +220,7 @@ class TimersPage extends React.Component {
 		(bool) Whether or not timer was started (true) or stopped (false)
 	*/
 	_pauseActiveTimer() {
+		if (! this.state.started) return;
 		var timer = this.state.activeTimer;
 		if (timer.isRunning()) {
 			this.setState({paused: true});
@@ -240,16 +241,15 @@ class TimersPage extends React.Component {
 		(int) number of seconds skipped
 	*/
 	_skipCurrentTask() {
+		if (! this.state.started) return;
 		var currentTask = this.props.data.active[this.state.activePointer],
 			timer = this.state.activeTimer,
 			currentState = timer.isRunning();
-		// timer.stop(); // pause the timer before continuing 
+
 		var toSkip = currentTask.end_time - timer.elapsed;
 		for (var t = 0; t <= toSkip; t++) {
 			timer.progress();
 			}
-
-		// if (currentState) timer.start();
 		}
 	}
 
