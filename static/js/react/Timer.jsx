@@ -3,6 +3,9 @@ A Timer wraps around the Progressbar.Circle to provide an intuitive interface
 for displaying timers.
 
 Optional Props
+	int end - ending time of timer
+	int delta - duration of the timer
+	String text - text to display with timer
 	int strokeWidth - width of the progressbar (defaults to 2)
 	String strokeColor - color of progressbar (defaults to 'green')
 
@@ -32,12 +35,11 @@ class Timer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			end: 0, // end time of the timer
-			delta: 0, // time to run
-			text: "", // text to display
+			end: props.end || 0, // end time of the timer
+			delta: props.delta || 0, // time to run
+			text: props.text || "", // text to display
 
 			// internal state
-			_timer_id: Math.random(), // id for timer to identify timer
 			_text_top: 0, // top position of text
 			_progress: 1, // progress (as a decimal) of the timer
 			_display: true, // whether or not to display the timer
@@ -128,6 +130,7 @@ class Timer extends React.Component {
 		(double) Current progress on timer (as a decimal)
 	*/
 	step(elapsedTime) {
+		if (! this.state._display) return 0; // no step to take
 		var state = this.state,
 			newProgress = (state.end - elapsedTime) / state.delta;
 

@@ -30,7 +30,8 @@ var React = require("react"),
 var Content = require("./Content.jsx"),
 	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
 	Timer = require("./Timer.jsx"),
-	FullRow = require("./FullRow.jsx");
+	FullRow = require("./FullRow.jsx"),
+	PassiveTaskList = require("./PassiveTaskList.jsx");
 
 // Other dependencies
 var TimerHooker = require("../lib/TimerHooker.js");
@@ -46,16 +47,17 @@ class TimersPage extends React.Component {
 		// Create a new TimersPage
 		super(props);
 		this.state = {
-			activeTimer: null, // timer for active tasks
 			activePointer: 0, // pointer to current active task
-			passiveTimer: null, // timer for passive tasks
-			passivePointer: 0, // pointer to current passive task
+			activeTimer: new TimerHooker(), // timer for active tasks
+			passiveTimer: new TimerHooker(), // timer for passive tasks
 			};
+		/* the timers are decoupled so that pauses and skips can be handled
+		separately */
 
-		this._startTimers = this._startTimers.bind(this);
 		this._updateActive = this._updateActive.bind(this);
 		this._updateUpcoming = this._updateUpcoming.bind(this);
-		this._queuePassive = this._queuePassive.bind(this);
+
+		this._startTimers = this._startTimers.bind(this);
 		}
 
 	render() {
@@ -86,75 +88,38 @@ class TimersPage extends React.Component {
 					<Col md={3} xs={6} className="center-horizontal display-height">
 						<FullRow><header>Background Tasks</header></FullRow>
 						<br/>
-						<FullRow>
-							<Timer ref="timer_passive1"></Timer>
-						</FullRow>
-						<FullRow>
-							<Timer ref="timer_passive2"></Timer>
-						</FullRow>
-						<FullRow>
-							<Timer ref="timer_passive3"></Timer>
-						</FullRow>
+						<PassiveTaskList
+							timer={this.state.passiveTimer}
+							data={this.props.data.passive}
+							ref="timers_passive"  />
 					</Col>
 				</Row>
 			</Grid></Content>
 			);
 		}
 
-	/*
-	Start the timers
-
-	Returns
-		(bool) Whether or not the timers started successfully
-	*/
-	_startTimers() {
-		if (this.state.activeTimer && this.state.passiveTimer) {
-			this.state.activeTimer.start();
-			this.state.passiveTimer.start();
-			this.refs.button_header.changeButtonState(false);
-			return true;
-			}
-		return false;
-		}
-
 	componentDidMount() {
 		// Hook right after component mounts
-		// filter the primary + passive timer references from this.refs
-		var passive_tasks = Object.keys(this.refs).filter((key) => key.match(/timer_passive\d*/)),
-			component = this;
+		var comp = this; // reference to component
 
-		/* the timers are decoupled so that pauses and skips can be handled
-		separately */
-		var activeTimer = new TimerHooker(),
-			passiveTimer = new TimerHooker();
-
-		activeTimer.each(function(elapsed) {
+		this.state.activeTimer.each(function(elapsed) {
 			// only one active timer to progress (the primary)
-			component.refs.timer_active.step(elapsed);
+			comp.refs.timer_active.step(elapsed);
 			});
-		activeTimer.once(0, this._updateActive);
-
-		passiveTimer.each(function(elapsed) {
-			// run each passive task step
-			for (var i = 0; i < passive_tasks.length; i++) {
-				component.refs[passive_tasks[i]].step(elapsed);
-				}
-			});
-		this._queuePassive();
-
-		/* these references never change, and so React does not call updates
-		even when the timer ticks - React's state is still the same */
-		this.setState({
-			activeTimer: activeTimer,
-			passiveTimer: passiveTimer
-			});
+		this.state.activeTimer.once(0, this._updateActive);
 		}
 
 	componentWillUnmount() {
 		// Hook right before component unmounts
-		var activeTimer = this.state.activeTimer;
-		if (activeTimer != null) activeTimer.stop();
-		this.setState({activeTimer: null}); // deference the timer
+		if (this.state.activeTimer != null) {
+			this.state.activeTimer.stop();
+			}
+		if (this.state.passiveTimer != null) {
+			this.state.passiveTimer.stop();
+			}
+
+		// dereference the timers
+		this.setState({activeTimer: null, passiveTimer: null});
 		}
 	
 	/*
@@ -167,6 +132,7 @@ class TimersPage extends React.Component {
 			timer_active = this.refs.timer_active,
 			comp = this;
 
+		// set the new primary task and update the upcoming tasks
 		timer_active.reset(task.name, task.start_time, task.duration);
 		this._updateUpcoming()
 
@@ -175,7 +141,7 @@ class TimersPage extends React.Component {
 			// propagate change through the state
 			comp.setState({activePointer: pointer});
 
-			// no more tasks, so remove from the interface
+			// remove from the interface if no more tasks
 			if (pointer < activeData.length) comp._updateActive();
 			else timer_active.remove();
 			});
@@ -209,10 +175,19 @@ class TimersPage extends React.Component {
 		}
 
 	/*
-	Queue the passive tasks
-	*/
-	_queuePassive() {
+	Start the timers
 
+	Returns
+		(bool) Whether or not the timers started successfully
+	*/
+	_startTimers() {
+		if (this.state.activeTimer && this.state.passiveTimer) {
+			this.state.activeTimer.start();
+			this.state.passiveTimer.start();
+			this.refs.button_header.changeButtonState(false);
+			return true;
+			}
+		return false;
 		}
 	}
 
