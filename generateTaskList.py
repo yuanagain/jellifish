@@ -34,6 +34,7 @@ def main():
 	tasknode_name = input('Please enter a TaskNode query name : ')
 	pulled_node = db_caller.create_tasknode(tasknode_name)
 	if (pulled_node is not None):
+		list_of_task_nodes.append(pulled_node)
 		retrieve_task_nodes(pulled_node, list_of_task_nodes)
 		print('\n')
 		for i in list_of_task_nodes:

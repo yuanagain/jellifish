@@ -199,7 +199,22 @@ class DatabaseCaller:
         #physical_tasknode.dependencies = db_tasknode.dependencies
         list_of_dependencies = []
         for depend in db_tasknode.dependencies:
-            list_of_dependencies.append(self.create_tasknode(TaskNode.Query.get(objectId = depend).name))
+            list_of_dependencies.append(self.create_tasknode_fromdb(TaskNode.Query.get(objectId = depend)))
+        #physical_tasknode.dependencies = tasknode_dictionary['dependencies']
+        physical_tasknode.dependencies = list_of_dependencies
+        physical_tasknode.flags = db_tasknode.flags
+        #ToDo for quantities and units do something like physical_tasknode.units = tasknode_dictionarytasknode_dictionary.units
+        #This is specifically for stuff we don't store in the tasknode itself
+        return physical_tasknode
+
+    # Return a TaskNode object given a database representation of it
+    def create_tasknode_fromdb(self, db_tasknode):
+        if (db_tasknode is None):
+            return
+        physical_tasknode = TN(db_tasknode.name, db_tasknode.short_descr, db_tasknode.long_descr, db_tasknode.time)
+        list_of_dependencies = []
+        for depend in db_tasknode.dependencies:
+            list_of_dependencies.append(self.create_tasknode_fromdb(TaskNode.Query.get(objectId = depend)))
         #physical_tasknode.dependencies = tasknode_dictionary['dependencies']
         physical_tasknode.dependencies = list_of_dependencies
         physical_tasknode.flags = db_tasknode.flags
