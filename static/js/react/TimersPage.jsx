@@ -50,6 +50,9 @@ class TimersPage extends React.Component {
 			activePointer: 0, // pointer to current active task
 			activeTimer: new TimerHooker(), // timer for active tasks
 			passiveTimer: new TimerHooker(), // timer for passive tasks
+
+			started: false, // whether or not the app has been started
+			paused: false, // whether or not app is paused
 			};
 		/* the timers are decoupled so that pauses and skips can be handled
 		separately */
@@ -58,10 +61,15 @@ class TimersPage extends React.Component {
 		this._updateUpcoming = this._updateUpcoming.bind(this);
 
 		this._startTimers = this._startTimers.bind(this);
+		this._pauseActiveTimer = this._pauseActiveTimer.bind(this);
+		this._skipCurrentTask = this._skipCurrentTask.bind(this);
 		}
 
 	render() {
 		// Render the component
+		var iconOptions = {}
+		if (! this.state.started) iconOptions.disabled = "disabled";
+
 		return (
 			<Content><Grid fluid>
 				<SectionHeaderButton header="Jelli.fish" button="Start" onClick={this._startTimers} ref="button_header" />
@@ -71,6 +79,20 @@ class TimersPage extends React.Component {
 						<FullRow><header>Active Task</header></FullRow>
 						<br/>
 						<FullRow><Timer ref="timer_active" strokeColor="red" strokeWidth={1} /></FullRow>
+						<Row>
+							<Col xs={6}>
+								<i
+								{...iconOptions}
+								className={"clickable-icon ionicons ion-ios-" + (this.state.paused ? "play": "pause")}
+								onClick={this._pauseActiveTimer}></i>
+							</Col>
+							<Col xs={6}>
+								<i
+								{...iconOptions}
+								className="ionicons ion-ios-skipforward clickable-icon" 
+								onClick={this._skipCurrentTask}></i>
+							</Col>
+						</Row>
 					</Col>
 					<Col md={3} xs={6} className="center-horizontal display-height">
 						<FullRow><header>Upcoming Tasks</header></FullRow>
@@ -184,10 +206,50 @@ class TimersPage extends React.Component {
 		if (this.state.activeTimer && this.state.passiveTimer) {
 			this.state.activeTimer.start();
 			this.state.passiveTimer.start();
+			this.setState({started: true});
 			this.refs.button_header.changeButtonState(false);
 			return true;
 			}
 		return false;
+		}
+
+	/*
+	Pause the current active timer
+
+	Returns
+		(bool) Whether or not timer was started (true) or stopped (false)
+	*/
+	_pauseActiveTimer() {
+		var timer = this.state.activeTimer;
+		if (timer.isRunning()) {
+			this.setState({paused: true});
+			timer.stop();
+			return false;
+			}
+		else {
+			this.setState({paused: false});
+			timer.start();
+			return true;
+			}
+		}
+
+	/*
+	Skip the current active task
+
+	Returns
+		(int) number of seconds skipped
+	*/
+	_skipCurrentTask() {
+		var currentTask = this.props.data.active[this.state.activePointer],
+			timer = this.state.activeTimer,
+			currentState = timer.isRunning();
+		// timer.stop(); // pause the timer before continuing 
+		var toSkip = currentTask.end_time - timer.elapsed;
+		for (var t = 0; t <= toSkip; t++) {
+			timer.progress();
+			}
+
+		// if (currentState) timer.start();
 		}
 	}
 

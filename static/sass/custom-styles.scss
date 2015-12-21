@@ -40,6 +40,23 @@ body {
 		}
 	}
 
+.clickable-icon {
+	font-size: 2em;
+	color: $gray-light;
+	@include transition(color 0.5s);
+	&:hover {
+		cursor: pointer;	
+		cursor: hand;
+		color: $gray-lightest;
+		}
+	&[disabled] {
+		color: $gray;
+		&:hover {
+			cursor: not-allowed;
+			}
+		}
+	}
+
 .display-height {
 	// max-height: 90vh;
 	}

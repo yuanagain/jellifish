@@ -9,6 +9,8 @@ class TimerHooker {
 		this.interval = null;
 		this.hooks = {};
 		this.hooks[-1] = {};
+
+		this.progress = this.progress.bind(this);
 		}
 
 	/*
@@ -91,6 +93,29 @@ class TimerHooker {
 		}
 
 	/*
+	Progress the timer one second
+
+	Examples
+		timer.progress();
+	*/
+	progress() {
+		// should only run if there are hooks for the current second
+		if (this.hooks.hasOwnProperty(this.elapsed)) {
+			// call each hook for each second
+			for (var i = 0; i < this.hooks[this.elapsed].length; i++) {
+				this.hooks[this.elapsed][i](this.elapsed);
+				}
+			// the time has passed and so this memory can be freed
+			delete this.hooks[this.elapsed];
+			}
+		// call the hooks for each second
+		for (var key in this.hooks[-1]) {
+			this.hooks[-1][key](this.elapsed);
+			}
+		this.elapsed++;
+		}
+
+	/*
 	Start the timer if it is not currently running
 
 	Returns
@@ -104,23 +129,7 @@ class TimerHooker {
 	start() {
 		if (! this.isRunning()) {
 			var timer = this;
-			this.interval = setInterval(function() {
-				// should only run if there are hooks for the current second
-				if (timer.hooks.hasOwnProperty(timer.elapsed)) {
-					// call each hook for each second
-					for (var i = 0; i < timer.hooks[timer.elapsed].length; i++) {
-						timer.hooks[timer.elapsed][i](timer.elapsed);
-						}
-					// the time has passed and so this memory can be freed
-					delete timer.hooks[timer.elapsed];
-					}
-				// call the hooks for each second
-				for (var key in timer.hooks[-1]) {
-					timer.hooks[-1][key](timer.elapsed);
-					}
-				timer.elapsed++;
-				}, 1000);
-
+			this.interval = setInterval(this.progress, 1000);
 			return true;
 			}
 		return false;
