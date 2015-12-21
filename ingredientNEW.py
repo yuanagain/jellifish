@@ -84,7 +84,7 @@ def main():
 				print('available operators:\n')
 				for i in list_of_operators:
 					print(i.name)
-					print
+					print('\n')
 				operator_name = input('Select an Operator : ')
 				for k in list_of_operators:
 					if (operator_name == k.name):
@@ -104,7 +104,7 @@ def main():
 					print('available operands:\n')
 					for i in task_list:
 						print(i.name)
-					print
+					print('\n')
 					operand_name = str.lower(input('Choose Operand ' + str(ctr) + ' (MAX ' + \
 					                      str(operator.numOperands-1) + ')' + " : "))
 					for k in task_list:
@@ -166,21 +166,11 @@ def main():
 
 	#Input into Database
 	for i in task_list:
-		print
+		print('\n')
 		i.display()
-		print
+		print('\n')
 	db_caller.add_tasknodes(task_list)
 	#db_caller.add_recipe(recipe_name, task_list)
-	
-	#Read back from database
-	
-
-
-	#db_caller.add_recipe(recipe_name, task_list)
-		#print (i.operator.name)
-		#for j in i.operands:
-		#	print (j.name)
-		#print('\n')
 	
 if __name__ == '__main__':
     main()

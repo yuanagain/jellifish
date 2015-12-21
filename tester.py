@@ -17,7 +17,6 @@ you will get a message:
 '''
 
 from databasecaller import DatabaseCaller
-from databasecaller import Recipe as rp
 from TaskNode import TaskNode
 
 #print the status (and the status of its dependencies,
