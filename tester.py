@@ -15,22 +15,17 @@ you will get a message:
 "Could not find the specified tasknode"
 
 '''
-
 from databasecaller import DatabaseCaller
 from TaskNode import TaskNode
-
-from algo.TnodeUtils import printTasks
-from algo.CoreEngine import CoreEngine as CE
-
+from algo import TnodeUtils
+from algo import CoreEngine as CE
 
 #print the status (and the status of its dependencies,
 #and their dependencies recursively)
 #for a given tasknode
-def printStatus(tasknode, list_of_tasks):
-	tasknode.display()
+def retrieve_task_nodes(tasknode, list_of_tasks):
 	for i in tasknode.dependencies:
-		printStatus(i, list_of_tasks)
-		#tnode = TaskNode(i.name, i.short_descr, i.long_descr, i.time)
+		retrieve_task_nodes(i, list_of_tasks)
 		list_of_tasks.append(i)
 
 def main():
@@ -40,14 +35,12 @@ def main():
 	if (pulled_node is None):
 		pass
 	else:
-		printStatus(pulled_node, list_of_tasks)
-		#list_of_tasks.append(pulled_node)
-	# list_of_tasks = db_caller.my_set
-	# print(db_caller.my_set)
-	# for i in list_of_tasks:
-	# 	print(i)
-	core_engine = CE(list_of_tasks)
-	core_engine.printTasks()
+		retrieve_task_nodes(pulled_node, list_of_tasks)
+		for i in list_of_tasks:
+			i.display()
+
+		#core_engine = CE(list_of_tasks)
+		#core_engine.printTasks()
 
 if __name__ == '__main__':
     main()

@@ -1,44 +1,25 @@
-#import CoreEngine as CE
-import TaskNode as TN
 from databasecaller import DatabaseCaller
 from TaskNode import TaskNode
 
-'''
-tnode_end = TN.TaskNode("end_node")
-tnode_i1 = TN.TaskNode("ingr_1")
-
-tnode_a1 = TN.TaskNode("act_1", time = 10.0)
-tnode_a1.set_flag("active")
-
-tnode_end.add_dependency(tnode_a1)
-tnode_a1.add_dependency(tnode_i1)
-
-solution = CE.CoreEngine([tnode_end, tnode_i1, tnode_a1])
-print(solution.ultrasort())
-print(solution.ultrasort(10000))
-'''
+from algo import CoreEngine as CE
+from algo import TnodeUtils
 
 '''
 Generate a list of TaskNode objects
-to complete a given TaskNode query,
+from a given TaskNode query,
 in no particular order. This is the
 input to our optimization algorithm.
 
 inputs: the name of the TaskNode
-		query, an instance of
-		the DatabaseCaller class,
+		query (TaskNode object),
 		and a list (typically empty)
 		which will get populated with
 		the TaskNode objects.
 '''
-def retrieve_task_nodes(tasknode_name, db_caller, list_of_task_nodes):
-	pulled_node = db_caller.create_tasknode(tasknode_name)
-	if (pulled_node is None):
-		return
-	list_of_task_nodes.append(pulled_node)
-	for i in pulled_node.dependencies:
-		retrieve_task_nodes(i, db_caller, list_of_task_nodes)
-	return list_of_task_nodes
+def retrieve_task_nodes(tasknode, list_of_task_nodes):
+	for i in tasknode.dependencies:
+		retrieve_task_nodes(i, list_of_task_nodes)
+		list_of_task_nodes.append(i)
 
 '''
 Test the CoreEngine functionality on a list of
@@ -51,12 +32,17 @@ def main():
 	list_of_task_nodes = []
 	db_caller = DatabaseCaller()
 	tasknode_name = input('Please enter a TaskNode query name : ')
-	list_of_task_nodes = retrieve_task_nodes(tasknode_name, \
-							db_caller, list_of_task_nodes)
-	if (list_of_task_nodes is not None):
+	pulled_node = db_caller.create_tasknode(tasknode_name)
+	if (pulled_node is not None):
+		retrieve_task_nodes(pulled_node, list_of_task_nodes)
+		print('\n')
 		for i in list_of_task_nodes:
 			i.display()
 			print('\n')
+		print("------------------------------------------")
+		core_engine = CE.CoreEngine(list_of_task_nodes)
+		core_engine.printTasks()
+
 
 if __name__ == '__main__':
     main()

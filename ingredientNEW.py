@@ -38,6 +38,7 @@ def main():
 	print('Welcome to the Recipe Database Generator')
 	print('\n')
 	task_list = []
+	consumed_operand_names = []
 	#recipe_name = input('Give your recipe a name : ')
 	end_loop = False
 	list_of_operators = db_caller.get_operators()
@@ -69,9 +70,11 @@ def main():
 		#Ingredient selection (if task_ingredient_flag == 1)
 		if (task_ingredient_flag == '1'):
 			task_name = str.lower(input('Enter an ingredient : '))
-			
+			task_short = input('Ingredient short description : ')
+			task_long = input('Ingredient long description : ')
+
 			#TaskNode Construction
-			task = TaskNode(task_name)
+			task = TaskNode(task_name, task_short, task_long, 0.0)
 			task.set_flag('ingredient', 'TRUE')
 			task.set_flag('active', 'FALSE')
 			task_list.append(task)
@@ -81,10 +84,12 @@ def main():
 			#Operator Selection
 			valid = False
 			while(valid == False):
+				print('\n')
 				print('available operators:\n')
+				print('\n')
 				for i in list_of_operators:
 					print(i.name)
-					print('\n')
+				print('\n')
 				operator_name = input('Select an Operator : ')
 				for k in list_of_operators:
 					if (operator_name == k.name):
@@ -101,18 +106,33 @@ def main():
 			for i in range(0,operator.numOperands):
 				valid = False
 				while (valid == False):	
+					print('\n')
 					print('available operands:\n')
+					print('\n')
 					for i in task_list:
-						print(i.name)
+						consumed = False
+						for j in consumed_operand_names:
+							if (i.name == j):
+								consumed = True
+								break
+						if (consumed == False):
+							print(i.name)
 					print('\n')
 					operand_name = str.lower(input('Choose Operand ' + str(ctr) + ' (MAX ' + \
 					                      str(operator.numOperands-1) + ')' + " : "))
 					for k in task_list:
 						if(operand_name == k.name):
-							task_operands.append(k)
-							task_operand_names.append(k.name)
-							valid = True
-							break
+							consumed = False
+							for j in consumed_operand_names:
+								if (operand_name == j):
+									consumed = True
+									break
+							if (consumed == False):
+								task_operands.append(k)
+								task_operand_names.append(k.name)
+								consumed_operand_names.append(k.name)
+								valid = True
+								break
 					if (valid == False):
 						print ('Please enter a valid operand!')
 				ctr = ctr + 1

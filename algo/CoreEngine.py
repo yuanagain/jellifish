@@ -47,7 +47,7 @@ Copyright Jellifish 2015
 
 import TaskNode as TN
 import random
-from TnodeUtils import printTasks
+from algo import TnodeUtils
 
 class CoreEngine:
     def __init__(self, tasklist):
