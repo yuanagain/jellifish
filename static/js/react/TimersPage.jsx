@@ -78,36 +78,27 @@ class TimersPage extends React.Component {
 					<Col md={6} xs={12} className="center-horizontal display-height">
 						<FullRow><header>Active Task</header></FullRow>
 						<br/>
-						<FullRow><Timer ref="timer_active" strokeColor="red" strokeWidth={1} /></FullRow>
+						<FullRow><Timer ref="timer_active" primary /></FullRow>
+						<br/>
 						<Row>
 							<Col xs={6}>
-								<i
-								{...iconOptions}
-								className={"clickable-icon ionicons ion-ios-" + (this.state.paused ? "play": "pause")}
-								onClick={this._pauseActiveTimer}></i>
+								<i {...iconOptions} onClick={this._pauseActiveTimer}
+								className={"clickable-icon ionicons ion-ios-" + (this.state.paused ? "play": "pause")}></i>
 							</Col>
 							<Col xs={6}>
-								<i
-								{...iconOptions}
-								className="ionicons ion-ios-skipforward clickable-icon" 
-								onClick={this._skipCurrentTask}></i>
+								<i {...iconOptions} onClick={this._skipCurrentTask}
+								className="ionicons ion-ios-skipforward clickable-icon"></i>
 							</Col>
 						</Row>
 					</Col>
-					<Col md={3} xs={6} className="center-horizontal display-height">
+					<Col md={3} xs={6} className="center-horizontal display-height secondary">
 						<FullRow><header>Upcoming Tasks</header></FullRow>
 						<br/>
-						<FullRow>
-							<Timer ref="timer_upcoming1"></Timer>
-						</FullRow>
-						<FullRow>
-							<Timer ref="timer_upcoming2"></Timer>
-						</FullRow>
-						<FullRow>
-							<Timer ref="timer_upcoming3"></Timer>
-						</FullRow>
+						<FullRow className="timer secondary"><Timer ref="timer_upcoming1" /></FullRow>
+						<FullRow className="timer secondary"><Timer ref="timer_upcoming2" /></FullRow>
+						<FullRow className="timer secondary"><Timer ref="timer_upcoming3" /></FullRow>
 					</Col>
-					<Col md={3} xs={6} className="center-horizontal display-height">
+					<Col md={3} xs={6} className="center-horizontal display-height secondary">
 						<FullRow><header>Background Tasks</header></FullRow>
 						<br/>
 						<PassiveTaskList
@@ -155,7 +146,7 @@ class TimersPage extends React.Component {
 			comp = this;
 
 		// set the new primary task and update the upcoming tasks
-		timer_active.reset(task.name, task.start_time, task.duration);
+		timer_active.reset(task.name, task.description, task.start_time, task.duration);
 		this._updateUpcoming()
 
 		this.state.activeTimer.once(task.end_time + 1, function() {
@@ -181,7 +172,7 @@ class TimersPage extends React.Component {
 			// upcoming tasks exist
 			if (pointer < activeData.length) {
 				var task = activeData[pointer];
-				ref.reset(task.name, task.start_time, task.duration);
+				ref.reset(task.name, task.description, task.start_time, task.duration);
 				}
 			else {
 				/* next task does not exist, so destroy the reference and move on

@@ -5,7 +5,8 @@ for displaying timers.
 Optional Props
 	int end - ending time of timer
 	int delta - duration of the timer
-	String text - text to display with timer
+	String name - text to display with timer
+	String description - description of task to display when primary
 	int strokeWidth - width of the progressbar (defaults to 2)
 	String strokeColor - color of progressbar (defaults to 'green')
 
@@ -37,10 +38,12 @@ class Timer extends React.Component {
 		this.state = {
 			end: props.end || 0, // end time of the timer
 			delta: props.delta || 0, // time to run
-			text: props.text || "", // text to display
+			name: props.name || "", // name of task
+			description: props.description || "", // description of task
 
 			// internal state
 			_text_top: 0, // top position of text
+			_text_left: 0, // left position of text
 			_progress: 1, // progress (as a decimal) of the timer
 			_display: true, // whether or not to display the timer
 			};
@@ -57,19 +60,27 @@ class Timer extends React.Component {
 		var styleOptions = { // when time is less than 0, don't display
 			visibility: (this.state.delta > 0) ? "inherit": "hidden",
 			display: (this.state._display) ? "inherit": "none"
-			};
+			},
+			descriptionStyle = {};
+
+		if (! this.props.primary) descriptionStyle["display"] = "none";
 
 		return (
 			<div style={styleOptions}>
+				<h4>{this.state.name}</h4>
 				<Progressbar
 					ref="progressbar"
 					{...this.props}
 					percent={this.state._progress * 100} />
-				<span className="timer-text primary" style={{position: "relative", top: this.state._text_top, left: 0}} ref="progressLabel">
+				<div
+					className="timer-text primary" ref="progressLabel"
+					style={{position: "relative", top: this.state._text_top, left: this.state._text_left}}>
 					{this._getFormattedTime()}
+				</div>
+				<span style={descriptionStyle} className="timer-text description">
+					{this.state.description}
 				</span>
 				<br/>
-				<h3>{this.state.text}</h3>
 			</div>
 			);
 		}
@@ -94,12 +105,15 @@ class Timer extends React.Component {
 	_positionText(e) {
 		// the node is an SVG element, so width/height are in special attributes
 		var svg = ReactDOM.findDOMNode(this.refs.progressbar),
-			height = $(svg).height();
+			height = $(svg).height(),
+			width = $(svg).width();
 
 		var textNode = ReactDOM.findDOMNode(this.refs.progressLabel);
-		height += $(textNode).height() * 2;
+		height += ($(textNode).height() - this.props.strokeWidth * 2) * 2;
+		width -= ($(textNode).width() + this.props.strokeWidth * 2);
 
-		this.setState({_text_top: -height / 2});
+		if (! this.props.primary) width = 0; // position at left = 0
+		this.setState({_text_top: -height / 2, _text_left: width / 2});
 		}
 
 	/*
@@ -145,15 +159,17 @@ class Timer extends React.Component {
 	Reset the timer to display new text and a new time
 
 	Arguments:
-		String display - text to display
+		String name - name to display
+		String description - description of the task
 		int start_time - starting point of the timer
 		int delta_time - elapsed time before timer reaches 0 progress
 	*/
-	reset(display, start_time, delta_time) {
+	reset(name, description, start_time, delta_time) {
 		this.setState({
+			name: name,
+			description: description,
 			end: start_time + delta_time,
 			delta: delta_time,
-			text: display,
 			_progress: 1,
 			});
 		}

@@ -38,7 +38,8 @@ class PassiveTaskList extends React.Component {
 						<Timer
 							end={item.end_time}
 							delta={item.duration}
-							text={item.name} 
+							name={item.name}
+							description={item.description}
 							ref={"timer_" + item.id} />
 					</FullRow>;
 					})}
