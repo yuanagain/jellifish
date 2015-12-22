@@ -86,12 +86,14 @@ class TimersPage extends React.Component {
 								className="ionicons ion-ios-skipforward clickable-icon"></i>
 							</Col>
 						</Row>
+						<br/>
 					</Col>
-					<Col xs={6} className="center-horizontal display-height secondary">
+					<Col md={6} xs={12} className="center-horizontal display-height secondary">
 						<Row>
 							<Col xs={6} className="timer secondary"><header>Upcoming Tasks</header></Col>
 							<Col xs={6} className="timer secondary"><header>Background Tasks</header></Col>
 						</Row>
+						<br/>
 						<Row>
 							<Col xs={6} className="timer secondary"><Timer ref="timer_upcoming1" /></Col>
 							<Col xs={6} className="timer secondary"><Timer ref="timer_passive1" /></Col>
