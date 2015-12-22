@@ -1,0 +1,9 @@
+{% extends "page.html" %}
+{% block content %}
+	<form id = "selection" method = "POST" action = "{{ url_for('.get_ingredients') }}"></form>
+{% endblock %}
+{% block postbody %}
+	<script type="text/javascript">
+		pages.selection({{ recipes|safe }});
+	</script>
+{% endblock %}
