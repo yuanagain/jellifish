@@ -50,22 +50,30 @@ class TimersPage extends React.Component {
 
 			started: false, // whether or not the app has been started
 			paused: false, // whether or not app is paused
+			stopped: false // whether or not the app has been stopped
 			};
 		/* the timers are decoupled so that pauses and skips can be handled
 		separately */
 
+		// bind various functions to the "this" instance
 		this._updateActive = this._updateActive.bind(this);
+		this._updatePassive = this._updatePassive.bind(this);
 		this._updateUpcoming = this._updateUpcoming.bind(this);
 
+		// bind the buttons to the "this" instance
 		this._startTimers = this._startTimers.bind(this);
 		this._pauseActiveTimer = this._pauseActiveTimer.bind(this);
 		this._skipCurrentTask = this._skipCurrentTask.bind(this);
+		this._stopTimers = this._stopTimers.bind(this);
 		}
 
 	render() {
 		// Render the component
-		var iconOptions = {}
+		var iconOptions = {}, stopIconOptions = {};
 		if (! this.state.started) iconOptions.disabled = "disabled";
+		else if (this.state.stopped || this.state.paused) {
+			stopIconOptions.disabled = "disabled";
+			}
 
 		return (
 			<Content><Grid fluid>
@@ -80,11 +88,16 @@ class TimersPage extends React.Component {
 						<FullRow className="timer primary"><Timer ref="timer_active" primary /></FullRow>
 						<br/>
 						<Row>
-							<Col xs={6}>
-								<i {...iconOptions} onClick={this._pauseActiveTimer}
-								className={"clickable-icon ionicons ion-ios-" + (this.state.paused ? "play": "pause")}></i>
+							<Col xs={4}>
+								<i {...iconOptions} {...stopIconOptions}
+									className="ionicons ion-stop clickable-icon"
+									onClick={this._stopTimers}></i>
 							</Col>
-							<Col xs={6}>
+							<Col xs={4}>
+								<i {...iconOptions} onClick={this._pauseActiveTimer}
+								className={"clickable-icon ionicons ion-ios-" + (this.state.paused || this.state.stopped ? "play": "pause")}></i>
+							</Col>
+							<Col xs={4}>
 								<i {...iconOptions} onClick={this._skipCurrentTask}
 								className="ionicons ion-ios-skipforward clickable-icon"></i>
 							</Col>
@@ -253,7 +266,7 @@ class TimersPage extends React.Component {
 		(bool) Whether or not the timers started successfully
 	*/
 	_startTimers() {
-		if (this.state.activeTimer && this.state.passiveTimer) {
+		if (this.state.activeTimer && this.state.passiveTimer && ! this.state.started) {
 			this.state.activeTimer.start();
 			this.state.passiveTimer.start();
 			this.setState({started: true});
@@ -270,16 +283,22 @@ class TimersPage extends React.Component {
 		(bool) Whether or not timer was started (true) or stopped (false)
 	*/
 	_pauseActiveTimer() {
-		if (! this.state.started) return;
+		if (! this.state.started) return null;
 		var timer = this.state.activeTimer;
-		if (timer.isRunning()) {
-			this.setState({paused: true});
+		if (this.state.stopped) {
+			timer.start();
+			this.state.passiveTimer.start();
+			this.setState({stopped: false});
+			return true;
+			}
+		else if (timer.isRunning()) {
 			timer.stop();
+			this.setState({paused: true});
 			return false;
 			}
 		else {
-			this.setState({paused: false});
 			timer.start();
+			this.setState({paused: false});
 			return true;
 			}
 		}
@@ -291,7 +310,7 @@ class TimersPage extends React.Component {
 		(int) number of seconds skipped
 	*/
 	_skipCurrentTask() {
-		if (! this.state.started) return;
+		if (! this.state.started) return 0;
 		var currentTask = this.props.active[this.state.activePointer],
 			timer = this.state.activeTimer,
 			currentState = timer.isRunning();
@@ -302,6 +321,24 @@ class TimersPage extends React.Component {
 			}
 
 		return toSkip;
+		}
+
+	/*
+	Stop the current active and passive task
+
+	Returns
+		(bool) Whether or not the app was stopped
+	*/
+	_stopTimers() {
+		if (! this.state.started || this.state.paused) return false;
+		var activeTimer = this.state.activeTimer,
+			passiveTimer = this.state.passiveTimer;
+
+		if (activeTimer.isRunning()) activeTimer.stop();
+		if (passiveTimer.isRunning()) passiveTimer.stop();
+		this.setState({stopped: true});
+
+		return true;
 		}
 	}
 
