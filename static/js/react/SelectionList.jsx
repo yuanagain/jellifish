@@ -11,31 +11,28 @@ Required Props
 var React = require("react"),
 	ReactBootstrap = require("react-bootstrap");
 
-class SelectionList extends React.Component {
-	render() {
-		// Render the component
-		var props = this.props; // allow for future references
-		return (
-			<ul>
-				{this.props.selections.map(function(item) {
-					/* render each selection
+function SelectionList(props) {
+	// Render the SelectionList component
+	return (
+		<ul>
+			{props.selections.map(function(item) {
+				/* render each selection
 
-					Arguments
-						String item - value to display (also set as input value)
+				Arguments
+					String item - value to display (also set as input value)
 
-					Returns 
-						(HTMLElement) rendered component
-					*/
-					var input_id = props.name + Math.ceil(Math.random() * 100000);
-					return (
-						<div key={"div-" + input_id}>
-							<ReactBootstrap.Input type={props.type} name={props.name} value={item} className = "radio-select" id={input_id} label={item} />
-						</div>
-						);
-					})}
-			</ul>
-			);
-		}
+				Returns 
+					(HTMLElement) rendered component
+				*/
+				var input_id = props.name + Math.ceil(Math.random() * 100000);
+				return (
+					<div key={"div-" + input_id}>
+						<ReactBootstrap.Input type={props.type} name={props.name} value={item} className = "radio-select" id={input_id} label={item} />
+					</div>
+					);
+				})}
+		</ul>
+		);
 	}
 
 module.exports = SelectionList;

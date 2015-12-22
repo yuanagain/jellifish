@@ -16,34 +16,32 @@ var Content = require("./Content.jsx"),
 	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
 	FullRow = require("./FullRow.jsx");
 
-class IngredientsPage extends React.Component {
-	render() {
-		// Render the component
-		function renderIngredient(ingredient, index) {
-			/* Internal - render a specific ingredient
+function IngredientsPage(props) {
+	// Render the IngredientsPage component
+	function renderIngredient(ingredient, index) {
+		/* Internal - render a specific ingredient
 
-			Arguments
-				String ingredient - ingredient name to display
-				int index - index of the current ingredient
+		Arguments
+			String ingredient - ingredient name to display
+			int index - index of the current ingredient
 
-			Returns
-				(HTMLElement) rendered component
-			*/
-			return (
-					<FullRow key={Math.random()}>
-						<h6 className="ingredient">{index + 1}. {ingredient}</h6>
-					</FullRow>
-				);
-			}
-
+		Returns
+			(HTMLElement) rendered component
+		*/
 		return (
-			<Content><Grid fluid>
-				<SectionHeaderButton header="Ingredients" button="Continue" type="submit" />
-				<br/>
-				{this.props.ingredients.map(renderIngredient)}
-			</Grid></Content>
+				<FullRow key={Math.random()}>
+					<h6 className="ingredient">{index + 1}. {ingredient}</h6>
+				</FullRow>
 			);
 		}
+
+	return (
+		<Content><Grid fluid>
+			<SectionHeaderButton header="Ingredients" button="Continue" type="submit" />
+			<br/>
+			{props.ingredients.map(renderIngredient)}
+		</Grid></Content>
+		);
 	}
 
 module.exports = IngredientsPage;
