@@ -29,8 +29,7 @@ class SelectionList extends React.Component {
 					var input_id = props.name + Math.ceil(Math.random() * 100000);
 					return (
 						<div key={"div-" + input_id}>
-							<ReactBootstrap.Input type={props.type} name={props.name} value={item} className = "radio-select" id={input_id}/>
-							<label htmlFor={input_id} className="input-label">{item}</label>
+							<ReactBootstrap.Input type={props.type} name={props.name} value={item} className = "radio-select" id={input_id} label={item} />
 						</div>
 						);
 					})}

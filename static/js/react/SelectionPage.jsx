@@ -24,7 +24,7 @@ class SelectionPage extends React.Component {
 				<SectionHeaderButton header="Recipe Selection" button="Generate Meal" type="submit" />
 				<Row><Col md={12}><header>Recipes</header></Col></Row>
 				<Row><Col md={12}>
-					<SelectionList selections={this.props.selections} name="recipe" type="radio" />
+					<SelectionList selections={this.props.selections} name="recipe" type="checkbox" />
 				</Col></Row>
 			</Grid></Content>
 			);
