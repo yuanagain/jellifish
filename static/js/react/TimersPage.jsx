@@ -28,6 +28,7 @@ var Content = require("./Content.jsx"),
 	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
 	Timer = require("./Timer.jsx"),
 	FullRow = require("./FullRow.jsx");
+	CollapsibleList = require("./CollapsibleList.jsx");
 
 // Other dependencies
 var TimerHooker = require("../lib/TimerHooker.js");
@@ -69,6 +70,8 @@ class TimersPage extends React.Component {
 		return (
 			<Content><Grid fluid>
 				<SectionHeaderButton header="Jelli.fish" button="Start" onClick={this._startTimers} ref="button_header" />
+				<br/>
+				<CollapsibleList list={this.props.recipes} header="Recipes" />
 				<br/>
 				<Row>
 					<Col md={6} xs={12} className="center-horizontal display-height">

@@ -101,5 +101,8 @@ body {
 	padding-left: 1em;
 	}
 
-input[type=checkbox], input[type=radio] {
+.collapsible-list {
+	border: 1px solid $brand-success;
+	border-radius: $padding-general / 2;
+	padding: $padding-general / 2;
 	}

@@ -1,9 +1,10 @@
 {% extends "page.html" %}
 {% block content %}
-	<form id = "ingredients" method = "POST" action = "{{ url_for('.get_timers') }}">
+	<form method = "POST" action = "{{ url_for('.get_timers') }}">
 		{% for recipe in selected_recipes %}
 			<input type = "hidden" name="recipe" value="{{ recipe }}" />
 		{% endfor %}
+		<div id = "ingredients"></div>
 	</form>
 {% endblock %}
 {% block postbody %}
