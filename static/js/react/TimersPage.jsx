@@ -151,7 +151,7 @@ class TimersPage extends React.Component {
 					task.available = true;
 					comp._updatePassive();
 					});
-				passiveTimer.once(passiveTask.end_time + 1, function() {
+				passiveTimer.once(passiveTask.end_time, function() {
 					task.available = false;
 					comp._updatePassive();
 					});
@@ -221,7 +221,7 @@ class TimersPage extends React.Component {
 		timer_active.reset(task.name, task.description, task.start_time, task.duration);
 		this._updateUpcoming()
 
-		this.state.activeTimer.once(task.end_time + 1, function() {
+		this.state.activeTimer.once(task.end_time, function() {
 			pointer++;
 			// propagate change through the state
 			comp.setState({activePointer: pointer});
@@ -316,7 +316,7 @@ class TimersPage extends React.Component {
 			currentState = timer.isRunning();
 
 		var toSkip = currentTask.end_time - timer.elapsed;
-		for (var t = 0; t <= toSkip; t++) {
+		for (var t = 0; t < toSkip; t++) {
 			timer.progress();
 			}
 
