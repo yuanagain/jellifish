@@ -8,7 +8,7 @@ In addition, it should help to structure our code and provide a universal format
 ## Contents
 
 1. [Repository Guidelines](#repository-guidelines)
-2. [Environment Setup](#environment-setup)
+3. [Environment Setup](#environment-setup)
 
 ### Repository Guidelines
 
@@ -29,6 +29,19 @@ This ensures that the `master` branch is always stable and ready for production,
 The `dev` branch is only merged into when a new feature or bug is fixed. Similar to `master`, this branch should **not** be modified directly and it should **never** be forced-push into.
 
 Features and bug fixes should exist in their own separate branches, which can be deleted when they become irrelevant (i.e merged into `dev`). For example, if you are introducing an advanced job-queueing feature, you might create a branch named `feature-job-queue`. On the other hand, if you are fixing an issue with this queueing, you might name the branch `bugfix-job-queue`.
+
+Once a branch is merged into its parent branch, *delete the branch*. We do not
+want extraneous, stale branches lying around that clutter up the repository.
+To delete a branch, run `git branch -d {branch}` and then `git push origin :{branch}`.
+Note the `:` - this deletes the branch off of the remote repository.
+
+#### Branch Names
+Instead of naming your branches directly off of the feature, have an appropriate
+prefix to the branch name. For example, when developing the feature for React,
+an appropriate branch name is `dev-react`, NOT just `react`.
+
+Alternatively, if you are fixing a bug on the `react` implementation, you would
+branch off of `dev-react` with a branch named `bugfix-react`.
 
 #### Commit Messages
 Aim to succintly describe your changes and your reasoning behind them. In addition, if you fix a bug, you should reference the associated GitHub issue and describe the bug fix. For example, you can write: `closes #34 - tasks no longer appear in randomized order` as part of the commit message. With certain keywords, you can [automatically close the referenced GitHub issue](https://help.github.com/articles/closing-issues-via-commit-messages/). In addition, you can [directly reference certain parts of the Git repository in commit messages and issues](https://help.github.com/articles/writing-on-github/#references).
