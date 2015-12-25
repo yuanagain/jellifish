@@ -10,6 +10,7 @@ In addition, it should help to structure our code and provide a universal format
 1. [Repository Guidelines](#repository-guidelines)
 2. [Environment Setup](#environment-setup)
 3. [Project Organization](#project-organization)
+4. [Documentation](#documentation)
 
 ### Repository Guidelines
 
@@ -83,6 +84,7 @@ If you ever need to deactivate your virtual environment, you can either exit the
 *Note: the guide above assumes you are using a Unix or Unix-based environment, whether that's OS X or a Linux distribution.*
 
 ### Project Organization
+
 Another important aspect of having a suitable development *and* production-ready
 environment is to appropriately organize the entire project.
 
@@ -112,3 +114,38 @@ Although seemingly pointless, this code allows Python to resolve more complex im
 project folder.
 
 In addition, it is important to have documentation on what the package contains and what its primary purpose is.
+
+### Documentation
+
+A large portion of your time should be dedicated to appropriately documenting your code. Documentation comes in two flavors: comments and docstrings.
+
+#### Comments
+Comments are often inline or just above their respective code block, and describe what a certain piece of code does. This is very useful for when someone else has to look at your code or when you revisit your code later on. Rather than trying to guess what something does, it is much simpler to read a comment and understand why something was written as it is. A comment should detail *what* a piece of code does and if necessary, *why* this method was chosen - this is especially important if another approach seems more logical initially.
+
+For example, if you are writing a complex controller for setting the current progress state of a timer that is being repositioned, as shown below, you want to comment on how it works:
+
+```javascript
+/* This condition is true if the task is currently being displayed, but
+perhaps in another position. So, we want to make sure wherever it is
+rendered next, it starts at the correct progress value. */
+if (task.ref != null && task.ref != undefined) {
+	newProgress = this.refs[task.ref].getProgress();
+	}
+// Triggers above condition in next call of _updatePassive
+task.ref = "timer_passive" + (index + 1);
+```
+
+Although the code seems to make perfect sense when writing it, it may not be so clear when referring back to it a few days later. Even worse, a peer or coworker looking at your code may not have a single clue about what is going on. So, it is vital to comment code, especially when it is tricky to understand or implement.
+
+#### Docstrings
+Documentation strings (also called "docstrings") are a special form of comments. They are often coupled with API components to describe what they do, the input they require, and what they output. Types of code that should have appropriate docstrings include:
+
+- Packages
+- Modules
+- Classes
+- Methods
+- Functions
+
+In essence, the entire API should be documented with docstrings, so that another team member can use your code *without* looking through it.
+
+We will be using the Sphinx tool to automatically compile documentation, and this uses the reStructuredText (RST) format.
