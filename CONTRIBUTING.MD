@@ -8,9 +8,9 @@ In addition, it should help to structure our code and provide a universal format
 ## Contents
 
 1. [Repository Guidelines](#repository-guidelines)
-2. [Environment Setup](#environment-setup)
-3. [Project Organization](#project-organization)
-4. [Documentation](#documentation)
+2. [Project Organization](#project-organization)
+3. [Documentation](#documentation)
+4. [Environment Setup](#environment-setup)
 
 ### Repository Guidelines
 
@@ -66,22 +66,6 @@ All changes:
     - Add debug statements for incorrect queueing order
     - Update task dependencies in realtime
 ```
-
-### Environment Setup
-
-An important aspect of working on a production-ready application is to maintain a standard development environment. To facilitate this, we will be using a tool called `virtualenv` in Python. Essentially, it isolates your project folder and Python installation from any other project, thus ensuring that you do not have dependency clashes. In addition, it will guarantee that we use the same Python version, which is important.
-
-Once you have `pip` (check out the [installation guide here](http://pip.readthedocs.org/en/stable/installing/)) installed, follow this guide with the current directory set to the **project folder**:
-
-1. Install `virtualenv` using pip: `pip install virtualenv`
-2. Create the virtual environment: `virtualenv venv`
-3. Activate the virtual environment: `source venv/bin/activate`
-
-Whenever you install a new library via pip, such as by running `pip install flask`, make sure to export all of your dependencies. This is easily done by running `pip freeze > requirements.txt`. To install dependencies from a requirements file, run `pip install -r requirements.txt`.
-
-If you ever need to deactivate your virtual environment, you can either exit the shell or run  the `deactivate` command.
-
-*Note: the guide above assumes you are using a Unix or Unix-based environment, whether that's OS X or a Linux distribution.*
 
 ### Project Organization
 
@@ -149,3 +133,19 @@ Documentation strings (also called "docstrings") are a special form of comments.
 In essence, the entire API should be documented with docstrings, so that another team member can use your code *without* looking through it.
 
 We will be using the Sphinx tool to automatically compile documentation, and this uses the reStructuredText (RST) format.
+
+### Environment Setup
+
+An important aspect of working on a production-ready application is to maintain a standard development environment. To facilitate this, we will be using a tool called `virtualenv` in Python. Essentially, it isolates your project folder and Python installation from any other project, thus ensuring that you do not have dependency clashes. In addition, it will guarantee that we use the same Python version, which is important.
+
+Once you have `pip` (check out the [installation guide here](http://pip.readthedocs.org/en/stable/installing/)) installed, follow this guide with the current directory set to the **project folder**:
+
+1. Install `virtualenv` using pip: `pip install virtualenv`
+2. Create the virtual environment: `virtualenv venv`
+3. Activate the virtual environment: `source venv/bin/activate`
+
+Whenever you install a new library via pip, such as by running `pip install flask`, make sure to export all of your dependencies. This is easily done by running `pip freeze > requirements.txt`. To install dependencies from a requirements file, run `pip install -r requirements.txt`.
+
+If you ever need to deactivate your virtual environment, you can either exit the shell or run  the `deactivate` command.
+
+*Note: the guide above assumes you are using a Unix or Unix-based environment, whether that's OS X or a Linux distribution.*
