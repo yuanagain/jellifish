@@ -8,7 +8,8 @@ In addition, it should help to structure our code and provide a universal format
 ## Contents
 
 1. [Repository Guidelines](#repository-guidelines)
-3. [Environment Setup](#environment-setup)
+2. [Environment Setup](#environment-setup)
+3. [Project Organization](#project-organization)
 
 ### Repository Guidelines
 
@@ -72,11 +73,42 @@ An important aspect of working on a production-ready application is to maintain 
 Once you have `pip` (check out the [installation guide here](http://pip.readthedocs.org/en/stable/installing/)) installed, follow this guide with the current directory set to the **project folder**:
 
 1. Install `virtualenv` using pip: `pip install virtualenv`
-3. Create the virtual environment: `virtualenv venv`
-4. Activate the virtual environment: `source venv/bin/activate`
+2. Create the virtual environment: `virtualenv venv`
+3. Activate the virtual environment: `source venv/bin/activate`
 
 Whenever you install a new library via pip, such as by running `pip install flask`, make sure to export all of your dependencies. This is easily done by running `pip freeze > requirements.txt`. To install dependencies from a requirements file, run `pip install -r requirements.txt`.
 
 If you ever need to deactivate your virtual environment, you can either exit the shell or run  the `deactivate` command.
 
 *Note: the guide above assumes you are using a Unix or Unix-based environment, whether that's OS X or a Linux distribution.*
+
+### Project Organization
+Another important aspect of having a suitable development *and* production-ready
+environment is to appropriately organize the entire project.
+
+Since we are mostly developing in Python, we want to have each component housed
+independently. However, this does not mean just keeping each component
+in a separate folder. If we do so, then components are not accessible from the main
+project folder. Instead, we want to make use of [Python's packaging system](https://docs.python.org/3.5/tutorial/modules.html#packages).
+
+#### Python Packages
+A Python package simply consists of a folder with an `__init__.py` file inside.
+However, it is pretty useful to simply import everything in a package in its
+`__init__.py`.
+
+For example, let's say that your package structure is as follows:
+
+```
+core/
+	__init__.py
+	algorithm.py
+	graph.py
+```
+
+That is, your package `core` contains the modules `algorithm.py` and `graph.py`. In your `__init__.py`, you would want the following code:
+`from . import algorithm, graph`.
+
+Although seemingly pointless, this code allows Python to resolve more complex import structures when you are importing from the main
+project folder.
+
+In addition, it is important to have documentation on what the package contains and what its primary purpose is.
