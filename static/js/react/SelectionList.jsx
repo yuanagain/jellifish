@@ -3,13 +3,15 @@ A SelectionList essentially holds a list of selections, with a given type
 (radio or checkbox).
 
 Required Props
-	String name - input name for form (HTML:form attribute)
+	String name - input name for form (input[name] attribute)
 	String type - type of input (either "radio" or "checkbox")
 	[String, ...] selections - list of selection options
 */
 
-var React = require("react"),
-	ReactBootstrap = require("react-bootstrap");
+var React = require("react");
+
+// React components
+var SelectionInput = require("./SelectionInput.jsx");
 
 function SelectionList(props) {
 	// Render the SelectionList component
@@ -27,7 +29,7 @@ function SelectionList(props) {
 				var input_id = props.name + Math.ceil(Math.random() * 100000);
 				return (
 					<div key={"div-" + input_id}>
-						<ReactBootstrap.Input type={props.type} name={props.name} value={item} className = "radio-select" id={input_id} label={item} />
+						<SelectionInput type={props.type} name={props.name} value={item} label={item} />
 					</div>
 					);
 				})}
