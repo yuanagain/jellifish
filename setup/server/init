@@ -45,7 +45,7 @@ cd "/var/www/{{ BASE_URL }}"
 sudo pyenv install {{ settings.py_version }}
 sudo pyenv rehash
 sudo pyenv local {{ settings.py_version }}
-sudo virtualenv --python=python env
+sudo virtualenv --python=python {{ settings.virtualenv }}
 
 # Create NginX directories and add the configuration
 sudo mkdir -p /var/cache/nginx

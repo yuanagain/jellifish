@@ -41,5 +41,8 @@ DEPLOY_SETTINGS = {
 	"ufw": True,
 	"swap_size": "1G",
 	"py_version": "3.5.0",
+	"virtualenv": "env",
+	"app_directory": "app",
+	"static_directory": "static",
 	"user": NAME
 	}

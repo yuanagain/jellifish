@@ -19,15 +19,18 @@ CONFIG.update(config.__dict__)
 
 def main():
 	'''Main process'''
+	# load configuration templates from this directory
 	jinjaLoader = jinja2.FileSystemLoader(searchpath = ".")
 	jinjaEnv = jinja2.Environment(trim_blocks = True, lstrip_blocks = True, loader = jinjaLoader)
 
+	# render each template and store in the configuration dictionary
 	packageData = CONFIG.copy()
 	for path in CONFIGURATION_FILES:
 		fileTemplate = jinjaEnv.get_template(path)
 		rendered = fileTemplate.render(**CONFIG)
 		packageData["DEPLOY_SETTINGS"]["configuration_file_data"][path] = rendered
 
+	# write the configuration data to configure.py
 	packagedTemplate = jinjaEnv.get_template("configure_template.py")
 	with open("configure.py", "w") as configure_file:
 		configure_file.write(packagedTemplate.render(**CONFIG))
