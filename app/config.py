@@ -31,3 +31,15 @@ VIEW_GLOBALS = {
 	"name": "Jellifish",
 	"static": "/".join([FULL_URL, "static"])
 	}
+
+DEPLOY_SETTINGS = {
+	"configuration_files": ["nginx.conf", "init", "upstart-app.conf"],
+	"configuration_file_data": {}, # utilized by package.py
+	"https": False,
+	"cloudflare": False,
+	"static_error_pages": False,
+	"ufw": True,
+	"swap_size": "1G",
+	"py_version": "3.5.0",
+	"user": NAME
+	}

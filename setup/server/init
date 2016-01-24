@@ -1,0 +1,124 @@
+#!/bin/bash
+# {{ NAME }}
+# Rushy Panchal
+# Install all dependencies and setup the environment
+
+# Options
+CWD="$PWD"
+
+# Add the new user
+sudo adduser "{{ settings.user }}"
+sudo gpasswd -a "{{ settings.user }}" sudo
+
+# Update repositories
+sudo apt-get update && sudo apt-get upgrade -y
+
+# Necessary packages
+sudo apt-get install -y git make ufw fail2ban vnstat
+
+# Python packages
+# required for compiling  most C programs and C-based Python packages
+sudo apt-get install -y build-essential  build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libffi-dev
+sudo apt-get install -y python python-pip python-dev uwsgi
+sudo pip install pip --upgrade
+
+sudo pip install virtualenv
+
+# Install pyenv to manage Python versions
+git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
+# Install Nginx
+sudo apt-get install -y nginx
+
+# Create the /var/www/ directory for the application
+sudo chown -R "{{ settings.user }}":"{{ settings.user }}" /var/www
+sudo mkdir -p "/var/www/{{ BASE_URL }}"
+sudo chown -R "{{ settings.user }}":www-data "/var/www/{{ BASE_URL }}"
+sudo chmod 755 /var/www
+sudo usermod -a -G www-data "{{ settings.user }}"
+
+# Create virtualenvv in /var/www/ directory of application using custom Python version
+cd "/var/www/{{ BASE_URL }}"
+sudo pyenv install {{ settings.py_version }}
+sudo pyenv rehash
+sudo pyenv local {{ settings.py_version }}
+sudo virtualenv --python=python env
+
+# Create NginX directories and add the configuration
+sudo mkdir -p /var/cache/nginx
+sudo rm /etc/nginx/sites-available/default
+sudo rm /etc/nginx/sites-enabled/default
+sudo mv nginx.conf "/etc/nginx/sites-available/{{ BASE_URL }}"
+sudo ln -s "/etc/nginx/sites-available/{{ BASE_URL }}" "/etc/nginx/sites-enabled/{{ BASE_URL }}"
+
+{% if https %}
+# NginX SSL configuration
+sudo mkdir -p "/etc/nginx/ssl/{{ BASE_URL }}"
+cd ~/
+sudo mv bundle.crt "/etc/nginx/ssl/{{ BASE_URL }}.bundle.crt"
+sudo mv private.key "/etc/nginx/ssl/{{ BASE_URL }}.private.key"
+{% endif %}
+
+# Create the Git repository and add the post-receive hook
+sudo mkdir -p "/var/repo/{{ NAME }}.git"
+cd "/var/repo/{{ NAME }}.git"
+sudo git init --bare
+sudo cat <<EOT >> "hooks/post-receive"
+#!/bin/sh
+git --work-tree=/var/www/{{ NAME }} --git-dir=/var/repo/{{ NAME }}.git checkout -f
+EOT
+sudo chmod +x hooks/post-receive
+sudo rm hooks/*.sample
+cd /var/repo
+sudo chown -R {{ settings.user }}:{{ settings.user }} "/var/repo/{{ NAME }}.git"
+cd ~/
+
+# Firewall configuration
+sudo ufw allow ssh # make sure to enable SSH access BEFORE enabling the firewall
+sudo ufw allow http
+{% if https %}
+sudo ufw allow https
+{% endif %}
+sudo ufw allow from 127.0.0.1 to any port "{{ PORT }}" # Application
+sudo ufw --force enable # force start UFW - no prompt
+
+# Disable logging into root via SSH
+sudo sed -i '/^#/!{s/PermitRootLogin .*/PermitRootLogin no/}' /etc/ssh/sshd_config
+sudo service ssh restart
+
+# Start services
+cd "$CWD"
+sudo service nginx start
+
+# Install Upstart script
+cd ~/
+sudo mv upstart-app.conf "/etc/init/{{ NAME }}.conf"
+sudo mkdir -p "/var/log/{{ NAME }}" # Cryptosana log directory
+sudo chown -R "{{ settings.user }}":"{{ settings.user }}" "/var/log/{{ NAME }}"
+sudo touch "/var/log/upstart/{{ NAME }}.log" # create the initial log item for upstart
+sudo ln -s "/var/log/upstart/{{ NAME }}.log" "/var/log/{{ NAME }}/service.log" # make link to the Upstart log
+sudo ln -s "/var/log/{{ NAME}}" "/var/www/{{ NAME }}/log"
+
+# Install Memory Swap
+sudo fallocate -l "{{ settings.swap_size }}" /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo "/swapfile   none    swap    sq    0   0" >> /etc/fstab
+
+# Create environment variable, {{ NAME }} for the app directory
+# for both the root and the {{ settings.user }}
+echo "export APP=/var/www/{{ NAME }}" >> ~/.profile
+sudo -H -u {{ settings.user }} bash -c 'echo "export APP=/var/www/{{ NAME }}" >> ~/.profile'
+
+# Cleanup
+sudo apt-get autoremove -y
+sudo apt-get clean
+cd ~/
+rm configure.py {{ " ".join(DEPLOY_SETTINGS["configuration_files"]) }} # delete the configuration programs
+
+# Final messages
+echo "You might also want to add a pre-receive hook, /var/repo/{{ NAME }}.git/hooks/pre-receive, to run unit tests before accepting a push."
