@@ -6,6 +6,9 @@ Required Props
 	String name - input name for form (input[name] attribute)
 	String type - type of input (either "radio" or "checkbox")
 	[String, ...] selections - list of selection options
+
+Optional Props
+	String data-react-id - base Parse analytics ID for when a selected item is submitted
 */
 
 var React = require("react");
@@ -29,7 +32,11 @@ function SelectionList(props) {
 				var input_id = props.name + Math.ceil(Math.random() * 100000);
 				return (
 					<div key={"div-" + input_id}>
-						<SelectionInput type={props.type} name={props.name} value={item} label={item} />
+						<SelectionInput type={props.type} name={props.name} value={item} label={item}
+						data-parse-id={
+							(props["data-parse-id"] == undefined || props["data-parse-id"] == null) ? "":
+							(props["data-parse-id"] + "-" + item)
+						} />
 					</div>
 					);
 				})}

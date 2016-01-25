@@ -77,9 +77,9 @@ class TimersPage extends React.Component {
 
 		return (
 			<Content><Grid fluid>
-				<SectionHeaderButton header="Jelli.fish" button="Start" onClick={this._startTimers} ref="button_header" />
+				<SectionHeaderButton header="Jelli.fish" button="Start" onClick={this._startTimers} ref="button_header" data-parse-id="button-timers-start" />
 				<br/>
-				<CollapsibleList list={this.props.recipes} header="Recipes" />
+				<CollapsibleList list={this.props.recipes} header="Recipes" data-parse-id="button-timers-view-recipes" />
 				<br/>
 				<Row>
 					<Col md={6} xs={12} className="center-horizontal display-height">
@@ -91,15 +91,18 @@ class TimersPage extends React.Component {
 							<Col xs={4}>
 								<i {...iconOptions} {...stopIconOptions}
 									className="ionicons ion-stop clickable-icon"
-									onClick={this._stopTimers}></i>
+									onClick={this._stopTimers}
+									data-parse-id="button-timers-stop"></i>
 							</Col>
 							<Col xs={4}>
 								<i {...iconOptions} onClick={this._pauseActiveTimer}
-								className={"clickable-icon ionicons ion-ios-" + (this.state.paused || this.state.stopped ? "play": "pause")}></i>
+								className={"clickable-icon ionicons ion-ios-" + (this.state.paused || this.state.stopped ? "play": "pause")}
+								data-parse-id="button-timers-pause"></i>
 							</Col>
 							<Col xs={4}>
 								<i {...iconOptions} onClick={this._skipCurrentTask}
-								className="ionicons ion-ios-skipforward clickable-icon"></i>
+								className="ionicons ion-ios-skipforward clickable-icon"
+								data-parse-id="button-timers-skip"></i>
 							</Col>
 						</Row>
 						<br/>

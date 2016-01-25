@@ -37,7 +37,7 @@ function IngredientsPage(props) {
 
 	return (
 		<Content><Grid fluid>
-			<SectionHeaderButton header="Ingredients" button="Continue" type="submit" />
+			<SectionHeaderButton header="Ingredients" button="Continue" type="submit" data-parse-id="button-ingredients-continue" />
 			<br/>
 			{props.ingredients.map(renderIngredient)}
 		</Grid></Content>

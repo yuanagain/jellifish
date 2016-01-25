@@ -20,10 +20,10 @@ function SelectionPage(props) {
 	// Render the SelectionPage component
 	return (
 		<Content><Grid fluid>
-			<SectionHeaderButton header="Recipe Selection" button="Generate Meal" type="submit" />
+			<SectionHeaderButton header="Recipe Selection" button="Generate Meal" type="submit" data-parse-id="button-recipe-generate-meal" />
 			<Row><Col md={12}><header>Recipes</header></Col></Row>
 			<Row><Col md={12}>
-				<SelectionList selections={props.selections} name="recipe" type="checkbox" />
+				<SelectionList selections={props.selections} name="recipe" type="checkbox" data-parse-id="recipe-selection" />
 			</Col></Row>
 		</Grid></Content>
 		);

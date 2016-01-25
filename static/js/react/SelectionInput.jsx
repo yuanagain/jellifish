@@ -7,6 +7,9 @@ Required Props
 	String type - type of input (either "radio" or "checkbox")
 	String value - value for the input
 	String label - label to display for the input	
+
+Optional Props
+	String data-react-id - Parse analytics ID for when the item is submitted, if selected
 */
 
 var React = require("react");
@@ -37,7 +40,7 @@ class SelectionInput extends React.Component {
 		as desired.*/
 		return (
 			<div className="selection-input">
-				<input type={this.props.type} name={this.props.name} value={this.props.value} checked={this.state.checked} />
+				<input type={this.props.type} name={this.props.name} value={this.props.value} checked={this.state.checked} data-parse-id={this.props["data-parse-id"]} />
 				<i className={"ionicons ion-ios-" + (this.state.checked ? "checkmark" :"circle-outline")}
 					onClick={() => this.setState({checked: ! this.state.checked})}></i>
 				<span>{this.props.label}</span>

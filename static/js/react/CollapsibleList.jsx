@@ -5,6 +5,9 @@ collapsed.
 Required Props
 	[Object, ...] list - list of data to display
 	String header - header of the list
+
+Optional Props
+	String data-parse-id - Parse analytics ID for when the list is collapsed or expanded
 */
 
 var React = require("react"),
@@ -15,9 +18,9 @@ var React = require("react"),
 // React components
 var FullRow = require("./FullRow.jsx");
 
-class RecipeList extends React.Component {
+class CollapsibleList extends React.Component {
 	/*
-	Create a new TimersPage
+	Create a new CollapsibleList
 
 	Arguments
 		Object props - properties for component
@@ -38,7 +41,8 @@ class RecipeList extends React.Component {
 					<Col xs={8}><header className="center-horizontal">{this.props.header}</header></Col>
 					<Col xs={4}>
 						<i className={"clickable-icon ionicons ion-ios-arrow-" + (this.state.open ? "up": "down")}
-						onClick={() => this.setState({open: ! this.state.open})}></i>
+						onClick={() => this.setState({open: ! this.state.open})}
+						data-parse-id={this.props["data-parse-id"]}></i>
 					</Col>
 				</Row>
 				<ReactBootstrap.Panel collapsible expanded={this.state.open}
@@ -57,4 +61,4 @@ class RecipeList extends React.Component {
 		}
 	}
 
-module.exports = RecipeList;
+module.exports = CollapsibleList;
