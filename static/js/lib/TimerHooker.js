@@ -1,5 +1,8 @@
 /*
 The TimerHooker class allows you to add hooks to passing time.
+
+Author: Rushy Panchal
+Project: jellifish
 */
 
 class TimerHooker {
