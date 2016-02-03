@@ -17,21 +17,15 @@ class PKBlind(PatchKit):
         current_sequence = []
 
         for seq in self.seq_list:
-            print(len(seq.tasks))
+
             for task in seq.tasks:
                 data = task.dump_data()
                 data["start"] = current_timing
                 current_timing += task.time
                 data["end"] = current_timing
-
-                print(data)
-                print(current_timing)
-                print(task.time)
                 current_sequence.append(data)
                 
                 if (task.min_wait > 0):
-                    print("waiting")
-                    print(task.min_wait)
                     current_sequence.append(
                         TS.wait_data(current_timing, current_timing + task.min_wait))
                 current_timing += task.min_wait
