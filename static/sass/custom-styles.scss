@@ -7,10 +7,31 @@ $background-color: #2C3E50;
 $background-color-header: rgba(132,132,132,0.5);
 $padding-general: 1em;
 
+$checkbutton-size: 1em;
+$checkbutton-color: $gray-lightest;
+
+// Full-element styling
 body {
 	padding: $padding-general;
 	}
 
+// Custom check-buttons
+div.selection-input {
+	font-size: $font-size-h4;
+	input[type=checkbox] {
+		display: none; // hide the default checkbox
+		& + i {
+			letter-spacing: $checkbutton-size / 2;
+			color: $checkbutton-color;
+			&:hover {
+				color: darken($checkbutton-color, 25%);
+				@include transition(color 0.25s);
+				}
+			}
+		}
+	}
+
+// Class-only styling
 .center-horizontal {
 	@include center-block;
 	text-align: center;

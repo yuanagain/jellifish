@@ -9,15 +9,13 @@ Required Props
 var React = require("react"),
 	ReactBootstrap = require("react-bootstrap");
 
-class GlobalHeader extends React.Component {
-	render() {
-		// Render the component
-		return (
-			<header className = "header">
-				<a href = "/"><ReactBootstrap.Image src={this.props.logoSrc} responsive rounded className = "logo" /></a>
-			</header>
-			);
-		}
+function GlobalHeader(props) {
+	// Render the GlobalHeader component
+	return (
+		<header className = "header">
+			<a href = "/"><ReactBootstrap.Image src={props.logoSrc} responsive rounded className = "logo" /></a>
+		</header>
+		);
 	}
 
 module.exports = GlobalHeader;

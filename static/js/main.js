@@ -5,7 +5,8 @@ Main page script
 var React = require("react"),
 	ReactDOM = require("react-dom"),
 	jQuery = require("jquery"),
-	utils = require("./lib/utils.js");
+	utils = require("./lib/utils.js"),
+	analytics = require("./lib/analytics.js");
 
 // React components
 var GlobalHeader = require("./react/GlobalHeader.jsx"),
@@ -18,6 +19,13 @@ function main() {
 	ReactDOM.render(
 		<GlobalHeader logoSrc={utils.staticPath("images/logo.png")} />,
 		utils.getElem("#header"));
+
+	jQuery(document).ready(postRender);
+	}
+
+function postRender() {
+	// Post-render hooks
+	analytics.parse(null, null);
 	}
 
 var page = {
