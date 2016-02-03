@@ -1,10 +1,10 @@
 """
 This module contains algorithms for optimizing batches of task sequences
 """
-from taskSequence import taskNode
-from taskSequence import taskSequence
+from TaskSequence import TaskNode
+from TaskSequence import TaskSequence
 import dataUtils as dutils
-import taskSequence as TS
+import TaskSequence as TS
 import sys
 
 class optimize_v1:
@@ -18,8 +18,8 @@ class optimize_v1:
 
 		Parameters:
 		------
-		seq_list : taskSequence[]
-		A list of taskSequence objects
+		seq_list : TaskSequence[]
+		A list of TaskSequence objects
 		"""
 		self.seq_list = seq_list
 
@@ -78,10 +78,10 @@ class optimize_v1:
 				data["end"] = current_timing
 				current_sequence.append(data)
 				
-				if (task.wait_low > 0):
+				if (task.min_wait > 0):
 					current_sequence.append(
-						TS.wait_data(current_timing, current_timing + task.wait_low))
-				current_timing += task.wait_low
+						TS.wait_data(current_timing, current_timing + task.min_wait))
+				current_timing += task.min_wait
 
 
 		return current_timing, current_sequence
@@ -89,16 +89,16 @@ class optimize_v1:
 
 def main(argv):
 	print("Testing blind_sequence")
-	tn_1 = taskNode(name = "tn1", time = 10.0, wait_low = 10.0, wait_high = 20.0)
-	tn_2 = taskNode(name = "tn2", time = 10.0, wait_low = 0.0, wait_high = 20.0)
-	tn_3 = taskNode(name = "tn3", time = 10.0, wait_low = 20.0, wait_high = 20.0)
+	tn_1 = TaskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+	tn_2 = TaskNode(name = "tn2", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+	tn_3 = TaskNode(name = "tn3", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
-	tn_4 = taskNode(name = "tn4", time = 10.0, wait_low = 10.0, wait_high = 20.0)
-	tn_5 = taskNode(name = "tn5", time = 10.0, wait_low = 0.0, wait_high = 20.0)
-	tn_6 = taskNode(name = "tn6", time = 10.0, wait_low = 20.0, wait_high = 20.0)
+	tn_4 = TaskNode(name = "tn4", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+	tn_5 = TaskNode(name = "tn5", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+	tn_6 = TaskNode(name = "tn6", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
-	ts_1 = taskSequence([tn_1, tn_2, tn_3])
-	ts_2 = taskSequence([tn_4, tn_5, tn_6])
+	ts_1 = TaskSequence([tn_1, tn_2, tn_3])
+	ts_2 = TaskSequence([tn_4, tn_5, tn_6])
 
 	ov1 = optimize_v1([ts_1, ts_2])
 	ct, cs = ov1.blind_sequence()

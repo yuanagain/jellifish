@@ -3,7 +3,7 @@ This module contains algorithms for optimizing batches of task sequences
 """
 from TaskSequence import TaskNode
 from TaskSequence import TaskSequence
-import dataUtils as dutils
+import DataUtils as dutils
 import TaskSequence as TS
 import sys
 
@@ -18,8 +18,8 @@ class PatchKit:
 
         Parameters:
         ------
-        seq_list : taskSequence[]
-        A list of taskSequence objects
+        seq_list : TaskSequence[]
+        A list of TaskSequence objects
         """
         self.seq_list = seq_list
 

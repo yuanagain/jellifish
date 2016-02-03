@@ -10,7 +10,7 @@ from TaskSequence import TaskSequence, TaskNode
 
 # Global Defaults
 default_db_fname = "RECIPEDATA_V1.db"
-default_fields = "(name, descr, time, frag, min_wait, max_wait)"
+default_fields = "(name, descr, time, min_wait, max_wait)"
 
 all_fields = ["name", "descr", "time", "min_wait", "max_wait"]
 data_default = {"time": 0.0, "min_wait": 0.0, "max_wait": 0.0}
@@ -67,6 +67,17 @@ class DBMgr:
             ids = marshal.dumps(task_id_list)
             self.add_entry_v3(task_seq.name, task_seq.descr, ids)
 
+    def fetch_seq_names(self):
+        """     
+        returns a list of names of task sequences in database
+        """
+        with self.connect:
+            cur = self.connect.cursor()
+            cur.execute('SELECT name FROM seqs')
+            names = cur.fetchall()
+            names = [el[0] for el in names]
+            return names
+
     def load_seq_v1(self, name):
         """
         Loads the first task sequence with a given name
@@ -85,7 +96,7 @@ class DBMgr:
             # load tasks by task id
             tasks = []
             for task_id in task_ids:
-                cur.execute("SELECT name, descr, time, frag, min_wait, max_wait "
+                cur.execute("SELECT name, descr, time, min_wait, max_wait "
                     + "FROM data WHERE id=:id", {"id": task_id})
                 task_data = cur.fetchone()
 
@@ -125,7 +136,7 @@ class DBMgr:
         Adds data from dictionary
         """
         entry = (None, task_data["name"], task_data["descr"], task_data["time"],
-                 task_data["frag"], task_data["min_wait"], task_data["max_wait"])
+                 task_data["min_wait"], task_data["max_wait"])
         self.add_entry_v2(entry)
 
 
@@ -143,7 +154,7 @@ class DBMgr:
 
     def add_entry_v2(self, entry):
         with self.connect:
-            self.connect.execute("INSERT INTO data VALUES(?, ?, ?, ?, ?, ?, ?)", entry)
+            self.connect.execute("INSERT INTO data VALUES(?, ?, ?, ?, ?, ?)", entry)
 
     def add_entry_v3(self, name, descr = "", tasks = None):
         with self.connect:
@@ -155,7 +166,7 @@ class DBMgr:
         ------
         First time setup
         """
-        create_1 = "CREATE TABLE data(id integer primary key, name TEXT, descr TEXT, time REAL, frag REAL, min_wait REAL, max_wait REAL)"
+        create_1 = "CREATE TABLE data(id integer primary key, name TEXT, descr TEXT, time REAL, min_wait REAL, max_wait REAL)"
         create_2 = "CREATE TABLE seqs(id integer primary key, name TEXT, descr TEXT, tasks BLOB)"
         print(create_1)
         print(create_2)

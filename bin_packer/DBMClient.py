@@ -5,6 +5,8 @@ used to maintain library of recipes
 import DBMgr
 from TaskSequence import TaskSequence, TaskNode
 import os
+from pkblind import PKBlind
+import DataUtils as dutils
 
 class DBMClient:
     def __init__(self, db_fname = None):
@@ -25,6 +27,16 @@ class DBMClient:
         failure if no such sequence exists
         """
         return self.dbm.load_seq_v1(name)
+
+    def fetch_recipe_v2(self, name):
+        """
+        Returns task sequence formatted w/ start/stop times
+        infused
+        """
+        ts = self.dbm.load_seq_v1(name)
+        pkb = PKBlind([ts])
+        ct, cs = pkb.fit()
+        return cs
 
     def add_recipe(self, recipe):
         """
@@ -62,6 +74,9 @@ def main():
     print("\nTESTING fetch_recipe")
     client.fetch_recipe("seq_1").print_dump()
     client.fetch_recipe("seq_2").print_dump()
+
+    instr = client.fetch_recipe_v2("seq_1")
+    dutils.print_instr(instr)
 
     print("\nTESTS COMPLETED")
 

@@ -17,33 +17,40 @@ class PKBlind(PatchKit):
         current_sequence = []
 
         for seq in self.seq_list:
+            print(len(seq.tasks))
             for task in seq.tasks:
                 data = task.dump_data()
                 data["start"] = current_timing
                 current_timing += task.time
                 data["end"] = current_timing
+
+                print(data)
+                print(current_timing)
+                print(task.time)
                 current_sequence.append(data)
                 
-                if (task.wait_low > 0):
+                if (task.min_wait > 0):
+                    print("waiting")
+                    print(task.min_wait)
                     current_sequence.append(
-                        TS.wait_data(current_timing, current_timing + task.wait_low))
-                current_timing += task.wait_low
+                        TS.wait_data(current_timing, current_timing + task.min_wait))
+                current_timing += task.min_wait
 
 
         return current_timing, current_sequence
 
 def main(argv):
     print("PKBLIND")
-    tn_1 = taskNode(name = "tn1", time = 10.0, wait_low = 10.0, wait_high = 20.0)
-    tn_2 = taskNode(name = "tn2", time = 10.0, wait_low = 0.0, wait_high = 20.0)
-    tn_3 = taskNode(name = "tn3", time = 10.0, wait_low = 20.0, wait_high = 20.0)
+    tn_1 = TaskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+    tn_2 = TaskNode(name = "tn2", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+    tn_3 = TaskNode(name = "tn3", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
-    tn_4 = taskNode(name = "tn4", time = 10.0, wait_low = 10.0, wait_high = 20.0)
-    tn_5 = taskNode(name = "tn5", time = 10.0, wait_low = 0.0, wait_high = 20.0)
-    tn_6 = taskNode(name = "tn6", time = 10.0, wait_low = 20.0, wait_high = 20.0)
+    tn_4 = TaskNode(name = "tn4", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+    tn_5 = TaskNode(name = "tn5", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+    tn_6 = TaskNode(name = "tn6", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
-    ts_1 = taskSequence([tn_1, tn_2, tn_3])
-    ts_2 = taskSequence([tn_4, tn_5, tn_6])
+    ts_1 = TaskSequence("ts1", tasks = [tn_1, tn_2, tn_3])
+    ts_2 = TaskSequence("ts2", tasks = [tn_4, tn_5, tn_6])
 
     ov1 = PKBlind([ts_1, ts_2])
     ct, cs = ov1.fit()
