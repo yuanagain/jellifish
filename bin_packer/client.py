@@ -1,3 +1,0 @@
-"""
-Implements a client for 
-"""
