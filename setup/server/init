@@ -68,7 +68,7 @@ cd "/var/repo/{{ NAME }}.git"
 sudo git init --bare
 sudo cat <<EOT >> "hooks/post-receive"
 #!/bin/sh
-git --work-tree=/var/www/{{ NAME }} --git-dir=/var/repo/{{ NAME }}.git checkout -f
+git --work-tree=/var/www/{{ BASE_URL }} --git-dir=/var/repo/{{ NAME }}.git checkout -f
 EOT
 sudo chmod +x hooks/post-receive
 sudo rm hooks/*.sample
@@ -122,3 +122,4 @@ rm configure.py {{ " ".join(DEPLOY_SETTINGS["configuration_files"]) }} # delete 
 
 # Final messages
 echo "You might also want to add a pre-receive hook, /var/repo/{{ NAME }}.git/hooks/pre-receive, to run unit tests before accepting a push."
+echo "Also, you may want to add your SSH public key to ~/.ssh/authorized_keys for {{ settings.user }}"
