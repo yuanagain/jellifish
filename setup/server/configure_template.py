@@ -15,7 +15,7 @@ def main():
 			config_file.write(DEPLOY_SETTINGS["configuration_file_data"][fileName])
 
 	if os.path.exists("init"):
-		subprocess.call(["chmod", "+x", "init", "&&", "init"])
+		subprocess.call("chmod +x init && ./init", shell = True)
 
 if __name__ == '__main__':
 	main()
