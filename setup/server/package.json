@@ -1,0 +1,18 @@
+{
+	"description": "Jelli.fish Packer configuration for generating server images",
+	"min_packer_version": "0.8.6",
+	"variables": {
+		"digitalocean_api_token": "{{ env `DO_API_TOKEN` }}"
+		},
+	"builders": [
+		{
+			"type": "digitalocean",
+			"api_token": "{{ user `digitalocean_api_token` }}",
+			"image": "ubuntu-14-04-x64",
+			"droplet_name": "jelli.fish",
+			"private_networking": true,
+			"region": "nyc2",
+			"size": "1024mb"
+		}
+	]
+}

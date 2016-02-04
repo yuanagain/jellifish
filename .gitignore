@@ -15,7 +15,9 @@ static/js/bundle.js
 *.map
 *.css
 
-### Node ###
+# Configuration scripts
+setup/server/configure.py
+
 ### Node ###
 # Logs
 logs

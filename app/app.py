@@ -15,6 +15,19 @@ class Application(object):
 		self.server = None
 		self._setup = False
 
+	@staticmethod
+	def getServer(setup = False):
+		'''Get the server of a new Application instance, optionally setting it up
+
+		Arguments
+			bool setup - whether or not to set up the server
+
+		Returns
+			(server.Server) application's server instance'''
+		app = Application()
+		app.setup()
+		return app.server
+
 	def run(self):
 		'''Runs the application'''
 		if not self._setup:
