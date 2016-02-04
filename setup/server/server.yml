@@ -1,0 +1,40 @@
+---
+
+- hosts: webservers
+  remote_user: ubuntu
+  sudo: True
+  tasks:
+    - name: create user
+      action: user name=$settings.user append=yes groups=www-data state=present
+    - name: install general packages
+      action: apt pkg=$item state=installed
+      with_items:
+        - git
+        - make
+        - ufw # Server firewall
+        - fail2ban # prevent brute-force SSH login attacks
+        - vnstat # network usage monitoring
+    - name: install Python-development packages
+      action: apt pkg=$item state=installed
+      with_items:
+        - build-essential # needed for building various C-based Python packages
+        - libssl-dev
+        - zlib1g-dev
+        - libbz2-dev
+        - libreadline-dev
+        - libsqlite3-dev
+        - libffi-dev
+        - python
+        - python-pip
+        - python-dev
+    - name: install Python libraries
+      action: pip name=$item state=present
+      with_items:
+        - virtualenv
+    - name: install web development libraries
+      action: apt pkg=$item state=installed
+      with_items:
+        - nginx
+        - uwsgi # to proxy requests to NginX
+    - name: install pyenv to manage Python versions
+      action: git repo=https://github.com/yyuu/pyenv.git dest=~/.pyenv
