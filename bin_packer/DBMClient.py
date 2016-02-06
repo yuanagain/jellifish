@@ -3,10 +3,10 @@ Implements a client for DBMgr and TaskSequence,
 used to maintain library of recipes
 """
 import DBMgr
-from TaskSequence import TaskSequence, TaskNode
+from taskSequence import taskSequence, taskNode
 import os
 from pkblind import PKBlind
-import DataUtils as dutils
+import dataUtils as dutils
 
 class DBMClient:
     def __init__(self, db_fname = None):
@@ -46,16 +46,15 @@ class DBMClient:
         #TODO error handling
         return
 
-
 def main():
     print("TESTING METHODS")
-    tn_1 = TaskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
-    tn_2 = TaskNode(name = "tn2", time = 10.0, min_wait = 0.0, max_wait = 20.0)
-    tn_3 = TaskNode(name = "tn3", time = 10.0, min_wait = 20.0, max_wait = 20.0)
+    tn_1 = taskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+    tn_2 = taskNode(name = "tn2", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+    tn_3 = taskNode(name = "tn3", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
-    tn_4 = TaskNode(name = "tn4", time = 10.0, min_wait = 10.0, max_wait = 20.0)
-    tn_5 = TaskNode(name = "tn5", time = 10.0, min_wait = 0.0, max_wait = 20.0)
-    tn_6 = TaskNode(name = "tn6", time = 10.0, min_wait = 20.0, max_wait = 20.0)
+    tn_4 = taskNode(name = "tn4", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+    tn_5 = taskNode(name = "tn5", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+    tn_6 = taskNode(name = "tn6", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
     ts_1 = TaskSequence(name = "seq_1", tasks = [tn_1, tn_2, tn_3])
     ts_2 = TaskSequence(name = "seq_2", tasks = [tn_4, tn_5, tn_6])

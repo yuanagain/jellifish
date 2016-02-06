@@ -1,8 +1,8 @@
 from PatchKit import PatchKit
-from TaskSequence import TaskSequence
-from TaskSequence import TaskNode
-import DataUtils as dutils
-import TaskSequence as TS
+from taskSequence import taskSequence
+from taskSequence import taskNode
+import dataUtils as dutils
+import taskSequence as TS
 import sys
 
 class PKBlind(PatchKit):
@@ -35,13 +35,13 @@ class PKBlind(PatchKit):
 
 def main(argv):
     print("PKBLIND")
-    tn_1 = TaskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
-    tn_2 = TaskNode(name = "tn2", time = 10.0, min_wait = 0.0, max_wait = 20.0)
-    tn_3 = TaskNode(name = "tn3", time = 10.0, min_wait = 20.0, max_wait = 20.0)
+    tn_1 = taskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+    tn_2 = taskNode(name = "tn2", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+    tn_3 = taskNode(name = "tn3", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
-    tn_4 = TaskNode(name = "tn4", time = 10.0, min_wait = 10.0, max_wait = 20.0)
-    tn_5 = TaskNode(name = "tn5", time = 10.0, min_wait = 0.0, max_wait = 20.0)
-    tn_6 = TaskNode(name = "tn6", time = 10.0, min_wait = 20.0, max_wait = 20.0)
+    tn_4 = taskNode(name = "tn4", time = 10.0, min_wait = 10.0, max_wait = 20.0)
+    tn_5 = taskNode(name = "tn5", time = 10.0, min_wait = 0.0, max_wait = 20.0)
+    tn_6 = taskNode(name = "tn6", time = 10.0, min_wait = 20.0, max_wait = 20.0)
 
     ts_1 = TaskSequence("ts1", tasks = [tn_1, tn_2, tn_3])
     ts_2 = TaskSequence("ts2", tasks = [tn_4, tn_5, tn_6])

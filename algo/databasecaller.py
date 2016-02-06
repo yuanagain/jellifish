@@ -148,7 +148,6 @@ class DatabaseCaller:
             ID = copy[0].objectId
         return ID
 
-
     # Returns a database tasknode object
     def get_tasknode(self, tasknode_name):
         queryset = TaskNode.Query.filter(name = tasknode_name)

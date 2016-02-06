@@ -1,10 +1,10 @@
 """
 This module contains algorithms for optimizing batches of task sequences
 """
-from TaskSequence import TaskNode
-from TaskSequence import TaskSequence
-import DataUtils as dutils
-import TaskSequence as TS
+from taskSequence import taskNode
+from taskSequence import taskSequence
+import dataUtils as dutils
+import taskSequence as TS
 import sys
 
 class PatchKit:

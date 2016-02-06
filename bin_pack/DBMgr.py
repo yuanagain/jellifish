@@ -44,7 +44,6 @@ class DBMgr:
             for row in rows:    
                 print(row)
 
-
     def add_seq_v1(self, task_seq):
         """
         Adds a task sequence to database
@@ -138,8 +137,6 @@ class DBMgr:
         entry = (None, task_data["name"], task_data["descr"], task_data["time"],
                  task_data["min_wait"], task_data["max_wait"])
         self.add_entry_v2(entry)
-
-
     
     def add_entry(self, fields, entry, overwrite = True):
         """
@@ -172,4 +169,10 @@ class DBMgr:
         print(create_2)
         self.connect.execute(create_1)
         self.connect.execute(create_2)
-        
+
+#Tester client
+def main():
+    print('Testing...')
+
+if __name__ == "__main__":
+    main()        

@@ -6,7 +6,7 @@ from an SQLite database
 import marshal
 import sqlite3 as lite
 import sys
-from TaskSequence import TaskSequence, TaskNode
+from taskSequence import taskSequence, taskNode
 
 # Global Defaults
 default_db_fname = "RECIPEDATA_V1.db"

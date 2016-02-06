@@ -46,7 +46,6 @@ class DBMClient:
         #TODO error handling
         return
 
-
 def main():
     print("TESTING METHODS")
     tn_1 = TaskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
