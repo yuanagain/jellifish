@@ -1,11 +1,11 @@
 ---
 
-- hosts: webservers
+- hosts: localhost
   remote_user: ubuntu
-  sudo: True
+  become_user: 'sudo_user'
   tasks:
     - name: create user
-      action: user name=$settings.user append=yes groups=www-data state=present
+      action: user name=panchr append=yes groups=www-data state=present
     - name: install general packages
       action: apt pkg=$item state=installed
       with_items:
@@ -26,11 +26,12 @@
         - libffi-dev
         - python
         - python-pip
+        - python-virtualenv
         - python-dev
-    - name: install Python libraries
-      action: pip name=$item state=present
-      with_items:
-        - virtualenv
+    # - name: install Python libraries # distribution spec is missing
+    #   action: pip name=$item state=latest
+    #   with_items:
+    #     - virtualenv
     - name: install web development libraries
       action: apt pkg=$item state=installed
       with_items:
