@@ -1,58 +1,33 @@
-# nandomoreira.me jekyll theme
+# .X [![Build Status](https://travis-ci.org/nandomoreirame/dotX.svg?branch=master)](https://travis-ci.org/nandomoreirame/dotX)
 
-### [Preview](http://nandomoreira.me/nandomoreira-jekyll-theme/)
+> Simple & Beautiful Jekyll theme
 
-## Setup
+### [Demo](http://nandomoreira.me/dotX/)
 
-### In the terminal run the commands
-
-```
-$ sudo npm i -g gulp bower browser-sync
-$ sudo gem install bundler
-$ bundle install
-$ npm install
-```
-
-## Using Rake tasks
-
-```
-$ rake post title="TITLE OF THE POST"
-$ rake page name="about.md"
-$ rake category title="Programing"
-$ rake tag title="Jekyll"
-```
-
-## Using Jekyll
-
-### Running the server:
-
-```
-$ jekyll server
-```
-
-Access, [localhost:4000](http://localhost:4000/)
-
-## Using Gulp
-
-### Rum gulp
-
-```
-$ gulp
-```
+![dotX - free Jekyll theme](/screenshot.png)
 
 ---
 
-## Deploy in Github pages in 2 steps
+### Start in 4 steps
+
+1. Download or clone repo `git clone git@github.com:nandomoreirame/dotX.git`
+2. Enter the folder: `cd dotX/`
+3. Install Ruby gems: `bundle install`
+4. Start Jekyll server: `jekyll serve`
+
+Access, [localhost:4000/dotX](http://localhost:4000/dotX)
+
+### Deploy in Github pages in 2 steps
 
 1. Change the variables `GITHUB_REPONAME` and `GITHUB_REPO_BRANCH` in `Rakefile`
 2. Run `rake` or `rake publish` for build and publish on Github
 
 ---
 
-* [Jekyll](http://jekyllrb.com/);
-* [Jekyll Documentation](http://jekyllrb.com/docs/home/);
-* [Como definir URLs curtas no Jekyll](http://nandomoreira.me/urls-curtas-no-jekyll/);
-* [Adicionando Disqus ao seu projeto Jekyll](http://nandomoreira.me/adicionando-disqus-ao-seu-projeto-jekyll/);
+### Using Rake tasks
+
+* Create a new page: `rake page name="contact.md"`
+* Create a new post: `rake post title="TITLE OF THE POST"`
 
 ---
 
@@ -60,4 +35,6 @@ $ gulp
 
 It is under [the MIT license](/LICENSE).
 
-Enjoy! :yum:
+Enjoy :yum:
+
+by [nandomoreira.me](http://nandomoreira.me)
