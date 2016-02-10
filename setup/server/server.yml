@@ -28,7 +28,8 @@
         - python-pip
         - python-virtualenv
         - python-dev
-    # - name: install Python libraries # distribution spec is missing
+    # installing libraries via Pip is not working because of a "missing distribution spec"
+    # - name: install Python libraries
     #   action: pip name=$item state=latest
     #   with_items:
     #     - virtualenv
