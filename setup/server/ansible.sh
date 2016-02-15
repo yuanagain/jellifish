@@ -3,13 +3,20 @@
 # ansible.sh
 # Install Ansible and provision the server
 
-# Install Ansible via apt
-echo "Installing Ansible..."
-sudo apt-get install -y software-properties-common
-sudo apt-add-repository ppa:ansible/ansible
-sudo apt-get update
-sudo apt-get install -y ansible
+# Check if Ansible is already installed...
+if hash ansible 2>/dev/null; then
+	# Ansible is already installed on the system
+	echo "Ansible already installed; skipping installation...";
+else
+	# Install Ansible because it exists on the system
+	echo "Ansible not installed; installing now..."
+	sudo apt-get install -y software-properties-common
+	sudo apt-add-repository ppa:ansible/ansible
+	sudo apt-get update
+	sudo apt-get install -y ansible
+fi
 
 # Run the Ansible provisioner
 echo "Provisioning via Ansible..."
-sudo ansible-playbook $1
+cd $1
+sudo ansible-playbook $2
