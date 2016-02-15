@@ -1,0 +1,14 @@
+# Rushy Panchal
+# tasks/directories.yml
+# Contains the directory creation directives for Ansible
+
+- name: create web directory
+  action: file path=/var/www/ state=directory group={{ default.user.name }} owner={{ default.user.name }}
+- name: create other directories
+  action: file path={{ item }} state=directory group={{ default.user.name }} owner={{ default.user.name }}
+  with_items:
+    - /var/www/{{ default.web.url }} # web directory
+    - /var/repo/{{ default.name }}.git # repository directory
+    - /var/cache/nginx # NginX cache directory
+    - /etc/nginx/ssl/{{ default.web.url }} # NginX ssl configuration
+    - /var/log/{{ default.name }} # Service logs directory

@@ -1,3 +1,7 @@
+# Rushy Panchal
+# server.yml
+# Ansible playbook for setting up the server
+
 ---
 
 - hosts: localhost
@@ -7,58 +11,7 @@
     # import configuration variables
     # all variables are subscripted with "default"
     - include_vars: config.yml
-    - name: create user
-      action: user name={{ default.user.name }} append=yes groups={{ ",".join(default.user.groups) }} state=present
-    - name: install general packages {{ ", ".join(items) }}
-      action: apt pkg={{ item }} state=installed
-      with_items:
-        - git
-        - make
-        - emacs
-        - ufw # Server firewall
-        - fail2ban # prevent brute-force SSH login attacks
-        - vnstat # network usage monitoring
-    - name: install Python-development packages
-      action: apt pkg={{ item }} state=installed
-      with_items: # needed for building various C-based Python packages
-        - build-essential
-        - libssl-dev
-        - zlib1g-dev
-        - libbz2-dev
-        - libreadline-dev
-        - libsqlite3-dev
-        - libffi-dev
-        - python
-        - python-pip
-        - python-virtualenv
-        - python-dev
-    - name: install web development libraries
-      action: apt pkg={{ item }} state=installed
-      with_items:
-        - nginx
-        - uwsgi # to proxy requests to NginX
-    - name: install pyenv # pyenv manages Python versions
-      action: git repo=https://github.com/yyuu/pyenv.git dest=~/.pyenv
-    - name: create web directory
-      action: file path=/var/www/ state=directory group={{ default.user.name }} owner={{ default.user.name }}
-    - name: create other directories
-      action: file path={{ item }} state=directory group={{ default.user.name }} owner={{ default.user.name }}
-      with_items:
-        - /var/www/{{ default.web.url }} # web directory
-        - /var/repo/{{ default.name }}.git # repository directory
-        - /var/cache/nginx # NginX cache directory
-        - /etc/nginx/ssl/{{ default.web.url }} # NginX ssl configuration
-        - /var/log/{{ default.name }} # Service logs directory
-    # Configure UFW with firewall settings
-    - name: configure ufw firewall
-      action: ufw policy=reject state=enabled rule=allow port={{ item }} src=any
-      with_items:
-        - ssh
-        - http
-        - https
-    - name: ensure services are running
-      action: service name={{ item }} state=running
-      with_items:
-        - nginx
-        - ssh
-
+    - include: tasks/users.yml
+    - include: tasks/packages.yml
+    - include: tasks/directories.yml
+    - include: tasks/setup.yml

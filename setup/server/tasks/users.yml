@@ -1,0 +1,6 @@
+# Rushy Panchal
+# tasks/users.yml
+# Contains the user creation directives for Ansible
+
+- name: create user
+  action: user name={{ default.user.name }} append=yes groups={{ ",".join(default.user.groups) }} state=present
