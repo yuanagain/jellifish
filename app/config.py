@@ -14,12 +14,12 @@ def recursiveMerge(x, y):
 			merged[key] = recursiveMerge(value, y[key])
 	return merged
 
-ENVIRONMENT = os.environ.get("PYTHONENV", "development")
+ENVIRONMENT = os.environ.get("ENV", "development")
 
 DEV_MODE = (ENVIRONMENT == "development")
 
 with open("../config.yml", "r") as config_file:
-	RAW_CONFIG = yaml.load(config_file)
+	RAW_CONFIG = yaml.load(config_file)["config"]
 	CONFIG = recursiveMerge(
 		RAW_CONFIG["default"],
 		RAW_CONFIG.get(ENVIRONMENT)

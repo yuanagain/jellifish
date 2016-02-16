@@ -10,40 +10,42 @@
 # The default settings are for the production server, so that Ansible can easily
 # include the variables without more work.
 # However, these are overridden by the "development" configuration.
-default:
-    name: "jellifish" # name of application
-    web:
-        url: "app.jelli.fish" # base URL to serve pages from
-        static: "static" # path of static files
-        https: yes # HTTPS enabled
-        protocol: "https://" # web protocol to prefix URL with
-        cloudflare: yes # CloudFlare protection/CDN enabled
-        static_error_pages: yes # static error pages are served directly by NginX
-    app:
-        secret_key: "NtaTRKcZKw256RNMwp25Xqvw" # secret key for sessions
-        py_version: 3.5.0 # Python version for the application
-        virtualenv: env # path/name of virtualenv
-        directory: app # main folder for the app
-        static_directory: static # folder for static assets
-    user:
-        name: jellifish # name of user to create
-        groups:
-            - www-data # default web-facing group
-    server:
-        ufw: yes # UFW is a basic web firewall
-        swap: 1G # swap is the disk space appropriated for memory-swaps
+config:
+    default:
+        name: "jellifish" # name of application
+        web:
+            url: "app.jelli.fish" # base URL to serve pages from
+            static: "static" # path of static files
+            https: yes # HTTPS enabled
+            gzip: yes # GZip enabled for response compression
+            protocol: "https://" # web protocol to prefix URL with
+            cloudflare: yes # CloudFlare protection/CDN enabled
+            static_error_pages: yes # static error pages are served directly by NginX
+        app:
+            secret_key: "NtaTRKcZKw256RNMwp25Xqvw" # secret key for sessions
+            py_version: 3.5.0 # Python version for the application
+            virtualenv: env # path/name of virtualenv
+            directory: app # main folder for the app
+            static_directory: static # folder for static assets
+        user:
+            name: jellifish # name of user to create
+            groups:
+                - www-data # default web-facing group
+        server:
+            ufw: yes # UFW is a basic web firewall
+            swap: 1G # swap is the disk space appropriated for memory-swaps
 
-# Production configuration, used in web-facing servers.
-production:
+    # Production configuration, used in web-facing servers.
+    production:
 
-# Development configuration, for running locally.
-development:
-    web:
-        url: "localhost:8080"
-        https: no
-        protocol: "http://"
-        cloudflare: no
-        static_error_pages: no
-    server:
-        ufw: no
-        swap: 0G
+    # Development configuration, for running locally.
+    development:
+        web:
+            url: "localhost:8080"
+            https: no
+            protocol: "http://"
+            cloudflare: no
+            static_error_pages: no
+        server:
+            ufw: no
+            swap: 0G

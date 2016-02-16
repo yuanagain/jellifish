@@ -3,4 +3,5 @@
 # Contains the user creation directives for Ansible
 
 - name: create user
-  action: user name={{ default.user.name }} append=yes groups={{ ",".join(default.user.groups) }} state=present
+  action: user name={{ config.user.name }} append=yes groups={{ ",".join(config.user.groups) }} state=present
+  

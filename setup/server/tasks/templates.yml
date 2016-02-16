@@ -1,0 +1,11 @@
+# Rushy Panchal
+# tasks/templates.yml
+# Contains the templating directives for Ansible
+
+# Copy template files to required locations
+- name: template and place configuration files
+  action: template dest={{ item.dest }} src={{ item.src }}
+  with_items:
+    - {dest: "/etc/nginx/sites-available/{{ config.web.url }}.conf", src: "templates/nginx.conf"}
+    - {dest: "/etc/init/{{ config.name }}", src: "templates/upstart.conf"}
+  

@@ -2,7 +2,7 @@
 # tasks/packages.yml
 # Contains the package installation directives for Ansible
 
-- name: install general packages {{ ", ".join(items) }}
+- name: install general packages
   action: apt pkg={{ item }} state=installed
   with_items:
     - git
