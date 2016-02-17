@@ -12,6 +12,7 @@
 # However, these are overridden by the "development" configuration.
 config:
     default:
+        env: "default"
         name: "jellifish" # name of application
         web:
             url: "app.jelli.fish" # base URL to serve pages from
@@ -37,9 +38,10 @@ config:
 
     # Production configuration, used in web-facing servers.
     production:
-
+        env: "production"
     # Development configuration, for running locally.
     development:
+        env: "development"
         web:
             url: "localhost:8080"
             https: no

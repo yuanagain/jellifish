@@ -7,5 +7,5 @@
   action: template dest={{ item.dest }} src={{ item.src }}
   with_items:
     - {dest: "/etc/nginx/sites-available/{{ config.web.url }}.conf", src: "templates/nginx.conf"}
-    - {dest: "/etc/init/{{ config.name }}", src: "templates/upstart.conf"}
+    - {dest: "/etc/init/{{ config.name }}.conf", src: "templates/upstart.conf"}
   
