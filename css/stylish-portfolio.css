@@ -266,7 +266,7 @@ footer {
     color: #fff;
 }
 
-.linked-h2 {
-    color: #fff;
-       
+.linked-h2 a{
+    color: #fff;   
+    font-size: 2em;
 }
