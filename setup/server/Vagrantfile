@@ -1,10 +1,10 @@
-# JelliFish
+# Rushy Panchal
 # Vagrantfile
 
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# required Vagrant version
+# Required Vagrant version
 Vagrant.require_version ">= 1.8.0"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
@@ -12,34 +12,38 @@ Vagrant.require_version ">= 1.8.0"
 Vagrant.configure(2) do |config|
   # see https://docs.vagrantup.com for reference.
 
+  ### BOX CONFIGURATION ###
+
   # The starting point for the Vagrant configuration (operating system)
   config.vm.box = "ubuntu/trusty64"
-  # the box version is restricted so that we do not run into incompatabilities
+
+  # The box version is restricted so that we do not run into incompatabilities
   config.vm.box_version = "= 20160208.0.0"
   config.vm.box_check_update = false # do not check for box updates
 
   # Accessing "localhost:8080" (on the host) will access port 80 on the guest machine.
   config.vm.network "forwarded_port", guest: 80, host: 8080
 
-  # Define a Vagrant Push strategy for pushing to Atlas. See the documentation
-  # at https://docs.vagrantup.com/v2/push/atlas.html for more information.
+  ### PROVISIONING ###
 
-  # upload the configuration file
-  config.vm.provision "file" do |file|
+  # Upload the configuration file
+  config.vm.provision :file do |file|
     file.source = "../../config.yml"
     file.destination = "/vagrant/config.yml"
   end
-
+  
   # Provision the VM with Ansible after installing it
-  config.vm.provision "shell" do |shell|
+  config.vm.provision :shell do |shell|
     shell.path = "ansible.sh"
     shell.upload_path = "/vagrant/ansible.sh" # Upload to same folder as server.yml
-    shell.args = ["/vagrant", "server.yml", ENV.fetch("ENV", "development")] # Ansible configuration file
+
+    # Ansible configuration file
+    shell.args = ["/vagrant", "server.yml", ENV.fetch("ENV", "development")]
   end
 
   # this configuration does not yet work because of an issue with Vagrant
   # and installing Ansible.
-  # config.vm.provision "ansible_local" do |ansible|
+  # config.vm.provision :ansible_local do |ansible|
   #     ansible.install = true
   #     ansible.version = "latest"
   #     ansible.sudo = true

@@ -15,3 +15,9 @@
     - nginx
     - ssh
   
+- name: set environment variables
+  action: lineinfile dest="~{{ config.user.name }}/.profile" line="export {{ item.name }}={{ item.value }};"
+  with_items:
+    - {name: "WEB_DIR", value: "/var/www/{{ config.web.url }}"}
+    - {name: "APP_DIR", value: "/var/www/{{ config.web.url }}/app"}
+    - {name: "GIT_DIR", value: "/var/repo/{{ config.name}}.git"}
