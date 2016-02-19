@@ -166,7 +166,16 @@ hr.small {
 /* About */
 
 .about {
-    padding: 50px 0;
+    display: table;
+    position: relative;
+    width: 100%;
+    height: 50%;
+    background: url(../img/sandwich.png) no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    padding: 10px;
 }
 
 /* Services */
@@ -249,4 +258,15 @@ footer {
 .my-img {
     max-width: 30%;
     max-height: 30%;    
+}
+
+.header2 {
+    font-size: 3em;
+    font-weight: 500;
+    color: #fff;
+}
+
+.linked-h2 {
+    color: #fff;
+       
 }
