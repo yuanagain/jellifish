@@ -1,6 +1,6 @@
 # Site settings
-title: 
-email:
+title: Jellifish
+email: team@jelli.fish
 description: > # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
   line in _config.yml. It will appear in your document head meta (for
@@ -10,8 +10,8 @@ url: "" # the base hostname & protocol for your site
 
 # User setting
 owner:
-email:
-facebook_username:
+email: team@jelli.fish
+facebook_username: getjellifish
 twitter_username:
 github_username:
 address:
@@ -19,7 +19,7 @@ address:
   - line:
   # Feel free to add more lines here 
 telephone:
-copyright:
+copyright: Jellifish
 
 # API settings
 google_api_key:
