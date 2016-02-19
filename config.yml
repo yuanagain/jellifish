@@ -29,7 +29,7 @@ config:
             directory: app # main folder for the app
             static_directory: static # folder for static assets
         user:
-            name: jellifish # name of user to create
+            name: admin # name of user to create
             groups:
                 - www-data # default web-facing group
         server:
