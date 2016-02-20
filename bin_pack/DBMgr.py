@@ -20,7 +20,7 @@ class DBMgr:
     def __init__(self, db_fname = default_db_fname):
         self.db_fname = db_fname
         self.connect = lite.connect(db_fname)
-        self.initialize()
+        #self.initialize()
 
     def print_dump(self):
         """
