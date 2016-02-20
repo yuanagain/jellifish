@@ -169,7 +169,7 @@ hr.small {
     display: table;
     position: relative;
     width: 100%;
-    height: 400px;
+    /*height: 400px;*/
     background: url(../img/sandwich.png) no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
