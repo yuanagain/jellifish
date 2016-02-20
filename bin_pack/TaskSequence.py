@@ -109,6 +109,20 @@ class TaskSequence:
             self.wait_t += task.min_wait
         self.act_time = self.min_t - self.wait_t
 
+class IngredientSequence:
+    """
+    This class handles ingredient profiles for recipes.
+    """
+    def __init__(self, ingredients = {}):
+        self.ingredients = ingredients
+
+    def add(self, ingredient, quantity = 1):
+        if ingredient in ingredients:
+            ingredients[ingredients] += quantity
+        else:
+            ingredients[ingredients] = quantity
+
+
 def main():
     print("Testing Methods")
 
