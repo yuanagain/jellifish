@@ -1,0 +1,22 @@
+# Rushy Panchal
+# server.yml
+# Ansible playbook for setting up the server
+
+---
+
+- hosts: localhost
+  remote_user: ubuntu
+  become_user: 'sudo_user'
+  tasks:
+    # import configuration variables, and merge with current environment
+    # all variables are subscripted with "config"
+    - include_vars: config.yml
+    - set_fact:
+        config: "{{ config.default | combine(
+          config.get(lookup('env', 'ENV'), {}),
+          recursive = True) }}" # recursively merge configuration
+    - include: tasks/users.yml
+    - include: tasks/packages.yml
+    - include: tasks/directories.yml
+    - include: tasks/templates.yml
+    - include: tasks/setup.yml

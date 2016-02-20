@@ -17,6 +17,8 @@ static/js/bundle.js
 
 # Configuration scripts
 setup/server/configure.py
+setup/server/.vagrant
+setup/server/config.yml
 
 ### Node ###
 # Logs

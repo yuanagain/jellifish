@@ -1,0 +1,35 @@
+# Rushy Panchal
+# tasks/packages.yml
+# Contains the package installation directives for Ansible
+
+- name: install general packages
+  action: apt pkg={{ item }} state=installed
+  with_items:
+    - git
+    - make
+    - emacs
+    - ufw # Server firewall
+    - fail2ban # prevent brute-force SSH login attacks
+    - vnstat # network usage monitoring
+- name: install Python-development packages
+  action: apt pkg={{ item }} state=installed
+  with_items: # needed for building various C-based Python packages
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - libffi-dev
+    - python
+    - python-pip
+    - python-virtualenv
+    - python-dev
+- name: install web development libraries
+  action: apt pkg={{ item }} state=installed
+  with_items:
+    - nginx
+    - uwsgi # to proxy requests to NginX
+    - uwsgi-plugin-python3
+- name: install pyenv # pyenv manages Python versions
+  action: git repo=https://github.com/yyuu/pyenv.git dest=~/.pyenv

@@ -1,0 +1,58 @@
+# jellifish
+# config.yml
+# Configuration for JelliFish
+
+---
+
+# Default configuration
+# This configuration is merged with the appropriate configuration for the
+# chosen environment (production or development).
+# The default settings are for the production server, so that Ansible can easily
+# include the variables without more work.
+# However, these are overridden by the "development" configuration.
+config:
+    default:
+        env: "default"
+        name: "jellifish" # name of application
+        web:
+            url: "app.jelli.fish" # base URL to serve pages from
+            static: "static" # path of static files
+            https: yes # HTTPS enabled
+            gzip: yes # GZip enabled for response compression
+            protocol: "https://" # web protocol to prefix URL with
+            cloudflare: yes # CloudFlare protection/CDN enabled
+            static_error_pages: yes # static error pages are served directly by NginX
+        app:
+            secret_key: "NtaTRKcZKw256RNMwp25Xqvw" # secret key for sessions
+            py_version: 3.5.0 # Python version for the application
+            virtualenv: env # path/name of virtualenv
+            directory: app # main folder for the app
+            static_directory: static # folder for static assets
+        user:
+            name: admin # name of user to create
+            groups:
+                - www-data # default web-facing group
+        server:
+            ufw: yes # UFW is a basic web firewall
+            swap: 1G # swap is the disk space appropriated for memory-swaps
+
+    # Production configuration, used in web-facing servers.
+    production:
+        env: "production"
+        web:
+            https: no
+            cloudflare: no
+            static_error_pages: no
+            protocol: "http://"
+    # Development configuration, for running locally.
+    development:
+        env: "development"
+        web:
+            url: "localhost:8080"
+            https: no
+            protocol: "http://"
+            cloudflare: no
+            static_error_pages: no
+        server:
+            ufw: no
+            swap: 0G

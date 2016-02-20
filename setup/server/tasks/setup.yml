@@ -1,0 +1,23 @@
+# Rushy Panchal
+# tasks/directories.yml
+# Contains the general setup directives for Ansible
+
+# Configure UFW with firewall settings
+- name: configure ufw firewall
+  action: ufw policy=reject state=enabled rule=allow port={{ item }} src=any
+  with_items:
+    - ssh
+    - http
+    - https
+- name: ensure services are running
+  action: service name={{ item }} state=running
+  with_items:
+    - nginx
+    - ssh
+  
+- name: set environment variables
+  action: lineinfile dest="~{{ config.user.name }}/.profile" line="export {{ item.name }}={{ item.value }};"
+  with_items:
+    - {name: "WEB_DIR", value: "/var/www/{{ config.web.url }}"}
+    - {name: "APP_DIR", value: "/var/www/{{ config.web.url }}/app"}
+    - {name: "GIT_DIR", value: "/var/repo/{{ config.name}}.git"}

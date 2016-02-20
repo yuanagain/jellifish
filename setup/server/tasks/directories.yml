@@ -1,0 +1,27 @@
+# Rushy Panchal
+# tasks/directories.yml
+# Contains the directory creation directives for Ansible
+
+- name: create directories
+  action: file path={{ item }} state=directory owner={{ config.user.name }} group=www-data recurse=yes
+  with_items:
+    - /var/www/
+    - /var/www/{{ config.web.url }} # web directory
+    - /var/repo/{{ config.name }}.git # repository directory
+    - /var/cache/nginx # NginX cache directory
+    - /etc/nginx/ssl/{{ config.web.url }} # NginX ssl configuration
+    - /var/log/{{ config.name }} # Service logs directory
+    - /var/log/nginx # NginX log directory
+    - /var/log/upstart # Upstart log directory
+
+# Create Git repository to allow for Git-based deployment
+- name: create Git repository
+  action: command chdir=/var/repo/{{ config.name }}.git git init --bare creates=HEAD
+
+# Automatically check out code to the app file
+- name: add post-receive hook to Git repository
+  action: template src="templates/post-receive" dest="/var/repo/{{ config.name }}.git/hooks/post-receive" mode=755 owner={{ config.user.name }} group={{ config.user.name }}
+
+# Ensure that the user can write/read to the repo
+- name: change Git repository permissions
+  file: path=/var/repo/{{ config.name }}.git owner={{ config.user.name }} group={{ config.user.name }} state=directory recurse=yes
