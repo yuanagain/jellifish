@@ -1,5 +1,8 @@
 #!/bin/bash
 
-git --work-tree=$WEB_DIR --git-dir=$GIT_DIR checkout -f
-echo "Updated repository on server: $GIT_DIR."
-echo "Checked out to repository to $WEB_DIR"
+WEB_PATH="/var/www/{{ config.web.url }}"
+GIT_PATH="/var/repo/{{ config.name }}.git"
+
+git --work-tree="$WEB_PATH" --git-dir="$GIT_PATH" checkout -f
+echo "Updated repository on server: $WEB_PATH."
+echo "Checked out to repository to $GIT_PATH."
