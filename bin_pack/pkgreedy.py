@@ -48,6 +48,7 @@ class PKGreedy(PatchKit):
             for index in indexSort(latest_start):
                 # if task not yet ready to start.
                 if earliest_start[index] > current_timing:
+                    print('need to wait')
                     continue
                 # if that sequence is done executing
                 if buf[index] == None:
@@ -74,17 +75,17 @@ class PKGreedy(PatchKit):
                     buf[index] = tasks[task_ct - remaining[index]]
                     remaining[index] -= 1
 
-
                 executed_task = True
                 break
                 # update buffer
 
+
             # wait if no possible tasks.
             if (executed_task == False):
-                min_start = min(min_next)
+                min_start = min(earliest_start) - current_timing
                 min_wait = current_timing - min_start
                 wait_data = TS.wait_data(current_timing, current_timing + min_wait)
-                # add wait data
+                # add wait data 
                 current_sequence.append(wait_data)
                 current_timing += min_wait
 

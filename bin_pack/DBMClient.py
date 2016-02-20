@@ -6,6 +6,7 @@ import DBMgr
 from TaskSequence import TaskSequence, TaskNode
 import os
 from pkblind import PKBlind
+from pkgreedy import PKGreedy
 import DataUtils as dutils
 
 class DBMClient:
@@ -48,6 +49,18 @@ class DBMClient:
         
         pkb = PKBlind(tseqs)
         ct, cs = pkb.fit()
+        return cs
+
+    def fetch_recipes_greedy(self, names):
+        # clean list
+        tseqs = []
+        this_recipes = self.list_recipes()
+        for i in range(len(names)):
+            if names[i] in this_recipes:
+                tseqs.append(self.fetch_recipe(names[i]))
+        
+        pkg = PKGreedy(tseqs)
+        ct, cs = pkg.fit()
         return cs
 
 
@@ -128,7 +141,7 @@ def main():
     print(client.list_recipes())
 
     print("\nTESTING multi-fetch")
-    instr2 = client.fetch_recipes_blind(["seq_2", "seq_4", "seq_3", "seq_1"])
+    instr2 = client.fetch_recipes_greedy(["seq_2", "seq_4", "seq_3", "seq_1"])
     dutils.print_instr(instr2)
 
     print("\nTESTS COMPLETED")
