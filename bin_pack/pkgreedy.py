@@ -48,7 +48,6 @@ class PKGreedy(PatchKit):
             for index in indexSort(latest_start):
                 # if task not yet ready to start.
                 if earliest_start[index] > current_timing:
-                    print('need to wait')
                     continue
                 # if that sequence is done executing
                 if buf[index] == None:
