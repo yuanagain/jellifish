@@ -6,6 +6,7 @@ from an SQLite database
 import marshal
 import sqlite3 as lite
 import sys
+import os
 from TaskSequence import TaskSequence, TaskNode
 
 # Global Defaults
@@ -20,7 +21,10 @@ class DBMgr:
     def __init__(self, db_fname = default_db_fname):
         self.db_fname = db_fname
         self.connect = lite.connect(db_fname)
-        #self.initialize()
+        try:
+            self.initialize()
+        except: 
+            print("Already initialized")
 
     def print_dump(self):
         """
