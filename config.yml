@@ -39,6 +39,11 @@ config:
     # Production configuration, used in web-facing servers.
     production:
         env: "production"
+        web:
+            https: no
+            cloudflare: no
+            static_error_pages: no
+            protocol: "http://"
     # Development configuration, for running locally.
     development:
         env: "development"
