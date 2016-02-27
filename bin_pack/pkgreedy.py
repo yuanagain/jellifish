@@ -37,7 +37,7 @@ class PKGreedy(PatchKit):
         # while action items available
 
         # TODO: NEED TO ASSIGN PROGRAMATICALLY
-        max_start = 900000
+        max_start = 90000000
         # when we need to act on the next tasks in the sequence
         earliest_start = [0] * len(self.seq_list)
         latest_start = [max_start] * len(self.seq_list)
@@ -45,7 +45,8 @@ class PKGreedy(PatchKit):
         while (isNonEmpty(buf)):
             executed_task = False
             # sort tasks by urgency
-            for index in indexSort(latest_start):
+            sorted_indices = indexSort(latest_start)
+            for index in sorted_indices:
                 # if task not yet ready to start.
                 if earliest_start[index] > current_timing:
                     continue
@@ -67,6 +68,8 @@ class PKGreedy(PatchKit):
 
                 # load up next task:
                 if remaining[index] == 0:
+                    earliest_start[index] = max_start
+                    latest_start[index] = max_start
                     buf[index] = None
                 else:
                     tasks = self.seq_list[index].tasks
@@ -81,8 +84,10 @@ class PKGreedy(PatchKit):
 
             # wait if no possible tasks.
             if (executed_task == False):
-                min_start = min(earliest_start) - current_timing
-                min_wait = current_timing - min_start
+                print("WAITNG")
+
+                min_wait = min(earliest_start) - current_timing
+                print(min_wait)
                 wait_data = TS.wait_data(current_timing, current_timing + min_wait)
                 # add wait data 
                 current_sequence.append(wait_data)
