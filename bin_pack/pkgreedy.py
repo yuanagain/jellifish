@@ -84,10 +84,10 @@ class PKGreedy(PatchKit):
 
             # wait if no possible tasks.
             if (executed_task == False):
-                print("WAITNG")
+                # print("WAITNG")
 
                 min_wait = min(earliest_start) - current_timing
-                print(min_wait)
+                # print(min_wait)
                 wait_data = TS.wait_data(current_timing, current_timing + min_wait)
                 # add wait data 
                 current_sequence.append(wait_data)
