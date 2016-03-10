@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/python,osx,windows,sublimetext,sass,pycharm
 
 ### Custom ###
+# Databases
+*.db
+
 # Images
 *.png
 *.jpg

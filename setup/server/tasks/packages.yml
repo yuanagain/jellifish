@@ -29,7 +29,5 @@
   action: apt pkg={{ item }} state=installed
   with_items:
     - nginx
-    - uwsgi # to proxy requests to NginX
-    - uwsgi-plugin-python3
 - name: install pyenv # pyenv manages Python versions
   action: git repo=https://github.com/yyuu/pyenv.git dest=~/.pyenv
