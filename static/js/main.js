@@ -12,7 +12,7 @@ var React = require("react"),
 var GlobalHeader = require("./react/GlobalHeader.jsx"),
 	SelectionPage = require("./react/SelectionPage.jsx"),
 	IngredientsPage = require("./react/IngredientsPage.jsx"),
-	TimersPage = require("./react/TimersPage.jsx")
+	TimersPage = require("./react/TimersPage.jsx");
 
 function main() {
 	// Render main components
@@ -25,7 +25,10 @@ function main() {
 
 function postRender() {
 	// Post-render hooks
-	analytics.parse(null, null);
+	/* Parse analytics have been disabled because we are no longer
+	using Parse, as their platform will be discontinued soon. */
+	// analytics.parse(null, null);
+	return;
 	}
 
 var page = {
