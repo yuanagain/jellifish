@@ -36,9 +36,6 @@ class TaskNode:
         "time": self.time, "frag": self.frag, "min_wait": self.min_wait, 
         "max_wait": self.max_wait}
 
-    def print_dump(self):
-        print("%16s %10s %10d" % (self.name, self.descr, self.time))
-
 def wait_data(start, end):
     """
     Cretes wait time data
@@ -78,13 +75,6 @@ class TaskSequence:
         self.wait_t = -1.0
         self.act_t = -1.0
 
-    def print_dump(self):
-        print("TaskSequence: " + self.name)
-        print("Printing tasks")
-        print("%16s %10s %10s" % ("name", "descr", "time"))
-        for task in self.tasks:
-            task.print_dump()
-
     def act_time(self):
         if self.act_t >= 0.0: return self.act_t
         self.update_times()
@@ -121,10 +111,3 @@ class IngredientSequence:
             ingredients[ingredients] += quantity
         else:
             ingredients[ingredients] = quantity
-
-
-def main():
-    print("Testing Methods")
-
-if __name__ == "__main__":
-    main()

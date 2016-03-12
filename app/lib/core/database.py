@@ -5,9 +5,8 @@ from an SQLite database
 
 import marshal
 import sqlite3 as lite
-import sys
-import os
-from TaskSequence import TaskSequence, TaskNode
+
+from . import node
 
 # Global Defaults
 default_db_fname = "RECIPEDATA_V1.db"
@@ -17,14 +16,10 @@ all_fields = ["name", "descr", "time", "min_wait", "max_wait"]
 data_default = {"time": 0.0, "min_wait": 0.0, "max_wait": 0.0}
 
 # Methods
-class DBMgr:
+class DatabaseManager:
     def __init__(self, db_fname = default_db_fname):
         self.db_fname = db_fname
-        self.connect = lite.connect(db_fname)
-        try:
-            self.initialize()
-        except: 
-            print("Already initialized")
+        self.connect = sqlite3.connect(db_fname)
 
     def print_dump(self):
         """
@@ -106,16 +101,15 @@ class DBMgr:
                 if task_data == None:
                     print("Sequence task list refers to nonexistent entry, db corrupted")
 
-                tnode = TaskNode(name = task_data[0], descr = task_data[1], 
+                tnode = node.TaskNode(name = task_data[0], descr = task_data[1], 
                     time = task_data[2], min_wait = task_data[3], 
                     max_wait = task_data[4])
                 tasks.append(tnode)
 
             
-            task_seq = TaskSequence(seq_data[0], seq_data[1], tasks)
+            task_seq = node.TaskSequence(seq_data[0], seq_data[1], tasks)
 
             return task_seq
-
 
     def add_task_v2(self, task_data):
         """
@@ -173,10 +167,3 @@ class DBMgr:
         print(create_2)
         self.connect.execute(create_1)
         self.connect.execute(create_2)
-
-#Tester client
-def main():
-    print('Testing...')
-
-if __name__ == "__main__":
-    main()        
