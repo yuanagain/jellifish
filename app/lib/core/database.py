@@ -1,6 +1,15 @@
 """
 Supports methods for storing and accessing recipes
 from an SQLite database
+
+The database created has two tables:
+1. data : this table stores all task names
+
+2. seqs : this table stores all complete recipes, with references 
+to individual tasks in the data table.
+
+Author: Yuan Wang
+Copyright Jellifish 2015
 """
 
 import marshal
@@ -43,9 +52,9 @@ class DatabaseManager:
             for row in rows:    
                 print(row)
 
-    def add_seq_v1(self, task_seq):
+    def add_sequence(self, task_seq):
         """
-        Adds a task sequence to database
+        Adds a task sequence task_seq to database
         """
         # serialize list of other id's
         task_id_list = []
@@ -54,7 +63,7 @@ class DatabaseManager:
 
             for task in task_seq.tasks:
                 task_data = task.dump_data_v2()
-                self.add_task_v3(task_data)
+                self.add_task(task_data)
 
                 # recover last inserted key id, 
                 cur.execute('SELECT max(id) FROM data')
@@ -63,7 +72,7 @@ class DatabaseManager:
 
             # serialize list
             ids = marshal.dumps(task_id_list)
-            self.add_entry_v3(task_seq.name, task_seq.descr, ids)
+            self.store_seq(task_seq.name, task_seq.descr, ids)
 
     def fetch_seq_names(self):
         """     
@@ -76,7 +85,7 @@ class DatabaseManager:
             names = [el[0] for el in names]
             return names
 
-    def load_seq_v1(self, name):
+    def load_seq_by_name(self, name):
         """
         Loads the first task sequence with a given name
         """
@@ -111,47 +120,29 @@ class DatabaseManager:
 
             return task_seq
 
-    def add_task_v2(self, task_data):
+    def add_task(self, task_data):
         """
-        Adds data from dictionary
-        """
-        fields = []
-        data = []
-        for field in all_fields:
-            if field in task_data:
-                fields.append(field)
-                data.append(task_data[field])
-            # if defaults are relevant.
-            else:
-                if field in data_default:
-                    fields.append(field)
-                    data.append(data_default[field])
-        self.add_entry(tuple(fields), tuple(data))
-
-    def add_task_v3(self, task_data):
-        """
-        Adds data from dictionary
+        Adds data from dictionary, task_data, with the key-value pairs: name (String), 
+        descr (String), time, min_wait (float), and max_wait (float)
         """
         entry = (None, task_data["name"], task_data["descr"], task_data["time"],
                  task_data["min_wait"], task_data["max_wait"])
-        self.add_entry_v2(entry)
-    
-    def add_entry(self, fields, entry, overwrite = True):
+        self.store_task_from_tuple(entry)
+  
+    def store_task_from_tuple(self, entry):
         """
-        Description
-        ------
-        Adds data from entry tuple to fields descriped in fields tuple.
-        Parameters
-        ------
-        """
-        with self.connect:
-            self.connect.execute("INSERT INTO data " + str(fields) + " VALUES" + str(entry))
+        Adds entry (a tuple) into data table. Entry should be of the form:
+        (name (String), descr (String), time, min_wait (float), and max_wait (float))
 
-    def add_entry_v2(self, entry):
+        """
         with self.connect:
             self.connect.execute("INSERT INTO data VALUES(?, ?, ?, ?, ?, ?)", entry)
 
-    def add_entry_v3(self, name, descr = "", tasks = None):
+    def store_seq(self, name, descr = "", tasks = None):
+        """
+        Adds entry into sequences table with the given name, description (descr), 
+        and binarized list of tasks (tasks).
+        """
         with self.connect:
             self.connect.execute("INSERT INTO seqs VALUES(?, ?, ?, ?)", (None, name, descr, tasks)) 
             
@@ -159,7 +150,7 @@ class DatabaseManager:
         """
         Description
         ------
-        First time setup
+        First time setup, creates data tables.
         """
         create_1 = "CREATE TABLE data(id integer primary key, name TEXT, descr TEXT, time REAL, min_wait REAL, max_wait REAL)"
         create_2 = "CREATE TABLE seqs(id integer primary key, name TEXT, descr TEXT, tasks BLOB)"

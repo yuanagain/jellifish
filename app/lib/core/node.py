@@ -1,7 +1,9 @@
 """
 This module contains the basic data structures for optimizing 
-a sequence.
+a sequence according to a bin-packing optimizsation approach.
 
+Author: Yuan Wang
+Copyright Jellifish 2015
 """
 
 class TaskNode:
@@ -56,15 +58,6 @@ class TaskSequence:
         self.wait_t = -1.0
         self.act_t= -1.0
 
-    def __iter__(self):
-        self.i = -1
-        return self
-
-    def __next__(self):
-        if self.i < len(self.tasks) - 1:    
-            i += 1
-            return self.tasks[i]
-        return StopIteration
 
     def load(self, tasks):
         """
@@ -76,21 +69,34 @@ class TaskSequence:
         self.act_t = -1.0
 
     def act_time(self):
+        """
+        Returns active time for task sequence
+        """
         if self.act_t >= 0.0: return self.act_t
         self.update_times()
         return self.act_t
 
     def min_time(self):
+        """
+        Returns minimum execution time for task sequence
+        """
         if self.min_t >= 0.0: return self.min_t
         self.update_times()
         return self.min_t
 
     def wait_time(self):
+        """
+        Returns cumulative min wait time for task sequence
+        """
         if self.wait_t >= 0.0: return self.wait_t
         self.update_times()
         return self.wait_t
 
     def update_times(self):
+        """
+        Updates computed act_time, min_time, wait_time after
+        loading a new task sequence.
+        """
         self.wait_t = 0.0
         self.min_t = 0.0
         for task in self.tasks:

@@ -1,6 +1,9 @@
 """
 Implements a client for DatabaseManager and TaskSequence, 
 used to maintain library of recipes.
+
+Author: Yuan Wang
+Copyright Jellifish 2015
 """
 from . import database
 from . import node
@@ -24,14 +27,14 @@ class DatabaseClient:
         Returns a TaskSequence object by name. Indicates
         failure if no such sequence exists
         """
-        return self.dbm.load_seq_v1(name)
+        return self.dbm.load_seq_by_name(name)
 
-    def fetch_recipe_v2(self, name):
+    def fetch_recipe_by_name(self, name):
         """
         Returns task sequence formatted w/ start/stop times
         infused
         """
-        ts = self.dbm.load_seq_v1(name)
+        ts = self.dbm.load_seq_by_name(name)
         pkb = patch.PatchKitBlind([ts])
         ct, cs = pkb.fit()
         return cs
@@ -64,7 +67,7 @@ class DatabaseClient:
         """
         Adds a TaskSequence recipe to the database.
         """
-        self.dbm.add_seq_v1(recipe)
+        self.dbm.add_sequence(recipe)
         #TODO error handling
         return
 

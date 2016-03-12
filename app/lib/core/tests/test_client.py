@@ -1,3 +1,10 @@
+"""
+Test client for client.py
+
+Author: Yuan Wang
+Copyright Jellifish 2015
+"""
+
 def main():
     print("TESTING METHODS")
     tn_1 = TaskNode(name = "tn1", time = 10.0, min_wait = 10.0, max_wait = 20.0)
@@ -27,7 +34,7 @@ def main():
     client.fetch_recipe("seq_1").print_dump()
     client.fetch_recipe("seq_2").print_dump()
 
-    instr = client.fetch_recipe_v2("seq_1")
+    instr = client.fetch_recipe_by_name("seq_1")
     dutils.print_instr(instr)
 
     print("\nTESTING import_recipes")

@@ -175,6 +175,10 @@ def indexSort(arr):
     return [i[0] for i in sorted(enumerate(arr), key=lambda x:x[1])]
 
 def isNonEmpty(arr):
+    """
+    Returns whether or not the array arr is nonempty. An empty
+    array in this case is one that only contains None for its values
+    """
     for el in arr:
         if el != None:
             return True

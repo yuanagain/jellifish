@@ -50,16 +50,16 @@ def main(argv):
     print("=======================================")
     print("STORING TASK SEQUENCES")
     print("=======================================")
-    dbu.add_seq_v1(ts_1)
-    dbu.add_seq_v1(ts_2)
+    dbu.add_sequence(ts_1)
+    dbu.add_sequence(ts_2)
 
     dbu.print_dump()
 
     print("=======================================")
     print("LOADING AND RECOVERING TASK SEQUENCES")
     print("=======================================")
-    ts_1a = dbu.load_seq_v1("seq_1")
-    ts_2a = dbu.load_seq_v1("seq_2")
+    ts_1a = dbu.load_seq_by_name("seq_1")
+    ts_2a = dbu.load_seq_by_name("seq_2")
 
     ts_1a.print_dump()
     ts_2a.print_dump()    

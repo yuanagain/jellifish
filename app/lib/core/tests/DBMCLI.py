@@ -1,5 +1,8 @@
 """
-Adds recipes
+Adds recipes from a command line interface.
+
+Author: Yuan Wang
+Copyright Jellifish 2015
 """
 import sys
 import DBMClient
@@ -58,7 +61,7 @@ def main(argv):
 	dbmc.add_recipe(ts)
 	print("Recipe %s Added", ts_name)
 	print("=======================================")
-	instr = dbmc.fetch_recipe_v2(ts_name)
+	instr = dbmc.fetch_recipe_by_name(ts_name)
 	dutils.print_instr(instr)
 	print("=======================================")
 	print("DBMC CONTENTS:")
