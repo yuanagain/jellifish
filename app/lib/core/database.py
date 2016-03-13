@@ -13,9 +13,12 @@ Copyright Jellifish 2015
 """
 
 import marshal
-import sqlite3 as lite
+import sqlite3
 
-from . import node
+# USE THESE IMPORTS WHEN PACKAGING
+#from . import node
+
+import node
 
 # Global Defaults
 default_db_fname = "RECIPEDATA_V1.db"
@@ -29,6 +32,9 @@ class DatabaseManager:
     def __init__(self, db_fname = default_db_fname):
         self.db_fname = db_fname
         self.connect = sqlite3.connect(db_fname)
+        try: self.initialize()
+        except:
+            return 
 
     def print_dump(self):
         """

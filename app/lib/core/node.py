@@ -38,6 +38,9 @@ class TaskNode:
         "time": self.time, "frag": self.frag, "min_wait": self.min_wait, 
         "max_wait": self.max_wait}
 
+    def print_dump(self):
+        print("%16s %10s %10d" % (self.name, self.descr, self.time))
+
 def wait_data(start, end):
     """
     Cretes wait time data
@@ -104,6 +107,13 @@ class TaskSequence:
             self.min_t += task.time + task.min_wait
             self.wait_t += task.min_wait
         self.act_time = self.min_t - self.wait_t
+
+    def print_dump(self):
+        print("TaskSequence: " + self.name)
+        print("Printing tasks")
+        print("%16s %10s %10s" % ("name", "descr", "time"))
+        for task in self.tasks:
+            task.print_dump()
 
 class IngredientSequence:
     """

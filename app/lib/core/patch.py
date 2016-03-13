@@ -1,7 +1,10 @@
 """
 This module contains algorithms for optimizing batches of task sequences
 """
-from . import node
+import node
+
+# USE THESE IMPORTS WHEN PACKAGING
+#from . import node
 
 class PatchKit:
     def __init__(self, seq_list = None):
