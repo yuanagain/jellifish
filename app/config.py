@@ -6,7 +6,16 @@ import os
 import yaml
 
 def recursiveMerge(x, y):
-	'''Recursively merge two dictionaries, x and y'''
+	'''
+	Recursively merge two dictionaries
+
+	Arguments
+		dict x - first dictionary to merge
+		dict y - second dictionary to merge
+
+	Returns
+		(dict) merged dictionaries
+	'''
 	if y is None: y = {}
 	merged = dict(x, **y)
 	for key, value in x.items():
@@ -31,7 +40,9 @@ BASE_URL = CONFIG["web"]["url"]
 FULL_URL = PROTOCOL + BASE_URL
 
 class FlaskSettings(object):
-	'''Settings for Flask server'''
+	'''
+	Settings for Flask server
+	'''
 	DEBUG = DEV_MODE
 
 	SECRET_KEY = CONFIG["app"]["secret_key"]

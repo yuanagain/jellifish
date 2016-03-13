@@ -154,8 +154,6 @@ class DatabaseManager:
             
     def initialize(self):
         """
-        Description
-        ------
         First time setup, creates data tables.
         """
         create_1 = "CREATE TABLE data(id integer primary key, name TEXT, descr TEXT, time REAL, min_wait REAL, max_wait REAL)"
