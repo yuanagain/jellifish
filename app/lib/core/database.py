@@ -15,10 +15,7 @@ Copyright Jellifish 2015
 import marshal
 import sqlite3
 
-# USE THESE IMPORTS WHEN PACKAGING
-#from . import node
-
-import node
+from . import node
 
 # Global Defaults
 default_db_fname = "RECIPEDATA_V1.db"
