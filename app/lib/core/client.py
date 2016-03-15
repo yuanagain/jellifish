@@ -5,21 +5,23 @@ used to maintain library of recipes.
 Author: Yuan Wang
 Copyright Jellifish 2015
 """
-# USE THESE IMPORTS WHEN PACKAGING
-# from . import database
-# from . import node
-# from . import patch
 
-import database
-import node
-import patch
+from . import database
+from . import node
+from . import patch
 
-class DatabaseClient:
-    def __init__(self, db_fname = None):
-        if db_fname == None:
-            self.dbm = database.DatabaseManager()
-        else:
-            self.dbm = database.DatabaseManager(db_fname)
+import os
+
+class DatabaseClient(object):
+    def __init__(self, conn):
+        # The file is automatically created if it does not exist by sqlite3
+        # and so, we should check, prior to creating the connection,
+        # if the file exists or not. Then it can be initialized if it does
+        # not exist.
+        should_init = os.path.exists(conn)
+        self.dbm = database.DatabaseManager(conn)
+        if should_init:
+            self.dbm.initialize()
 
     def list_recipes(self):
         """

@@ -9,32 +9,25 @@ The database created has two tables:
 to individual tasks in the data table.
 
 Author: Yuan Wang
-Copyright Jellifish 2015
+Copyright Jellifish 2015-2016
 """
 
 import marshal
 import sqlite3
 
-# USE THESE IMPORTS WHEN PACKAGING
-#from . import node
+from . import node
 
-import node
-
-# Global Defaults
-default_db_fname = "RECIPEDATA_V1.db"
-default_fields = "(name, descr, time, min_wait, max_wait)"
-
-all_fields = ["name", "descr", "time", "min_wait", "max_wait"]
-data_default = {"time": 0.0, "min_wait": 0.0, "max_wait": 0.0}
-
-# Methods
-class DatabaseManager:
-    def __init__(self, db_fname = default_db_fname):
-        self.db_fname = db_fname
-        self.connect = sqlite3.connect(db_fname)
-        try: self.initialize()
-        except:
-            return 
+class DatabaseManager(object):
+    """
+    Represents a database with the following fields:
+        name - name of task
+        descr - description of task
+        time - time taken by task
+        min_wait - minimum waiting time of a task
+        max_wait - maximum waiting time of a task
+    """
+    def __init__(self, conn):
+        self.connect = sqlite3.connect(conn)
 
     def print_dump(self):
         """
@@ -101,8 +94,7 @@ class DatabaseManager:
             seq_data = cur.fetchone()
 
             if seq_data == None:
-                print("Sequence does not exist")
-                return None
+                raise KeyError("Sequence does not exist")
 
             task_ids = marshal.loads(seq_data[2])
 
@@ -114,7 +106,7 @@ class DatabaseManager:
                 task_data = cur.fetchone()
 
                 if task_data == None:
-                    print("Sequence task list refers to nonexistent entry, db corrupted")
+                    raise ValueError("Sequence task list refers to nonexistent entry, db corrupted")
 
                 tnode = node.TaskNode(name = task_data[0], descr = task_data[1], 
                     time = task_data[2], min_wait = task_data[3], 
@@ -156,9 +148,7 @@ class DatabaseManager:
         """
         First time setup, creates data tables.
         """
-        create_1 = "CREATE TABLE data(id integer primary key, name TEXT, descr TEXT, time REAL, min_wait REAL, max_wait REAL)"
-        create_2 = "CREATE TABLE seqs(id integer primary key, name TEXT, descr TEXT, tasks BLOB)"
-        print(create_1)
-        print(create_2)
-        self.connect.execute(create_1)
-        self.connect.execute(create_2)
+        create_data = "CREATE TABLE data(id integer primary key, name TEXT, descr TEXT, time REAL, min_wait REAL, max_wait REAL)"
+        create_seqs = "CREATE TABLE seqs(id integer primary key, name TEXT, descr TEXT, tasks BLOB)"
+        self.connect.execute(create_data)
+        self.connect.execute(create_seqs)
