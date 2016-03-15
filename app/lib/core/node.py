@@ -10,40 +10,30 @@ class TaskNode:
     """
     A TaskNode contains information about itself and its wait time.
     """
-    def __init__(self, name = "", descr = "", data = dict(), time = 1.0,
-        min_wait = 0, max_wait = 0, successor = None):
+    def __init__(self, name = "", descr = "", time = 1.0, min_wait = 0, max_wait = 0):
         self.name = name
         self.descr= descr
-        self.data = data
-        # self.next = successor
         self.time = time
-        # the number of fragments the task can be reduced into
-        self.frag = 1
-        # cost to restart task
-        self.frag_cost = 0.0
         self.min_wait = min_wait
         self.max_wait = max_wait
-        # used in optimization
-        self.completed = 0.0
 
     def dump_data(self):
         """
-        Releases information on self.
+        Returns a representation of the node.
         """
         return {"name": self.name, "descr": self.descr, 
-        "time": self.time}
-
-    def dump_data_v2(self):
-        return {"name": self.name, "descr": self.descr, 
-        "time": self.time, "frag": self.frag, "min_wait": self.min_wait, 
+        "time": self.time, "min_wait": self.min_wait, 
         "max_wait": self.max_wait}
 
     def print_dump(self):
+        """
+        Prints the representation of the node.
+        """
         print("%16s %10s %10d" % (self.name, self.descr, self.time))
 
 def wait_data(start, end):
     """
-    Cretes wait time data
+    Creates wait time data
     """
     return {"name": "Wait", "descr": "Nothing to do now, just hold on!", 
         "start": start, "end": end, "time": start - end, "data": None}
@@ -60,7 +50,6 @@ class TaskSequence:
         self.min_t = -1.0
         self.wait_t = -1.0
         self.act_t= -1.0
-
 
     def load(self, tasks):
         """
@@ -109,21 +98,11 @@ class TaskSequence:
         self.act_time = self.min_t - self.wait_t
 
     def print_dump(self):
+        """
+        Prints out a representation of the sequence.
+        """
         print("TaskSequence: " + self.name)
         print("Printing tasks")
         print("%16s %10s %10s" % ("name", "descr", "time"))
         for task in self.tasks:
             task.print_dump()
-
-class IngredientSequence:
-    """
-    This class handles ingredient profiles for recipes.
-    """
-    def __init__(self, ingredients = {}):
-        self.ingredients = ingredients
-
-    def add(self, ingredient, quantity = 1):
-        if ingredient in ingredients:
-            ingredients[ingredients] += quantity
-        else:
-            ingredients[ingredients] = quantity
