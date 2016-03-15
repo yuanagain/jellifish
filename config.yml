@@ -28,6 +28,7 @@ config:
             virtualenv: env # path/name of virtualenv
             directory: app # main folder for the app
             static_directory: static # folder for static assets
+            database: recipes.db # database connection path
         user:
             name: admin # name of user to create
             groups:

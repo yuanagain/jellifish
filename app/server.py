@@ -4,6 +4,7 @@
 
 from flask import Flask, render_template, request, redirect, url_for
 
+import lib.core
 import config
 
 class Server(Flask):
@@ -20,6 +21,10 @@ class Server(Flask):
 		self.config.from_object(configPath)
 		self.jinja_env.globals["site"] = config.VIEW_GLOBALS
 
+		self.database = lib.core.client.DatabaseClient(config.DATABASE)
+		self.recipes = lib.core.cache.CachedValue(refresh = self.database.list_recipes,
+			prefetch = True)
+
 	def configureRoutes(self):
 		'''
 		Configure the routes for the server
@@ -34,7 +39,7 @@ class Server(Flask):
 
 			Renders index.html with a list of recipes
 			'''
-			return render_template("index.html", recipes = ["Pasta", "Grilled Chicken"])
+			return render_template("index.html", recipes = self.recipes.value)
 
 		@self.route("/ingredients", methods = ["POST"])
 		def get_ingredients():

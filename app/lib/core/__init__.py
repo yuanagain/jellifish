@@ -1,4 +1,4 @@
 # Rushy Panchal
 # lib/core/__init__.py
 
-from . import client, database, node, patch
+from . import cache, client, database, node, patch

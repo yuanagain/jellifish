@@ -18,7 +18,7 @@ class DatabaseClient(object):
         # and so, we should check, prior to creating the connection,
         # if the file exists or not. Then it can be initialized if it does
         # not exist.
-        should_init = os.path.exists(conn)
+        should_init = not os.path.exists(conn)
         self.dbm = database.DatabaseManager(conn)
         if should_init:
             self.dbm.initialize()

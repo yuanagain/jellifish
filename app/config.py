@@ -39,6 +39,8 @@ PROTOCOL = CONFIG["web"]["protocol"]
 BASE_URL = CONFIG["web"]["url"]
 FULL_URL = PROTOCOL + BASE_URL
 
+DATABASE = CONFIG["app"]["database"]
+
 class FlaskSettings(object):
 	'''
 	Settings for Flask server
