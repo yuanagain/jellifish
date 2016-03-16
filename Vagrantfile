@@ -26,12 +26,6 @@ Vagrant.configure(2) do |config|
 
   ### PROVISIONING ###
 
-  # Upload the configuration file
-  config.vm.provision :file do |file|
-    file.source = "config.yml"
-    file.destination = "/vagrant/config.yml"
-  end
-
   # Upload public key to server
   config.vm.provision :file do |file|
     file.source = ENV.fetch("SSH_KEY", "~/.ssh/id_rsa.pub")
@@ -40,11 +34,11 @@ Vagrant.configure(2) do |config|
 
   # Provision the VM with Ansible after installing it
   config.vm.provision :shell do |shell|
-    shell.path = "scripts/ansible.sh"
+    shell.path = "server/scripts/ansible.sh"
     shell.upload_path = "/vagrant/ansible.sh" # Upload to same folder as server.yml
 
     # Ansible configuration file
-    shell.args = ["/vagrant", "server.yml", ENV.fetch("ENV", "development")]
+    shell.args = [ENV.fetch("ENV", "development"), "/vagrant", "server/server.yml", "../config.yml"]
   end
 
   # this configuration does not yet work because of an issue with Vagrant

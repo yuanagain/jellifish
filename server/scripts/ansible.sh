@@ -18,5 +18,5 @@ fi
 
 # Run the Ansible provisioner
 echo "Provisioning via Ansible..."
-cd $1
-sudo ENV=$3 ansible-playbook $2
+cd $2
+sudo ENV=$1 CONFIG=$4 ansible-playbook $3

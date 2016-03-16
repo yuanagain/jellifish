@@ -10,7 +10,7 @@
   tasks:
     # import configuration variables, and merge with current environment
     # all variables are subscripted with "config"
-    - include_vars: config.yml
+    - include_vars: "{{ lookup('env', 'CONFIG') }}"
     - set_fact:
         config: "{{ config.default | combine(
           config.get(lookup('env', 'ENV'), {}),

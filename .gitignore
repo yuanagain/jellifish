@@ -18,10 +18,8 @@ static/js/bundle.js
 *.map
 *.css
 
-# Configuration scripts
-setup/server/configure.py
-setup/server/.vagrant
-setup/server/config.yml
+# Vagrant directory
+.vagrant
 
 ### Node ###
 # Logs
