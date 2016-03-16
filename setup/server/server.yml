@@ -16,6 +16,7 @@
           config.get(lookup('env', 'ENV'), {}),
           recursive = True) }}" # recursively merge configuration
     - include: tasks/users.yml
+    - include: tasks/env.yml
     - include: tasks/packages.yml
     - include: tasks/directories.yml
     - include: tasks/templates.yml
