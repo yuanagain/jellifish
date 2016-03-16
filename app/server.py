@@ -42,7 +42,7 @@ class Server(Flask):
 		'''
 		@self.route("/index/")
 		@self.route("/")
-		def recipe_selection():
+		def get_index():
 			'''
 			Handles a request to /index
 				Method: GET
@@ -53,7 +53,7 @@ class Server(Flask):
 			return render_template("index.html", recipes = self.recipes.value)
 
 		@self.route("/ingredients", methods = ["POST"])
-		def get_ingredients():
+		def post_ingredients():
 			'''
 			Handles a request to /ingredients
 				Method: POST
@@ -68,7 +68,7 @@ class Server(Flask):
 			return render_template("ingredients.html", ingredients = ingredients, selected_recipes = selected_recipes)
 
 		@self.route("/timers", methods = ["POST"])
-		def get_timers():
+		def post_timers():
 			'''
 			Handles a request to /timers
 				Method: POST
@@ -81,3 +81,15 @@ class Server(Flask):
 			timer_data = self.meals[selected_recipes]
 			timer_data["recipes"] = selected_recipes
 			return render_template("timers.html", data = timer_data)
+
+		@self.route("/ingredients")
+		@self.route("/timers")
+		def redirect_index():
+			'''
+			Handles a request to /ingredients OR /timers
+				Method: GET
+				Path: /ingredients OR /timers
+
+			Redirects to get_index router.
+			'''
+			return redirect(url_for(".get_index"))
