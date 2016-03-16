@@ -4,20 +4,30 @@
 
 # Configure UFW with firewall settings
 - name: configure ufw firewall
-  action: ufw policy=reject state=enabled rule=allow port={{ item }} src=any
+  ufw: policy=reject state=enabled rule=allow port={{ item }} src=any
   with_items:
     - ssh
     - http
     - https
 - name: ensure services are running
-  action: service name={{ item }} state=running
+  service: name={{ item }} state=running
   with_items:
     - nginx
     - ssh
-  
-- name: set environment variables
-  action: lineinfile dest="~{{ config.user.name }}/.profile" line="export {{ item.name }}={{ item.value }};"
+- name: allow services to be run by user
+  lineinfile: dest=/etc/sudoers line={{ item }}
   with_items:
-    - {name: "WEB_DIR", value: "/var/www/{{ config.web.url }}"}
-    - {name: "APP_DIR", value: "/var/www/{{ config.web.url }}/app"}
-    - {name: "GIT_DIR", value: "/var/repo/{{ config.name}}.git"}
+    - "{{ config.user.name }} ALL = (root) NOPASSWD: /usr/sbin/service"
+
+- name: prevent SSH password authentication
+  lineinfile: dest=/etc/ssh/sshd_config
+    regexp="^PasswordAuthentication"
+    line="PasswordAuthentication no"
+    state=present
+- name: prevent SSH root login
+  lineinfile: dest=/etc/ssh/sshd_config
+    regexp="^PermitRootLogin"
+    line="PermitRootLogin no"
+    state=present
+- name: restart SSH
+  service: name=ssh state=restarted
