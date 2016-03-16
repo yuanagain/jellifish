@@ -23,6 +23,12 @@ class DatabaseClient(object):
         if should_init:
             self.dbm.initialize()
 
+    def close(self):
+        """
+        Closes the database connection
+        """
+        self.dbm.close()
+
     def list_recipes(self):
         """
         Returns list of recipes by name
@@ -51,8 +57,10 @@ class DatabaseClient(object):
         tseqs = []
         this_recipes = self.list_recipes()
         for i in range(len(names)):
-            if names[i] in this_recipes:
+            try:
                 tseqs.append(self.fetch_recipe(names[i]))
+            except KeyError:
+                pass
         
         pkb = patch.PatchKitBlind(tseqs)
         ct, cs = pkb.fit()
@@ -63,8 +71,10 @@ class DatabaseClient(object):
         tseqs = []
         this_recipes = self.list_recipes()
         for i in range(len(names)):
-            if names[i] in this_recipes:
+            try:
                 tseqs.append(self.fetch_recipe(names[i]))
+            except KeyError:
+                pass
         
         pkg = patch.PatchKitGreedy(tseqs)
         ct, cs = pkg.fit()
@@ -75,7 +85,7 @@ class DatabaseClient(object):
         Adds a TaskSequence recipe to the database.
         """
         self.dbm.add_sequence(recipe)
-        #TODO error handling
+        # TODO error handling
         return
 
     def import_recipes(self, dbmc, overwrite = False):

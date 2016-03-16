@@ -40,6 +40,7 @@ BASE_URL = CONFIG["web"]["url"]
 FULL_URL = PROTOCOL + BASE_URL
 
 DATABASE = CONFIG["app"]["database"]
+CACHE_SIZE = CONFIG["app"]["cache_size"]
 
 class FlaskSettings(object):
 	'''

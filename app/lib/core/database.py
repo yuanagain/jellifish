@@ -29,6 +29,12 @@ class DatabaseManager(object):
     def __init__(self, conn):
         self.connect = sqlite3.connect(conn)
 
+    def close(self):
+        """
+        Closes the database connection
+        """
+        self.connect.close()
+
     def print_dump(self):
         """
         Prints contents of database

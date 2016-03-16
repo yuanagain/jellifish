@@ -29,6 +29,7 @@ config:
             directory: app # main folder for the app
             static_directory: static # folder for static assets
             database: recipes.db # database connection path
+            cache_size: 100 # maximum amount of cached recipes
         user:
             name: admin # name of user to create
             groups:

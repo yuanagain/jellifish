@@ -62,7 +62,7 @@ class Application(object):
 		'''
 		Shutdown the application
 		'''
-		return # no shutdown behavior yet
+		self.server.shutdown()
 
 	def handleSignal(self, signal, frame):
 		'''
