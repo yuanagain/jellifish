@@ -27,7 +27,10 @@ class DatabaseManager(object):
         max_wait - maximum waiting time of a task
     """
     def __init__(self, conn):
-        self.connect = sqlite3.connect(conn)
+        # Disabling the "check_same_thread" fixes the issue of incorrectly accessing
+        # the database from multiple threads (i.e a Flask request). However, this
+        # is potentially risky and should be avoided if possible.
+        self.connect = sqlite3.connect(conn, check_same_thread = False)
 
     def close(self):
         """
@@ -41,6 +44,7 @@ class DatabaseManager(object):
         """
         with self.connect:
             cur = self.connect.cursor() 
+
             print("DATA")   
             cur.execute('SELECT * FROM data')
             col_names = [cn[0] for cn in cur.description]
@@ -56,6 +60,8 @@ class DatabaseManager(object):
             print(col_names)
             for row in rows:    
                 print(row)
+
+            cur.close()
 
     def add_sequence(self, task_seq):
         """
@@ -79,15 +85,20 @@ class DatabaseManager(object):
             ids = marshal.dumps(task_id_list)
             self.store_seq(task_seq.name, task_seq.descr, ids)
 
+            cur.close()
+
     def fetch_seq_names(self):
         """     
         returns a list of names of task sequences in database
         """
         with self.connect:
             cur = self.connect.cursor()
+
             cur.execute('SELECT name FROM seqs')
             names = cur.fetchall()
             names = [el[0] for el in names]
+
+            cur.close()
             return names
 
     def load_seq_by_name(self, name):
@@ -96,6 +107,7 @@ class DatabaseManager(object):
         """
         with self.connect:
             cur = self.connect.cursor() 
+
             cur.execute('SELECT name, descr, tasks FROM seqs WHERE name=:name', {"name": name})
             seq_data = cur.fetchone()
 
@@ -122,6 +134,7 @@ class DatabaseManager(object):
             
             task_seq = node.TaskSequence(seq_data[0], seq_data[1], tasks)
 
+            cur.close()
             return task_seq
 
     def add_task(self, task_data):
