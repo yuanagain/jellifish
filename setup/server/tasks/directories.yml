@@ -3,7 +3,7 @@
 # Contains the directory creation directives for Ansible
 
 - name: create directories
-  action: file path={{ item }} state=directory owner={{ config.user.name }} group=www-data recurse=yes
+  file: path={{ item }} state=directory owner={{ config.user.name }} group=www-data recurse=yes
   with_items:
     - /var/www/
     - /var/www/{{ config.web.url }} # web directory
@@ -16,11 +16,11 @@
 
 # Create Git repository to allow for Git-based deployment
 - name: create Git repository
-  action: command chdir=/var/repo/{{ config.name }}.git git init --bare creates=HEAD
+  command: chdir=/var/repo/{{ config.name }}.git git init --bare creates=HEAD
 
 # Automatically check out code to the app file
 - name: add post-receive hook to Git repository
-  action: template src="templates/post-receive" dest="/var/repo/{{ config.name }}.git/hooks/post-receive" mode=755 owner={{ config.user.name }} group={{ config.user.name }}
+  template: src="templates/post-receive" dest="/var/repo/{{ config.name }}.git/hooks/post-receive" mode=755 owner={{ config.user.name }} group={{ config.user.name }}
 
 # Ensure that the user can write/read to the repo
 - name: change Git repository permissions
