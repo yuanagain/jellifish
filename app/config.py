@@ -27,7 +27,8 @@ ENVIRONMENT = os.environ.get("ENV", "development")
 
 DEV_MODE = (ENVIRONMENT == "development")
 
-with open("../config.yml", "r") as config_file:
+configPath = "config.yml" if os.path.exists("config.yml") else "../config.yml"
+with open(configPath, "r") as config_file:
 	RAW_CONFIG = yaml.load(config_file)["config"]
 	CONFIG = recursiveMerge(
 		RAW_CONFIG["default"],

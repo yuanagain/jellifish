@@ -13,3 +13,7 @@
   template: dest="~{{ config.user.name }}/.ssh/authorized_keys" src="/var/tmp/host_ssh.key"
   become_user: "{{ config.user.name }}"
   
+- name: allow services to be run by user
+  lineinfile: dest=/etc/sudoers line={{ item }}
+  with_items:
+    - "{{ config.user.name }} ALL = (root) NOPASSWD: /usr/sbin/service"

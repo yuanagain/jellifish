@@ -1,9 +1,6 @@
 # Rushy Panchal
 # Vagrantfile
 
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 # Required Vagrant version
 Vagrant.require_version ">= 1.8.0"
 

@@ -14,11 +14,8 @@
   with_items:
     - nginx
     - ssh
-- name: allow services to be run by user
-  lineinfile: dest=/etc/sudoers line={{ item }}
-  with_items:
-    - "{{ config.user.name }} ALL = (root) NOPASSWD: /usr/sbin/service"
 
+# SSH configuration
 - name: prevent SSH password authentication
   lineinfile: dest=/etc/ssh/sshd_config
     regexp="^PasswordAuthentication"

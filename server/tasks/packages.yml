@@ -11,9 +11,17 @@
     - ufw # Server firewall
     - fail2ban # prevent brute-force SSH login attacks
     - vnstat # network usage monitoring
-- name: install Python-development packages
+    - ruby
+    - npm
+- name: install web development libraries
   apt: pkg={{ item }} state=installed
-  with_items: # needed for building various C-based Python packages
+  with_items:
+    - nginx
+
+# Python
+- name: install Python-dev packages # building various C-based Python packages
+  apt: pkg={{ item }} state=installed
+  with_items: 
     - build-essential
     - libssl-dev
     - zlib1g-dev
@@ -25,13 +33,7 @@
     - python-pip
     - python-virtualenv
     - python-dev
-- name: install web development libraries
-  apt: pkg={{ item }} state=installed
-  with_items:
-    - nginx
-
-# Python version management
-- name: install pyenv
+- name: install pyenv # Python version management
   git: repo=https://github.com/yyuu/pyenv.git dest="~{{ config.user.name }}/.pyenv" clone=yes
   become: yes
   become_user: "{{ config.user.name }}"
@@ -42,3 +44,16 @@
     creates: "~/.pyenv/versions/{{ config.app.py_version }}"
   become: yes
   become_user: "{{ config.user.name }}"
+
+# Other
+- name: install other packages
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - ruby
+    - nodejs
+    - nodejs-legacy
+    - npm
+- name: install Gem packages
+  gem: name=sass version=3.4.19 state=present
+- name: install npm packages
+  npm: name=browserify global=yes state=present

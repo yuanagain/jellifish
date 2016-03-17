@@ -17,11 +17,11 @@ config:
         web:
             url: "app.jelli.fish" # base URL to serve pages from
             static: "static" # path of static files
-            https: yes # HTTPS enabled
+            https:  no # HTTPS enabled
             gzip: yes # GZip enabled for response compression
-            protocol: "https://" # web protocol to prefix URL with
-            cloudflare: yes # CloudFlare protection/CDN enabled
-            static_error_pages: yes # static error pages are served directly by NginX
+            protocol: "http://" # web protocol to prefix URL with
+            cloudflare: no # CloudFlare protection/CDN enabled
+            static_error_pages: no # static error pages are served directly by NginX
         app:
             secret_key: "NtaTRKcZKw256RNMwp25Xqvw" # secret key for sessions
             py_version: 3.5.0 # Python version for the application
@@ -41,20 +41,18 @@ config:
     # Production configuration, used in web-facing servers.
     production:
         env: "production"
+    # Test configuration, for a web-facing test server.
+    testing:
+        env: "testing"
         web:
-            https: no
-            cloudflare: no
-            static_error_pages: no
-            protocol: "http://"
+            url: "test.jelli.fish"
+        app:
+            secret_key: "02a0eF878C8D3eDcd9ab41bd"
     # Development configuration, for running locally.
     development:
         env: "development"
         web:
             url: "localhost:8080"
-            https: no
-            protocol: "http://"
-            cloudflare: no
-            static_error_pages: no
         server:
             ufw: no
             swap: 0G

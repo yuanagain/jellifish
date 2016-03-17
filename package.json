@@ -15,10 +15,6 @@
   "devDependencies": {
     "reactify": "^1.1.1"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "npm install -g browserify"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yuanagain/jellifish.git"
