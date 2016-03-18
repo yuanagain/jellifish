@@ -8,6 +8,7 @@ var windowSize = Dimensions.get('window');
 
 var Navigator = require('Navigator');
 var TimerV1 = require('./iostimer')
+var LoginPage = require('./loginpage')
 
 var {
   AppRegistry,
@@ -30,13 +31,22 @@ var Login = React.createClass({
     );
   },
   render: function() {
-    return (
-    <View style={styles.container}>
-      <TimerV1
-        progress={0.30}
-        />
-    </View>
-    );
+    if (this.state.logged_in) {
+      return (
+      <View style={styles.container}>
+        <TimerV1
+          progress={0.30}
+          />
+      </View>
+      );
+    }
+    else {
+      return (
+        <View style={styles.container}>
+          <LoginPage />
+        </View>
+      )
+    }
   },
 
   _handlePress_toRecord(event) {

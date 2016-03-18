@@ -30,6 +30,7 @@ var TimerV1 = React.createClass({
         username: '',
         // progress: 0.3,
         indeterminate: false,
+        not_paused: true
       }
     );
   },
@@ -63,18 +64,20 @@ var TimerV1 = React.createClass({
     );
   },
   animate: function() {
-    var progress = this.props.progress
-    this.setState({ progress });
-    setTimeout(() => {
-      this.setState({ indeterminate: false });
-      setInterval(() => {
-        progress += 1/600;
-        if(progress > 1) {
-          progress = 1;
-        }
-        this.setState({ progress });
+    if (this.state.not_paused) {
+      var progress = this.props.progress
+      this.setState({ progress });
+      setTimeout(() => {
+        this.setState({ indeterminate: false });
+        setInterval(() => {
+          progress += 1/600;
+          if(progress > 1) {
+            progress = 1;
+          }
+          this.setState({ progress });
+        }, 100);
       }, 100);
-    }, 100);
+    }
   },
 
   componentDidMount: function() {
