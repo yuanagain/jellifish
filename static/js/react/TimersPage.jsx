@@ -37,7 +37,7 @@ class TimersPage extends React.Component {
 	/*
 	Create a new TimersPage
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {

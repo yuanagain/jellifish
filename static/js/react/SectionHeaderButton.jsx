@@ -22,7 +22,7 @@ class SectionHeaderButton extends React.Component {
 	/*
 	Construct a new SectionHeaderButton
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {
@@ -51,7 +51,7 @@ class SectionHeaderButton extends React.Component {
 	/*
 	Change the button state
 
-	Arguments
+	Parameters
 		bool state (optional) - what state to set the button to
 
 	Returns

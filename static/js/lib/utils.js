@@ -8,7 +8,7 @@ module.exports = {
 	/*
 	Get the static path of a file
 
-	Arguments
+	Parameters
 		String path - path to append to static base
 
 	Returns
@@ -28,7 +28,7 @@ module.exports = {
 	/*
 	Get an elem with a jQuery selector
 
-	Arguments
+	Parameters
 		String selector - selector in the form of jQuery
 
 	Returns

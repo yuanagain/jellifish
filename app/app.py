@@ -21,7 +21,7 @@ class Application(object):
 	def getServer(setup = False):
 		'''Get the server of a new Application instance, optionally setting it up
 
-		Arguments
+		Parameters
 			bool setup - whether or not to set up the server
 
 		Returns
@@ -68,7 +68,7 @@ class Application(object):
 		'''
 		Handle an incoming signal
 		
-		Arguments
+		Parameters
 			int signal - signal number
 			(stack) frame - frame that the signal was received in
 		'''

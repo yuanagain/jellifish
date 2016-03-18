@@ -23,7 +23,7 @@ function SelectionList(props) {
 			{props.selections.map(function(item) {
 				/* render each selection
 
-				Arguments
+				Parameters
 					String item - value to display (also set as input value)
 
 				Returns 

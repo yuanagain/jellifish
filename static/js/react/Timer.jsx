@@ -30,7 +30,7 @@ class Timer extends React.Component {
 	/*
 	Create a new Timer
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {
@@ -99,7 +99,7 @@ class Timer extends React.Component {
 	/*
 	Position the text element depending on the parent and sibling sizes
 
-	Arguments
+	Parameters
 		Event e - event associated with resize
 	*/
 	_positionText(e) {
@@ -137,7 +137,7 @@ class Timer extends React.Component {
 	/*
 	Update the timer with a single decreased second
 
-	Arguments
+	Parameters
 		int elapsedTime - how much time has passed so far on the global timer
 
 	Returns
@@ -158,7 +158,7 @@ class Timer extends React.Component {
 	/*
 	Reset the timer to display new text and a new time
 
-	Arguments:
+	Parameters:
 		String name - name to display
 		String description - description of the task
 		int start_time - starting point of the timer
@@ -178,7 +178,7 @@ class Timer extends React.Component {
 	/*
 	Remove the timer by setting it as inactive
 
-	Arguments
+	Parameters
 		bool permanent - whether or not to remove the timer permanently
 	*/
 	remove(permanent) {

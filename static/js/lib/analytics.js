@@ -9,7 +9,7 @@ module.exports = {
 	/*
 	Configure Parse analytics
 
-	Arguments
+	Parameters
 		String applicationID - Parse's provided application ID
 		String jsKey - Parse's provided JavaScript Key
 

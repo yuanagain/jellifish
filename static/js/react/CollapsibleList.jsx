@@ -22,7 +22,7 @@ class CollapsibleList extends React.Component {
 	/*
 	Create a new CollapsibleList
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {
