@@ -5,11 +5,6 @@
 # Databases
 *.db
 
-# Images
-*.png
-*.jpg
-*.svg
-
 # Compiled/Bundled JSX
 static/js/external.js
 static/js/bundle.js
@@ -17,6 +12,9 @@ static/js/bundle.js
 # Compiled SASS/extra files
 *.map
 *.css
+
+# Gemfile lock file
+Gemfile.lock
 
 # Vagrant directory
 .vagrant

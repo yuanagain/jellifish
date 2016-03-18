@@ -53,7 +53,9 @@
     - nodejs
     - nodejs-legacy
     - npm
-- name: install Gem packages
-  gem: name=sass version=3.4.19 state=present
+- name: install bundler via gem
+  command: gem install bundler
+- name: install Ruby packages via bundler
+  command: bundler install
 - name: install npm packages
   npm: name=browserify global=yes state=present
