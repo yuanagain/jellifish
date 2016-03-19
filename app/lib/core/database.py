@@ -73,7 +73,7 @@ class DatabaseManager(object):
             cur = self.connect.cursor() 
 
             for task in task_seq.tasks:
-                task_data = task.dump_data_v2()
+                task_data = task.dump_data()
                 self.add_task(task_data)
 
                 # recover last inserted key id, 

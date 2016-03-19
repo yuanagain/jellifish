@@ -36,6 +36,10 @@ input[type=text], input[type=number] {
 	text-align: center;
 	}
 
+hr {
+	background-color: $gray-lightest;
+	}
+
 // Class-only styling
 .center-horizontal {
 	@include center-block;

@@ -71,7 +71,24 @@ class Server(Flask):
 				Path: /new
 			Saves the recipe and redirects to /new.
 			'''
-			# TODO save data
+			name = request.form.get("name")
+			descr = request.form.get("description")
+			# The data is turned into a JSON string on the new_recipe page, because
+			# that is the simplest way to transmit a list of unknown size,, even
+			# though it is a rather hacky way to submit the data through a form,
+			# especially because it is not even sent as application/json, but just
+			# as raw text.
+			tasks_raw = json.loads(request.form.get("tasks"))
+			# TODO verify if arguments are provided or not, and report error
+			# as a flash message if not provided.
+			# Convert each raw task to a TaskNode
+			tasks = map(lambda raw: lib.core.node.TaskNode(**raw), tasks_raw)
+
+			# Create the TaskSequence and add it to the database.
+			seq = lib.core.node.TaskSequence(name, descr, tasks)
+			seq.update_times()
+			self.database.add_recipe(seq)
+
 			return redirect(url_for(".get_new"))
 
 		@self.route("/ingredients", methods = ["POST"])
