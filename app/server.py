@@ -81,8 +81,11 @@ class Server(Flask):
 			tasks_raw = json.loads(request.form.get("tasks"))
 			# TODO verify if arguments are provided or not, and report error
 			# as a flash message if not provided.
-			# Convert each raw task to a TaskNode
-			tasks = map(lambda raw: lib.core.node.TaskNode(**raw), tasks_raw)
+			
+			# Convert each raw task to a TaskNode - note: I avoid using map
+			# here because map returns an iterator, and converting that to a list
+			# is less efficient than simply using a list comprehension.
+			tasks = [lib.core.node.TaskNode(**raw) for raw in tasks_raw]
 
 			# Create the TaskSequence and add it to the database.
 			seq = lib.core.node.TaskSequence(name, descr, tasks)

@@ -54,8 +54,8 @@ class NewRecipePage extends React.Component {
 					<h3>Steps</h3>
 				</FullRow>
 
-				<input type="hidden" id="data-tasks" name="tasks"
-					value={JSON.stringify(this.state.tasks)}/>
+				<input type="hidden" name="tasks" value={JSON.stringify(this.state.tasks)} />
+
 				<div id="new-task" className="center-horizontal">
 					<InputRow label="Name" id="new-task-name" labelSize={4} 
 						rowClass="padding-vertical" inputClass="width-full" />
@@ -93,6 +93,7 @@ class NewRecipePage extends React.Component {
 					Add Step
 					</ReactBootstrap.Button>
 				</FullRow>
+
 				<div id="tasks">
 					{this.state.tasks.map(function(task, index) {
 						/*
@@ -132,7 +133,6 @@ class NewRecipePage extends React.Component {
 		this._elems.time = utils.getElem("#new-task-time");
 		this._elems.min_wait = utils.getElem("#new-task-min-wait");
 		this._elems.max_wait = utils.getElem("#new-task-max-wait");
-		this._elems.tasks = utils.getElem("#data-tasks");
 		}
 
 	/*
