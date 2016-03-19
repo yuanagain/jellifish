@@ -31,10 +31,29 @@ div.selection-input {
 		}
 	}
 
+input[type=text], input[type=number] {
+	color: black;
+	text-align: center;
+	}
+
 // Class-only styling
 .center-horizontal {
 	@include center-block;
 	text-align: center;
+	}
+
+.width-full {
+	width: 90%;
+	}
+
+.padding-vertical {
+	padding-top: $padding-general / 2;
+	padding-bottom: $padding-general / 2;
+	}
+
+.padding-horizontal {
+	padding-left: $padding-general / 2;
+	padding-right: $padding-general / 2;
 	}
 
 .logo {

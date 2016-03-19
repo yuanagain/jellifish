@@ -40,7 +40,12 @@ class SectionHeaderButton extends React.Component {
 			<Row className = "section-header">
 				<Col md={6} className="center-horizontal"><h3>{this.props.header}</h3></Col>
 				<Col md={6} className="center-horizontal">
-					<ReactBootstrap.Button bsStyle="primary" onClick={this.props.onClick} type={this.props.type} disabled={! this.state.buttonActive} data-parse-id={this.props["data-parse-id"]}>
+					<ReactBootstrap.Button
+						bsStyle="primary"
+						onClick={this.props.onClick}
+						type={this.props.type}
+						disabled={! this.state.buttonActive}
+						data-parse-id={this.props["data-parse-id"]}>
 						{this.props.button}
 					</ReactBootstrap.Button>
 				</Col>

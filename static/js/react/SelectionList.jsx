@@ -21,7 +21,8 @@ function SelectionList(props) {
 	return (
 		<ul>
 			{props.selections.map(function(item) {
-				/* render each selection
+				/*
+				Render each selection
 
 				Parameters
 					String item - value to display (also set as input value)

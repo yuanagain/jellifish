@@ -3,6 +3,7 @@
 # app/server.py
 
 from flask import Flask, render_template, request, redirect, url_for
+import json
 
 import lib.core
 import config
@@ -11,7 +12,7 @@ class Server(Flask):
 	'''
 	Creates a basic Flask Web Server
 
-	Arguments
+	Parameters
 		str configPath - path to the configuration, as an object, for the server
 		list *args - extra arguments to pass to Flask
 		dict kwargs - extra keyword arguments to pass to Flask
@@ -51,6 +52,27 @@ class Server(Flask):
 			Renders index.html with a list of recipes
 			'''
 			return render_template("index.html", recipes = self.recipes.value)
+
+		@self.route("/new")
+		def get_new():
+			'''
+			Handles a request to /new
+				Method: GET
+				Path: /new
+			Renders new_recipe.html.
+			'''
+			return render_template("new_recipe.html")
+
+		@self.route("/new", methods = ["POST"])
+		def post_new():
+			'''
+			Handles a request to /new
+				Method: POST
+				Path: /new
+			Saves the recipe and redirects to /new.
+			'''
+			# TODO save data
+			return redirect(url_for(".get_new"))
 
 		@self.route("/ingredients", methods = ["POST"])
 		def post_ingredients():

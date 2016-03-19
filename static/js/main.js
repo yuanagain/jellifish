@@ -12,7 +12,8 @@ var React = require("react"),
 var GlobalHeader = require("./react/GlobalHeader.jsx"),
 	SelectionPage = require("./react/SelectionPage.jsx"),
 	IngredientsPage = require("./react/IngredientsPage.jsx"),
-	TimersPage = require("./react/TimersPage.jsx");
+	TimersPage = require("./react/TimersPage.jsx"),
+	NewRecipePage = require("./react/NewRecipePage.jsx");
 
 function main() {
 	// Render main components
@@ -35,7 +36,7 @@ var page = {
 	/*
 	Render the selection page
 
-	Arguments
+	Parameters
 		[String, ...] selections - list of selection options to render
 	*/
 	selection: function(selections) {
@@ -49,7 +50,7 @@ var page = {
 	/*
 	Render the ingredients page
 
-	Arguments
+	Parameters
 		[String, ...] ingredients - list of ingredients to render
 	*/
 	ingredients: function(ingredients) {
@@ -63,7 +64,7 @@ var page = {
 	/*
 	Render the timers page
 
-	Arguments
+	Parameters
 		Object data - list of ingredients to render
 	*/
 	timers: function(data) {
@@ -74,6 +75,17 @@ var page = {
 				passive={data.passive}
 				recipes={data.recipes} />,
 			utils.getElem("#timers")
+			);
+		},
+
+	/*
+	Render the new_recipe page
+	*/
+	new_recipe: function() {
+		main();
+		ReactDOM.render(
+			<NewRecipePage />,
+			utils.getElem("#new-recipe")
 			);
 		}
 	}
