@@ -1,6 +1,6 @@
 {% extends "page.html" %}
 {% block content %}
-	<form id = "new-recipe" method = "POST" action="{{ url_for('.post_new') }}"></form>
+	<form id = "new-recipe" method = "POST" action="{{ url_for('recipes.post_new') }}"></form>
 {% endblock %}
 {% block postbody %}
 	<script type="text/javascript">
