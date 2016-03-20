@@ -65,7 +65,8 @@ class Server(Flask):
 			'''
 			selected_recipes = tuple(request.form.getlist("recipe"))
 			timer_data = self.meals[selected_recipes]
-			ingredients = filter(lambda item: item["duration"] == 0, timer_data["active"])
+			ingredients = [item["name"] for item in
+				filter(lambda item: item["time"] == 0, timer_data)]
 			return render_template("ingredients.html", ingredients = ingredients, selected_recipes = selected_recipes)
 
 		@self.route("/timers", methods = ["POST"])
@@ -79,8 +80,7 @@ class Server(Flask):
 			as taken from the backend.
 			'''
 			selected_recipes = tuple(request.form.getlist("recipe"))
-			timer_data = self.meals[selected_recipes]
-			timer_data["recipes"] = selected_recipes
+			timer_data = {"recipes": selected_recipes, "active": self.meals[selected_recipes]}
 			return render_template("timers.html", data = timer_data)
 
 		@self.route("/ingredients")

@@ -36,7 +36,7 @@ def wait_data(start, end):
     Creates wait time data
     """
     return {"name": "Wait", "descr": "Nothing to do now, just hold on!", 
-        "start": start, "end": end, "time": start - end, "data": None}
+        "start": start, "end": end, "time": start - end}
 
 class TaskSequence:
     """
