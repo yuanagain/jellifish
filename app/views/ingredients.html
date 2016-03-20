@@ -9,6 +9,6 @@
 {% endblock %}
 {% block postbody %}
 	<script type="text/javascript">
-		pages.ingredients({{ ingredients | safe }});
+		pages.ingredients({{ ingredients | tojson | safe }});
 	</script>
 {% endblock %}

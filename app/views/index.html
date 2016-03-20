@@ -4,6 +4,6 @@
 {% endblock %}
 {% block postbody %}
 	<script type="text/javascript">
-		pages.selection({{ recipes|safe }});
+		pages.selection({{ recipes | tojson | safe }});
 	</script>
 {% endblock %}
