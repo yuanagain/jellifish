@@ -6,6 +6,8 @@
 $background-color: #2C3E50;
 $background-color-header: rgba(132,132,132,0.5);
 $padding-general: 1em;
+$padding-small: 5px;
+$border-width: 1px;
 
 $checkbutton-size: 1em;
 $checkbutton-color: $gray-lightest;
@@ -32,12 +34,21 @@ div.selection-input {
 	}
 
 input[type=text], input[type=number] {
-	color: black;
+	color: $gray-lighter;
 	text-align: center;
+	padding: $padding-small;
+	border-radius: $padding-small;
+	background-color: transparent;
+	border: solid $border-width $gray;
+	@include transition(border 0.3s);
+	&:focus {
+		border-color: $gray-light;
+		outline: none;
+		}
 	}
 
 hr {
-	background-color: $gray-lightest;
+	background-color: $gray-light;
 	}
 
 // Class-only styling

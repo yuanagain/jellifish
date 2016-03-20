@@ -63,19 +63,19 @@ class NewRecipePage extends React.Component {
 						rowClass="padding-vertical" inputClass="width-full" />
 					<Row className="padding-vertical">
 						<Col md={4} xs={12}>
-							<Row className="center-horizontal"><span>Time</span></Row>
+							<Row className="center-horizontal"><span>Time (s)</span></Row>
 							<Row className="center-horizontal padding-vertical">
 								<input type="number" id="new-task-time" />
 							</Row>
 						</Col>
 						<Col md={4} xs={12}>
-							<Row className="center-horizontal"><span>Min. Wait</span></Row>
+							<Row className="center-horizontal"><span>Min. Wait (s)</span></Row>
 							<Row className="center-horizontal padding-vertical">
 								<input type="number" id="new-task-min-wait" />
 							</Row>
 						</Col>
 						<Col md={4} xs={12}>
-							<Row className="center-horizontal"><span>Max. Wait</span></Row>
+							<Row className="center-horizontal"><span>Max. Wait (s)</span></Row>
 							<Row className="center-horizontal padding-vertical">
 								<input type="number" id="new-task-max-wait" />
 							</Row>
