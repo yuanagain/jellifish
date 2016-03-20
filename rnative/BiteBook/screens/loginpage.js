@@ -33,7 +33,6 @@ var LoginPage = React.createClass({
     <View style={styles.container}>
 
       <View style={styles.header_container}>
-        <Image src={require('../assets/mtn.png')} style={styles.backgroundImage} />
         <Text style={styles.title_text}>
           ChefNotes
         </Text>
