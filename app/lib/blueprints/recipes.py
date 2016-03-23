@@ -16,12 +16,25 @@ class RecipeRouter(route.Router):
 		'''
 		Add routes to the router.
 		'''
+		@self.route("/index")
+		@self.route("/")
+		def get_index():
+			'''
+			Handles a request to / or /index
+				Method: GET
+				Path: / or /index
+
+			Renders recipe_list.html
+			'''
+			return render_template("recipes.html", recipes = self.recipes.value)
+
 		@self.route("/new")
 		def get_new():
 			'''
 			Handles a request to /new
 				Method: GET
 				Path: /new
+
 			Renders new_recipe.html.
 			'''
 			return render_template("new_recipe.html")
@@ -32,6 +45,7 @@ class RecipeRouter(route.Router):
 			Handles a request to /new
 				Method: POST
 				Path: /new
+
 			Saves the recipe and redirects to /new.
 			'''
 			name = request.form.get("name")

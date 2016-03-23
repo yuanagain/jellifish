@@ -41,7 +41,6 @@ class TimersPage extends React.Component {
 		Object props - properties for component
 	*/
 	constructor(props) {
-		// Create a new TimersPage
 		super(props);
 		this.state = {
 			activePointer: 0, // pointer to current active task

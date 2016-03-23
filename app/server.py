@@ -22,7 +22,7 @@ class Server(Flask):
 		self.jinja_env.globals["site"] = config.VIEW_GLOBALS
 
 		self.database = lib.core.client.DatabaseClient(config.DATABASE)
-		lib.blueprints.route.Router.setGlobalData("database", self.database)
+		
 		# Recipes are cached and are refreshed every minute, as necessary.
 		self.recipes = lib.core.cache.CachedValue(refresh = self.database.list_recipes,
 			prefetch = True)
@@ -30,6 +30,11 @@ class Server(Flask):
 		# when unused.
 		self.meals = lib.core.cache.FixedSizeCache(config.CACHE_SIZE,
 			config.CACHE_SIZE / 10, onmiss = self.database.fetch_recipes_greedy)
+
+		lib.blueprints.route.Router.updateGlobalData({
+			"database": self.database,
+			"recipes": self.recipes
+			})
 
 	def shutdown(self):
 		'''

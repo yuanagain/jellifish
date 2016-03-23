@@ -13,7 +13,8 @@ var GlobalHeader = require("./react/GlobalHeader.jsx"),
 	SelectionPage = require("./react/SelectionPage.jsx"),
 	IngredientsPage = require("./react/IngredientsPage.jsx"),
 	TimersPage = require("./react/TimersPage.jsx"),
-	NewRecipePage = require("./react/NewRecipePage.jsx");
+	NewRecipePage = require("./react/NewRecipePage.jsx"),
+	RecipesPage = require("./react/RecipesPage.jsx");
 
 function main() {
 	// Render main components
@@ -34,7 +35,7 @@ function postRender() {
 
 var page = {
 	/*
-	Render the selection page
+	Render the selection page.
 
 	Parameters
 		[String, ...] selections - list of selection options to render
@@ -48,7 +49,7 @@ var page = {
 		},
 
 	/*
-	Render the ingredients page
+	Render the ingredients page.
 
 	Parameters
 		[String, ...] ingredients - list of ingredients to render
@@ -62,7 +63,7 @@ var page = {
 		},
 
 	/*
-	Render the timers page
+	Render the timers page.
 
 	Parameters
 		Object data - list of ingredients to render
@@ -79,13 +80,27 @@ var page = {
 		},
 
 	/*
-	Render the new_recipe page
+	Render the new_recipe page.
 	*/
 	new_recipe: function() {
 		main();
 		ReactDOM.render(
 			<NewRecipePage />,
 			utils.getElem("#new-recipe")
+			);
+		},
+
+	/*
+	Render the recipe page.
+
+	Parameters
+		[String, ...] recipes - list of recipes to render
+	*/
+	recipes: function(recipes) {
+		main();
+		ReactDOM.render(
+			<RecipesPage recipes={recipes} />,
+			utils.getElem("#recipes")
 			);
 		}
 	}

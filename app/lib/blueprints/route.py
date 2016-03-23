@@ -33,6 +33,24 @@ class Router(Blueprint):
 		'''
 		return setattr(cls, name, value)
 
+	@classmethod
+	def updateGlobalData(cls, data):
+		'''
+		Update global data for all routers - this is useful for things such as sharing
+		database connections or cached values.
+
+		Parameters
+			dict data - data to update global store with
+
+		Examples
+			Router.updateGlobalData({"db", 23, "x": "some_value"})
+			Router.db # => 23
+			ChildClass.db # => 23
+			ChildClass.x # => "some_value"
+		'''
+		for (key, value) in data.items():
+			setattr(cls, key, value)
+
 	def addRoutes(self):
 		'''
 		Add routes to the router.
