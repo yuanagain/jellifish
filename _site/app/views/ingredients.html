@@ -1,0 +1,14 @@
+{% extends "page.html" %}
+{% block content %}
+	<form method = "POST" action = "{{ url_for('.post_timers') }}">
+		{% for recipe in selected_recipes %}
+			<input type = "hidden" name="recipe" value="{{ recipe }}" />
+		{% endfor %}
+		<div id = "ingredients"></div>
+	</form>
+{% endblock %}
+{% block postbody %}
+	<script type="text/javascript">
+		pages.ingredients({{ ingredients | safe }});
+	</script>
+{% endblock %}
