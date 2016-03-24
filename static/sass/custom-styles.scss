@@ -1,0 +1,129 @@
+// Rushy Panchal
+// Custom Styles
+@import "variables";
+@import "mixins";
+
+$background-color: #2C3E50;
+$background-color-header: rgba(132,132,132,0.5);
+$padding-general: 1em;
+
+$checkbutton-size: 1em;
+$checkbutton-color: $gray-lightest;
+
+// Full-element styling
+body {
+	padding: $padding-general;
+	}
+
+// Custom check-buttons
+div.selection-input {
+	font-size: $font-size-h4;
+	input[type=checkbox] {
+		display: none; // hide the default checkbox
+		& + i {
+			letter-spacing: $checkbutton-size / 2;
+			color: $checkbutton-color;
+			&:hover {
+				color: darken($checkbutton-color, 25%);
+				@include transition(color 0.25s);
+				}
+			}
+		}
+	}
+
+// Class-only styling
+.center-horizontal {
+	@include center-block;
+	text-align: center;
+	}
+
+.logo {
+	max-height: 5em;
+	}
+
+.content {
+	@include center-block;
+	margin-top: $padding-general;
+	padding-top: $padding-general;
+	padding-bottom: $padding-general;
+	background-color: $background-color;
+	border-radius: $padding-general;
+	max-width: 70vw;
+	@include media-breakpoint-down(md) {
+		max-width: 100vw;
+		}
+	}
+
+.timer-text {
+	font-size: 1em;
+	&.primary {
+		font-size: 1em;
+		}
+	&.name {
+		
+		}
+	&.description {
+		font-size: 1em;
+		font-style: italic;
+		}
+	}
+
+.timer {
+	&.secondary svg {
+		height: 5em;
+		}
+	&.primary svg {
+		max-height: 40vh;
+		}
+	}
+
+.overflow {
+	&.scroll {
+		overflow-y: scroll;
+		overflow-x: scroll;
+		}
+	&.hidden {
+		overflow-y: hidden;
+		overflow-x: hidden;
+		}
+	}
+
+.passive-tasks {
+	.row:nth-child(n+4) {
+		display: none;
+		}
+	}
+
+.display-height {
+	max-height: 90vh;
+	@include media-breakpoint-down(xs) {
+		max-height: none;
+		}
+	}
+
+.clickable-icon {
+	font-size: 2em;
+	color: $gray-light;
+	@include transition(color 0.5s);
+	&:hover {
+		cursor: pointer;	
+		cursor: hand;
+		color: $gray-lightest;
+		}
+	&[disabled] {
+		color: $gray;
+		&:hover {
+			cursor: not-allowed;
+			}
+		}
+	}
+
+.ingredient {
+	padding-left: 1em;
+	}
+
+.collapsible-list {
+	border: 1px solid $brand-success;
+	border-radius: $padding-general / 2;
+	padding: $padding-general / 2;
+	}

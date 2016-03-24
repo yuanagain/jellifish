@@ -1,0 +1,30 @@
+# Rushy Panchal
+# tasks/directories.yml
+# Contains the general setup directives for Ansible
+
+# Configure UFW with firewall settings
+- name: configure ufw firewall
+  ufw: policy=reject state=enabled rule=allow port={{ item }} src=any
+  with_items:
+    - ssh
+    - http
+    - https
+- name: ensure services are running
+  service: name={{ item }} state=running
+  with_items:
+    - nginx
+    - ssh
+
+# SSH configuration
+- name: prevent SSH password authentication
+  lineinfile: dest=/etc/ssh/sshd_config
+    regexp="^PasswordAuthentication"
+    line="PasswordAuthentication no"
+    state=present
+- name: prevent SSH root login
+  lineinfile: dest=/etc/ssh/sshd_config
+    regexp="^PermitRootLogin"
+    line="PermitRootLogin no"
+    state=present
+- name: restart SSH
+  service: name=ssh state=restarted

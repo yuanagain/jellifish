@@ -1,0 +1,19 @@
+# Rushy Panchal
+# tasks/users.yml
+# Contains the user creation directives for Ansible
+
+- name: create user
+  user: name={{ config.user.name }} append=yes groups={{ ",".join(config.user.groups) }} state=present shell=/bin/bash
+  
+- name: make SSH user directory
+  file: path="~{{ config.user.name }}/.ssh/" state=directory owner={{ config.user.name }}
+  become_user: "{{ config.user.name }}"
+
+- name: add SSH key to user
+  template: dest="~{{ config.user.name }}/.ssh/authorized_keys" src="/var/tmp/host_ssh.key"
+  become_user: "{{ config.user.name }}"
+  
+- name: allow services to be run by user
+  lineinfile: dest=/etc/sudoers line={{ item }}
+  with_items:
+    - "{{ config.user.name }} ALL = (root) NOPASSWD: /usr/sbin/service"

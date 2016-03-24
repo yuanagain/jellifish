@@ -1,0 +1,61 @@
+# Rushy Panchal
+# tasks/packages.yml
+# Contains the package installation directives for Ansible
+
+- name: install general packages
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - git
+    - make
+    - emacs
+    - ufw # Server firewall
+    - fail2ban # prevent brute-force SSH login attacks
+    - vnstat # network usage monitoring
+    - ruby
+    - npm
+- name: install web development libraries
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - nginx
+
+# Python
+- name: install Python-dev packages # building various C-based Python packages
+  apt: pkg={{ item }} state=installed
+  with_items: 
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - libffi-dev
+    - python
+    - python-pip
+    - python-virtualenv
+    - python-dev
+- name: install pyenv # Python version management
+  git: repo=https://github.com/yyuu/pyenv.git dest="~{{ config.user.name }}/.pyenv" clone=yes
+  become: yes
+  become_user: "{{ config.user.name }}"
+- name: install Python version(s)
+  shell: source ~/.profile && pyenv install {{ config.app.py_version | quote }}
+  args:
+    executable: /bin/bash
+    creates: "~/.pyenv/versions/{{ config.app.py_version }}"
+  become: yes
+  become_user: "{{ config.user.name }}"
+
+# Other
+- name: install other packages
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - ruby
+    - nodejs
+    - nodejs-legacy
+    - npm
+- name: install bundler via gem
+  command: gem install bundler
+- name: install Ruby packages via bundler
+  command: bundler install
+- name: install npm packages
+  npm: name=browserify global=yes state=present

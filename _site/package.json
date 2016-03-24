@@ -1,0 +1,34 @@
+{
+  "name": "jellifish",
+  "version": "0.1.0",
+  "description": "A GPS for the kitchen",
+  "main": "index.js",
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "moment": "^2.10.6",
+    "parse": "^1.7.0",
+    "rc-progress": "^1.0.4",
+    "react": "^0.14.3",
+    "react-bootstrap": "^0.28.1",
+    "react-dom": "^0.14.3"
+  },
+  "devDependencies": {
+    "reactify": "^1.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuanagain/jellifish.git"
+  },
+  "author": "Rushy Panchal, Yuan Wang, Hector Solis, Aana Bansal, Ilya Krasnovsky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yuanagain/jellifish/issues"
+  },
+  "homepage": "https://github.com/yuanagain/jellifish#readme",
+  "private": true,
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  }
+}
