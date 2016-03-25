@@ -4,6 +4,9 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
+import CustomStyles from '../modules/customstyles'
+
+const _cvals = require('../modules/customvalues')
 
 var {
   AppRegistry,
@@ -32,54 +35,26 @@ var LoginPage = React.createClass({
 
     return (
     <View style={styles.container}>
-
-      <View style={styles.header_container}>
-        <Text style={styles.title_text}>
-          ChefNotes
-        </Text>
-      </View>
-
-      <View style={styles.inputs_container}>
-
-        <TextInput
-        style={styles.email_input}
-
-        onChangeText={(username) => this.setState({username})}
-
-        value={this.state.username}
-        placeholder={"user@email.com"}
-        autoCapitalize={"none"}
-        />
-
-        <View style={styles.white_line}>
+      <View>
+        <View style={styles.header_container}>
+          <Text style={styles.title_text}>
+            Settings
+          </Text>
         </View>
 
-        <TextInput
-        style={styles.email_input}
-
-        onChangeText={(password) => this.setState({password})}
-
-        value={this.state.password}
-        placeholder={"Password"}
-        secureTextEntry={true}
-        autoCapitalize={"none"}
-        />
+        <View style={styles.inputs_container}>
+        <Text>
+          {"Settings available TBD"}
+        </Text>
+        </View>
       </View>
-
       <View style={styles.buttons_container}>
         <Button
-          style={styles.login_button}
+          style={styles.save_button}
           styleDisabled={{color: 'grey'}}
           onPress={this.props.loginFunction}
           >
-          Sign In
-        </Button>
-        <Button
-          style={styles.signup_button}
-          styleDisabled={{color: 'grey'}}
-          onPress={this._handlePress}
-          >
-          New user? Sign Up!
+          Save Changes
         </Button>
       </View>
 
@@ -91,52 +66,45 @@ var LoginPage = React.createClass({
 var styles = StyleSheet.create({
   title_text: {
     color: 'white',
-    fontSize: 50,
-    fontFamily: 'chalkduster',
-    padding: 24
+    fontSize: 30,
+    fontFamily: _cvals.mainfont,
+    paddingTop: 30,
+    paddingBottom: 5,
   },
-  login_button: {
+  save_button: {
     color: 'white',
     //height: windowSize.height * 1 / 10,
     //width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    fontSize: 40,
+    fontSize: 28,
     textAlign: 'center',
-    backgroundColor: '#395E85',
+    backgroundColor: _cvals.sknavy,
     width: windowSize.width,
-    padding: 15,
-    fontFamily: 'chalkduster',
+    padding: 5,
+    fontFamily: _cvals.mainfont,
     shadowRadius: 4,
     shadowColor: 'black',
     shadowOpacity: 0.5,
     shadowOffset: {width: 0, height: 3}
   },
-  signup_button: {
-    fontSize: 20,
-    opacity: 1,
-    color: 'white',
-    padding: 5,
-    margin: 10,
-    fontFamily: 'avenir',
-  },
   email_input: {
-    height: 40,
+    height: 20,
     borderWidth: 0,
-    fontSize: 34,
+    fontSize: 20,
     textShadowColor: 'white',
     color: 'white',
     margin: 15,
     marginVertical: 18,
-    fontFamily: 'avenir',
+    fontFamily: _cvals.mainfont,
   },
   container: {
     flexDirection: 'column',
     flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'flex-end',
-    backgroundColor: '#46D5B5',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
     opacity: 0.92,
     margin: 0,
   },
@@ -144,14 +112,15 @@ var styles = StyleSheet.create({
     // height: windowSize.height * 6 / 10,
     width: windowSize.width,
     alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: _cvals.skkellygreen,
+    justifyContent: 'flex-end',
   },
   inputs_container: {
     width: windowSize.width,
     //height: windowSize.height * 2 / 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#83e2cd',
+    backgroundColor: _cvals.skkellygreen_light,
     opacity: 1.0,
   },
   buttons_container: {
@@ -160,11 +129,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 0,
-    backgroundColor: '#83e2cd',
-    // shadowRadius: 4,
-    // shadowColor: 'black',
-    // shadowOpacity: 0.5,
-    // shadowOffset: {width: 0, height: 0}
+    backgroundColor: 'transparent',
   },
   white_line: {
     backgroundColor: 'white',

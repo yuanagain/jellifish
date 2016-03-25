@@ -7,7 +7,7 @@ var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 
 var Navigator = require('Navigator');
-var TimerV1 = require('./iostimer')
+
 var LoginPage = require('./loginpage')
 
 var {
