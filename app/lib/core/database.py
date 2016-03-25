@@ -87,6 +87,16 @@ class DatabaseManager(object):
 
             cur.close()
 
+    def delete_sequence(self, name):
+        """
+        Deletes the recipe, by name, from the database.
+        """
+        with self.connect:
+            cur = self.connect.cursor()
+            cur.execute('DELETE FROM seqs WHERE name=:name', {"name": name})
+
+            cur.close()
+
     def fetch_seq_names(self):
         """     
         returns a list of names of task sequences in database

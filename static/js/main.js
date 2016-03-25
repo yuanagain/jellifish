@@ -96,10 +96,10 @@ var page = {
 	Parameters
 		[String, ...] recipes - list of recipes to render
 	*/
-	recipes: function(recipes) {
+	recipes: function(recipes, urls) {
 		main();
 		ReactDOM.render(
-			<RecipesPage recipes={recipes} />,
+			<RecipesPage recipes={recipes} urls={urls} />,
 			utils.getElem("#recipes")
 			);
 		}

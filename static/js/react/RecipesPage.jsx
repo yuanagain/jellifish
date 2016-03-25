@@ -14,7 +14,8 @@ var React = require("react"),
 
 // React components
 var Content = require("./Content.jsx"),
-	SectionHeaderButton = require("./SectionHeaderButton.jsx");
+	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
+	FullRow = require("./FullRow.jsx");
 
 class RecipesPage extends React.Component {
 	/*
@@ -26,13 +27,37 @@ class RecipesPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
+		for (var index in props.recipes) {
+			this.state[props.recipes[index]] = true;
+			}
 		}
 
 	render() {
 		// Render the component
+		var comp = this;
 		return (
 			<Content><Grid fluid>
+			<FullRow className="center-horizontal"><h3>Recipes</h3></FullRow>
 
+			{this.props.recipes.filter((recipe) => comp.state[recipe]).map(
+				function(recipe) {
+				return (
+					<Row className="padding-vertical" key={Math.random()}>
+						<Col md={8} xs={6} className="center-horizontal">
+							<span>{recipe}</span>
+						</Col>
+						<Col md={2} xs={3}>
+							<ReactBootstrap.Button
+								href={comp.props.urls.edit + encodeURIComponent(recipe)}
+								bsStyle="primary">Edit</ReactBootstrap.Button>
+						</Col>
+						<Col md={2} xs={3}>
+							<ReactBootstrap.Button
+								href={comp.props.urls.delete + encodeURIComponent(recipe)}
+								bsStyle="primary">Delete</ReactBootstrap.Button>
+						</Col>
+					</Row>);
+				})}
 			</Grid></Content>
 			);
 		}

@@ -26,7 +26,11 @@ class RecipeRouter(route.Router):
 
 			Renders recipe_list.html
 			'''
-			return render_template("recipes.html", recipes = self.recipes.value)
+			return render_template("recipes.html",
+				recipes = self.recipes.value,
+				edit_url = url_for(".get_edit", recipe = ""),
+				delete_url = url_for(".get_delete", recipe = "")
+				)
 
 		@self.route("/new")
 		def get_new():
@@ -70,3 +74,31 @@ class RecipeRouter(route.Router):
 			self.database.add_recipe(seq)
 
 			return redirect(url_for("recipes.get_new"))
+
+		@self.route("/edit/<recipe>")
+		def get_edit(recipe = ""):
+			'''
+			Handles a request to /edit
+				Method: GET
+				Path: /edit
+
+			Renders edit_recipe.html.
+			'''
+			if recipe:
+				return render_template("edit_recipe.html", recipe = recipe)
+			else:
+				return redirect(".get_index")
+
+		@self.route("/delete/<recipe>")
+		def get_delete(recipe = ""):
+			'''
+			Handles a request to /delete
+				Method: GET
+				Path: /delete
+
+			Deletes the recipe and redirects to /.
+			'''
+			if recipe:
+				self.database.delete_recipe(recipe)
+				self.recipes.refresh(True)
+			return redirect(url_for(".get_index"))

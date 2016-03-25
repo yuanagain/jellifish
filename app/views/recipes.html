@@ -4,6 +4,9 @@
 {% endblock %}
 {% block postbody %}
 	<script type="text/javascript">
-		pages.recipes({{ recipes | tojson | safe }});
+		pages.recipes({{ recipes | tojson | safe }}, {
+			edit: {{ edit_url | tojson | safe }},
+			delete: {{ delete_url | tojson | safe }}
+			});
 	</script>
 {% endblock %}

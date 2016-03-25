@@ -88,6 +88,12 @@ class DatabaseClient(object):
         # TODO error handling
         return
 
+    def delete_recipe(self, name):
+        """
+        Deletes a recipe, by name, from the database.
+        """
+        return self.dbm.delete_sequence(name)
+
     def import_recipes(self, dbmc, overwrite = False):
         """
         Import recipes from another DatabaseClient object. Does 
