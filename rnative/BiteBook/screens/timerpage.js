@@ -8,6 +8,8 @@ var Timer = require('./iostimer')
 import CustomStyles from '../modules/customstyles'
 
 const _cvals = require('../modules/customvalues')
+let small_num = 0.0000000000000000000000000000001
+var tdata = []//['title1', 'title2', 'title3', 'title3', 'title4']
 
 var {
   AppRegistry,
@@ -15,8 +17,34 @@ var {
   View,
   Text,
   TextInput,
-  Image
+  Image,
+  ScrollView,
 } = React;
+
+var Thumb = React.createClass({
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return false;
+  },
+  render: function() {
+    return (
+      <View style={styles.timer_container}>
+        <Timer
+          totaltime={10}
+          title_text={this.props.title_text}
+          getIncrement={this.props.getIncrement}
+          size={'small'}
+          index={1}
+        />
+      </View>
+    );
+  }
+});
+
+var createThumbRow = (text) => <Thumb title_text={text} getIncrement={getIncrement}/>;
+
+var getIncrement = function() {
+  return 0.000000000000000001
+}
 
 var TimerPage = React.createClass({
   getInitialState: function() {
@@ -25,7 +53,8 @@ var TimerPage = React.createClass({
         username: '',
         password: '',
         runStatus: 'running',
-        index: 0
+        backgroundTimerCt: 4,
+        index: 0,
       }
     );
   },
@@ -36,6 +65,13 @@ var TimerPage = React.createClass({
       ...props
     } = this.props;
 
+    if (this.state.backgroundTimerCt < 4) {
+      this.contentsize = {width: windowSize.width, justifyContent: 'center'}
+    }
+    else {
+      this.contentsize = {}
+    }
+
     return (
     <View style={styles.container}>
       <View>
@@ -45,20 +81,32 @@ var TimerPage = React.createClass({
           </Text>
         </View>
 
-        <View style={styles.inputs_container}>
+        <View style={styles.timers_container}>
           <Timer
             totaltime={10}
             title_text={"test title"}
             getIncrement={this.getIncrement}
             index={0}
           />
-          <Timer
-            totaltime={10}
-            title_text={"test title"}
-            getIncrement={this.getIncrement}
-            size={'small'}
-            index={0}
-          />
+          <ScrollView
+            style={[styles.scroll_container, ]}
+            horizontal={true}
+            contentContainerStyle={[styles.scroll_content_container, this.contentsize]}
+            showsHorizontalScrollIndicator={true}
+            >
+            <View style={styles.timer_container}>
+              <Timer
+                totaltime={10}
+                title_text={"test title"}
+                getIncrement={this.getIncrement}
+                size={'small'}
+                index={1}
+              />
+            </View>
+            <View style={styles.timer_container}>
+              {tdata.map(createThumbRow)}
+            </View>
+          </ScrollView>
         </View>
       </View>
       <View style={styles.buttons_container}>
@@ -70,10 +118,11 @@ var TimerPage = React.createClass({
           Pause
         </Button>
       </View>
-
     </View>
     );
   },
+
+
   togglePause: function() {
     if (this.state.runStatus == 'paused') {
       this.setState({runStatus: 'running'})
@@ -85,14 +134,14 @@ var TimerPage = React.createClass({
   getIncrement: function(index) {
     var totaltime = 10.0;
     if (this.state.runStatus == 'paused') {
-      return 0.0
+      return small_num
     }
     if (this.state.runStatus == 'running') {
       if (this.state.index == index) {
         return totaltime / 6000;
       }
       else {
-        return 0.0
+        return small_num
       }
     }
   },
@@ -106,7 +155,9 @@ var styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 5,
   },
-
+  timer_container: {
+    margin: 10,
+  },
   email_input: {
     height: 20,
     borderWidth: 0,
@@ -133,7 +184,19 @@ var styles = StyleSheet.create({
     backgroundColor: _cvals.skkellygreen,
     justifyContent: 'flex-end',
   },
-  inputs_container: {
+  scroll_container: {
+    flex: 1,
+    marginTop: 40,
+  },
+  scroll_content_container: {
+    flex: 1,
+    width: windowSize.width,
+    flex: 0,
+    alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  timers_container: {
+    marginTop: 40,
     width: windowSize.width,
     //height: windowSize.height * 2 / 10,
     alignItems: 'center',
@@ -149,12 +212,6 @@ var styles = StyleSheet.create({
     flex: 0,
     backgroundColor: 'transparent',
   },
-  white_line: {
-    backgroundColor: 'white',
-    height: 2,
-    opacity: 0.3,
-    width: windowSize.width
-  },
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover', // or 'stretch'
@@ -163,8 +220,6 @@ var styles = StyleSheet.create({
   },
   pause_button: {
     color: 'white',
-    //height: windowSize.height * 1 / 10,
-    //width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,

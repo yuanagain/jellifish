@@ -11,13 +11,78 @@ import React, {
   View
 } from 'react-native';
 
-var Login = require('./screens/login')
+import TabNavigator from 'react-native-tab-navigator';
+
+var LoginPage = require('./screens/loginpage')
+var RecipeListing = require('./screens/recipelisting')
+var SettingsPage = require('./screens/settingspage')
+var TimerPage = require('./screens/timerpage')
 
 class BiteBook extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTab: 'settings'
+    };
+  }
+
   render() {
-    return (
-      <Login />
-    );
+    if (this.state.selectedTab == 'loginpage') {
+      return (
+        <LoginPage loginFunction={() => this.loginFunc()} />
+      );
+    }
+    else {
+      return (
+        <TabNavigator selected={this.state.selectedTab}>
+          <TabNavigator.Item
+            tabBarStyle={{height: 0,}}
+            title='Recipes'
+            selected={this.state.selectedTab === 'home'}
+            //badgeText="Home"
+            onPress={() => {
+              this.setState({
+                selectedTab: 'home'
+              });
+              }
+            }>
+            <RecipeListing />
+          </TabNavigator.Item>
+          <TabNavigator.Item
+            title="Timer"
+            selected={this.state.selectedTab === 'timer'}
+            //badgeText="Profile"
+            onPress={() => {
+              this.setState({
+              selectedTab: 'timer'
+              });
+            }
+            }>
+            <TimerPage
+              recipeName={"RECIPE NAME"}
+            />
+          </TabNavigator.Item>
+          <TabNavigator.Item
+            title="Settings"
+            selected={this.state.selectedTab === 'settings'}
+            //badgeText="Profile"
+            onPress={() => {
+              this.setState({
+              selectedTab: 'settings'
+              });
+            }
+            }>
+            <SettingsPage />
+          </TabNavigator.Item>
+        </TabNavigator>
+
+      )
+    }
+  }
+
+  loginFunc() {
+    console.log("GOING HOME")
+    this.setState({selectedTab: 'home'})
   }
 }
 

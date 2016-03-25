@@ -114,7 +114,6 @@ var TimerV1 = React.createClass({
   },
 
   componentDidMount: function() {
-    this.increment = this.props.totaltime / 6000;
     this.animate();
   },
 
