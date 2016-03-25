@@ -1,7 +1,7 @@
 # Rushy Panchal
 # app/lib/blueprints/recipes.py
 
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 import json
 
 from .. import core
@@ -73,6 +73,7 @@ class RecipeRouter(route.Router):
 			seq.update_times()
 			self.database.add_recipe(seq)
 
+			flash("Recipe {name} added.".format(name = name), "success")
 			return redirect(url_for("recipes.get_new"))
 
 		@self.route("/edit/<recipe>")
@@ -87,6 +88,7 @@ class RecipeRouter(route.Router):
 			if recipe:
 				return render_template("edit_recipe.html", recipe = recipe)
 			else:
+				flash("Recipe name not provided.", "error")
 				return redirect(".get_index")
 
 		@self.route("/delete/<recipe>")
@@ -101,4 +103,7 @@ class RecipeRouter(route.Router):
 			if recipe:
 				self.database.delete_recipe(recipe)
 				self.recipes.refresh(True)
+				flash("Recipe {name} deleted.".format(name = recipe), "success")
+			else:
+				flash("Recipe name not provided.", "error")
 			return redirect(url_for(".get_index"))
