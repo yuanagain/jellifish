@@ -83,7 +83,7 @@ var TimerPage = React.createClass({
 
         <View style={styles.timers_container}>
           <Timer
-            totaltime={10}
+            totaltime={100}
             title_text={"test title"}
             getIncrement={this.getIncrement}
             index={0}
@@ -94,15 +94,6 @@ var TimerPage = React.createClass({
             contentContainerStyle={[styles.scroll_content_container, this.contentsize]}
             showsHorizontalScrollIndicator={true}
             >
-            <View style={styles.timer_container}>
-              <Timer
-                totaltime={10}
-                title_text={"test title"}
-                getIncrement={this.getIncrement}
-                size={'small'}
-                index={1}
-              />
-            </View>
             <View style={styles.timer_container}>
               {tdata.map(createThumbRow)}
             </View>
@@ -132,13 +123,12 @@ var TimerPage = React.createClass({
     }
   },
   getIncrement: function(index) {
-    var totaltime = 10.0;
     if (this.state.runStatus == 'paused') {
       return small_num
     }
     if (this.state.runStatus == 'running') {
       if (this.state.index == index) {
-        return totaltime / 6000;
+        return 1;
       }
       else {
         return small_num
@@ -187,6 +177,7 @@ var styles = StyleSheet.create({
   scroll_container: {
     flex: 1,
     marginTop: 40,
+    height: 140
   },
   scroll_content_container: {
     flex: 1,

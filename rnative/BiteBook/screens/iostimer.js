@@ -103,13 +103,13 @@ var TimerV1 = React.createClass({
       setTimeout(() => {
         this.setState({ indeterminate: false });
         setInterval(() => {
-          _progress += this.props.getIncrement(this.props.index);
+          _progress += (this.props.getIncrement(this.props.index) / (this.props.totaltime * 1000 / 250));
           if(_progress > 1) {
             _progress = 1;
           }
           this.setState({ _progress });
-        }, this.props.totaltime);
-      }, this.props.totaltime);
+        }, 250);
+      }, 1);
     }
   },
 
