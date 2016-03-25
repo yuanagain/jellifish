@@ -13,6 +13,7 @@ Optional Props
 	String rowClass - classes for row
 	String labelClass - classes for label
 	String inputClass - classes for span
+	String value - starting value of input
 */
 
 var React = require("react"),
@@ -34,6 +35,7 @@ function InputRow(props) {
 					id={props.id || props.name}
 					className={props.inputClass}
 					onClick={props.onClick}
+					defaultValue={props.value}
 				/>
 			</Col>
 		</Row>

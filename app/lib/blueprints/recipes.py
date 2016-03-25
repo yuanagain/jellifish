@@ -60,8 +60,9 @@ class RecipeRouter(route.Router):
 			# especially because it is not even sent as application/json, but just
 			# as raw text.
 			tasks_raw = json.loads(request.form.get("tasks"))
-			# TODO verify if arguments are provided or not, and report error
-			# as a flash message if not provided.
+			if not (name and descr and tasks_raw):
+				flash("Could not save recipe: all fields not provided.", "error")
+				return redirect(url_for("recipes.get_new"))
 
 			# Convert each raw task to a TaskNode - note: I avoid using map
 			# here because map returns an iterator, and converting that to a list
@@ -72,6 +73,7 @@ class RecipeRouter(route.Router):
 			seq = core.node.TaskSequence(name, descr, tasks)
 			seq.update_times()
 			self.database.add_recipe(seq)
+			self.recipes.refresh(True)
 
 			flash("Recipe {name} added.".format(name = name), "success")
 			return redirect(url_for("recipes.get_new"))
@@ -86,10 +88,49 @@ class RecipeRouter(route.Router):
 			Renders edit_recipe.html.
 			'''
 			if recipe:
-				return render_template("edit_recipe.html", recipe = recipe)
+				seq = self.database.fetch_recipe(recipe)
+				data = {
+					"name": recipe,
+					"descr": seq.descr,
+					"tasks": [task.dump_data() for task in seq.tasks]
+					}
+				return render_template("edit_recipe.html", recipe = data)
 			else:
 				flash("Recipe name not provided.", "error")
-				return redirect(".get_index")
+				return redirect(url_for(".get_index"))
+
+		@self.route("/edit", methods = ["POST"])
+		def post_edit():
+			'''
+			Handles a request to /edit
+				Method: POST
+				Path: /edit
+
+			Renders edit_recipe.html, after updating the data.
+			'''
+			oldname = request.form.get("oldname")
+			name = request.form.get("name")
+			descr = request.form.get("description")
+			if not name:
+				flash("Name not provided.", "error")
+				return redirect(url_for(".get_edit", recipe = oldname))
+
+			tasks_raw = json.loads(request.form.get("tasks"))
+			if not (name and descr and tasks_raw):
+				flash("Could not save recipe: all fields not provided.", "error")
+				return redirect(url_for("recipes.get_new"))
+
+			tasks = [core.node.TaskNode(**raw) for raw in tasks_raw]
+
+			seq = core.node.TaskSequence(name, descr, tasks)
+			seq.update_times()
+
+			self.database.delete_recipe(oldname)
+			self.database.add_recipe(seq)
+			self.recipes.refresh(True)
+
+			self.recipes.refresh(True)
+			return redirect(url_for(".get_edit", recipe = name))
 
 		@self.route("/delete/<recipe>")
 		def get_delete(recipe = ""):

@@ -14,7 +14,8 @@ var GlobalHeader = require("./react/GlobalHeader.jsx"),
 	IngredientsPage = require("./react/IngredientsPage.jsx"),
 	TimersPage = require("./react/TimersPage.jsx"),
 	NewRecipePage = require("./react/NewRecipePage.jsx"),
-	RecipesPage = require("./react/RecipesPage.jsx");
+	RecipesPage = require("./react/RecipesPage.jsx"),
+	EditRecipePage = require("./react/EditRecipePage.jsx");
 
 function main() {
 	// Render main components
@@ -102,6 +103,19 @@ var page = {
 			<RecipesPage recipes={recipes} urls={urls} />,
 			utils.getElem("#recipes")
 			);
+		},
+
+	/*
+	Render a recipe to edit.
+
+	Parameters
+		Object recipe - recipe to edit
+	*/
+	edit_recipe: function(recipe) {
+		main();
+		ReactDOM.render(
+			<EditRecipePage recipe={recipe} />,
+			utils.getElem("#edit-recipe"));
 		}
 	}
 

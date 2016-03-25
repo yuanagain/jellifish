@@ -1,0 +1,9 @@
+{% extends "page.html" %}
+{% block content %}
+	<form id="edit-recipe" method="POST" action="{{ url_for('.post_edit') }}"></form>
+{% endblock %}
+{% block postbody %}
+	<script type="text/javascript">
+		pages.edit_recipe({{ recipe | tojson | safe }});
+	</script>
+{% endblock %}
