@@ -9,7 +9,7 @@ import CustomStyles from '../modules/customstyles'
 
 const _cvals = require('../modules/customvalues')
 let small_num = 0.0000000000000000000000000000001
-var tdata = ['title1', 'title2', 'title3', 'title3', 'title4']
+var tdata = ['title1', 'title2', 'title3', 'title4', 'title5']
 
 var {
   AppRegistry,
@@ -169,7 +169,7 @@ var styles = StyleSheet.create({
   },
   timer_container: {
     flexDirection: 'row',
-    margin: 10,
+    margin: 6,
   },
   email_input: {
     height: 20,
@@ -200,15 +200,17 @@ var styles = StyleSheet.create({
   scroll_container: {
     flex: 1,
     marginTop: 40,
-    height: 140
+    height: 140,
+    width: windowSize.width
   },
   scroll_content_container: {
     flexDirection: 'row',
     flex: 1,
-    width: windowSize.width,
+    //width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
     height: 140,
+
     // justifyContent: 'center',
   },
   timers_container: {
