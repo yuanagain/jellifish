@@ -6,6 +6,8 @@ var Button = require('react-native-button');
 
 var RecipeListingRow = require('./recipelistingrow')
 
+var _cvals = require('../modules/customvalues')
+
 var mainfont = 'avenir'
 var skorange = '#F5A623'
 var skblue = '#4A90E2'
@@ -20,6 +22,8 @@ var {
   Image,
   ListView
 } = React;
+
+var RecipeDetail = require('./recipedetail')
 
 var RecipeListing = React.createClass({
   getInitialState: function() {
@@ -38,58 +42,96 @@ var RecipeListing = React.createClass({
           {'name': 'Recipe Name 9', 'descr': 'Description 9'},
         ]
       ),
+      selected: []
     };
   },
   render: function() {
-    console.log("YO")
     var {
       name,
+      runApp,
       ...props
     } = this.props;
 
     return (
     <View style={styles.container}>
+      <View style={styles.body_container}>
+        <View style={styles.header_container}>
+          <Text style={styles.header_text}>
+            {"Recipes"}
+          </Text>
+          <View style={styles.divider_line}>
+          </View>
+        </View>
 
-      <View style={styles.header_container}>
-        <Text style={styles.header_text}>
-          {"Recipes"}
-        </Text>
+
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this.renderListingRow}
+          style={styles.listView}
+        />
+
         <View style={styles.divider_line}>
         </View>
       </View>
-
-
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderListingRow}
-        style={styles.listView}
-      />
-
-      <View style={styles.divider_line}>
+      <View style={styles.buttons_container}>
+        <Button
+          style={styles.button}
+          styleDisabled={{color: 'grey'}}
+          onPress={this.props.runApp.bind(this, this.state.selected)}
+          >
+          {'Cook Selected!'}
+        </Button>
       </View>
     </View>
     );
   },
 
+  runApp: function() {
+    this.props.runApp('arg')
+  },
+
   renderListingRow(rowData) {
     return (
         <RecipeListingRow
-        onPressFunction={() => this.onButtonPress("TEST")}
-        recipe_name={rowData['name']}
+        onSelect={this.onSelect}
+        onDetail={this.onDetail}
+        name={rowData['name']}
         description_text={rowData['descr']}
         />
     )
   },
-  onButtonPress(arg) {
-    console.log(arg)
+
+  onSelect: function(name) {
+    // if not contained in selection
+    if (this.state.selected.indexOf(name) == -1) {
+      this.state.selected.push(name)
+    }
+    // if already contained in selection
+    else {
+      var index = this.state.selected.indexOf(name)
+      this.state.selected.splice(index, index + 1)
+
+    }
+    console.log(this.state.selected)
+  },
+
+  onDetail: function(name) {
+    console.log(name)
     this.props.navigator.push({
-      id: "Recipe",
-      component: RecipeListingRow,
+      id: "RecipeDetail",
+      component: RecipeDetail,
       passProps: {
-        matchnum: "recipe",
+        name: name,
+        imageLink: 'http://facebook.github.io/react/img/logo_og.png',
+        descr: "Description Text",
+        goBack: this.goBack,
       }
     })
   },
+
+  goBack: function() {
+    this.props.navigator.pop()
+  }
 });
 
 var styles = StyleSheet.create({
@@ -101,11 +143,12 @@ var styles = StyleSheet.create({
     padding: 10
   },
   header_text: {
-    color: skgreen,
-    fontSize: 20,
+    color: 'white',
+    fontSize: 30,
     fontFamily: mainfont,
     fontWeight: 'bold',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    marginVertical: 5,
   },
   value_text: {
     color: 'black',
@@ -114,6 +157,15 @@ var styles = StyleSheet.create({
     padding: 10,
   },
   container: {
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
+    opacity: 1.00,
+    marginTop: 0,
+  },
+  body_container: {
     flexDirection: 'column',
     flex: 1,
     alignItems: 'flex-start',
@@ -126,8 +178,8 @@ var styles = StyleSheet.create({
     width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'flex-end',
-    backgroundColor: 'transparent',
-    height: 40,
+    backgroundColor: _cvals.skkellygreen,
+    height: 70,
   },
   section_container: {
     width: windowSize.width,
@@ -142,7 +194,33 @@ var styles = StyleSheet.create({
   },
   listView: {
     backgroundColor: 'transparent',
-  }
+  },
+  buttons_container: {
+      //height: windowSize.height * 1 / 10,
+      width: windowSize.width,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 0,
+      backgroundColor: 'transparent',
+    },
+    button: {
+      color: 'white',
+      //height: windowSize.height * 1 / 10,
+      //width: windowSize.width,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1,
+      fontSize: 28,
+      textAlign: 'center',
+      backgroundColor: _cvals.sknavy,
+      width: windowSize.width,
+      padding: 5,
+      fontFamily: _cvals.mainfont,
+      shadowRadius: 4,
+      shadowColor: 'black',
+      shadowOpacity: 0.5,
+      shadowOffset: {width: 0, height: 3}
+    },
 })
 
 module.exports = RecipeListing;

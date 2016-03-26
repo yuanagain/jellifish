@@ -4,12 +4,15 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 
+
 var {
   AppRegistry,
   StyleSheet,
   View,
   Text,
   Image,
+  TouchableHighlight,
+  TouchableOpacity,
 } = React;
 
 var mainfont = 'avenir'
@@ -25,44 +28,66 @@ var RecipeListingRow = React.createClass({
   getInitialState: function() {
     return (
       {
-        status: 0
+        status: 0,
+        selected: false,
+        selectedStyle: {}
       }
     );
   },
   render: function() {
     var {
-      recipe_name,
+      name,
       description_text,
       onPressDetailFunction,
-      onPressSelectFunction,
+      onSelect,
+      onDetail,
+      thumbnailStyle,
       ...props
     } = this.props;
 
     return (
-      <View>
+      <View >
         <View style={styles.container}>
-          <View style={styles.thumbnail_container}>
-            <Image
-              source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
-              style={styles.thumbnail}
-            />
+          <View style={[styles.thumbnail_container, this.state.selectedStyle]}>
+            <TouchableHighlight onPress={() => this.onSelect()}>
+              <Image
+                source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
+                style={styles.thumbnail}
+              />
+            </TouchableHighlight>
           </View>
-          <View style={styles.content_container}>
-            <Text
-            style={styles.name_text}
-            onPress={this.props.onPressSelectFunction}>
-              {this.props.recipe_name}
-            </Text>
-            <Text style={styles.description_text}>
-              {this.props.description_text}
-            </Text>
-          </View>
+          <TouchableOpacity onPress={() => this.onDetail()}>
+            <View style={styles.content_container}>
+              <Text
+              style={styles.name_text}>
+                {this.props.name}
+              </Text>
+              <Text style={styles.description_text}>
+                {this.props.description_text}
+              </Text>
+            </View>
+          </TouchableOpacity >
         </View>
         <View style={styles.divider_line}>
         </View>
       </View>
     );
   },
+  onSelect: function() {
+    if (this.state.selected) {
+      this.props.onSelect(this.props.name)
+      this.setState({selectedStyle: {}, selected: false})
+    }
+    else {
+      this.props.onSelect(this.props.name)
+      this.setState({selectedStyle: styles.selectedStyle, selected: true})
+    }
+    return
+  },
+  onDetail: function() {
+    this.props.onDetail(this.props.name)
+
+  }
 });
 
 var styles = StyleSheet.create({
@@ -102,7 +127,17 @@ var styles = StyleSheet.create({
   thumbnail_container: {
     height: rowheight
   },
+  selectedStyle: {
+    opacity: 0.5,
+  },
   thumbnail: {
+    height: rowheight,
+    width: rowheight,
+    borderRadius: 0,
+    marginHorizontal: 0,
+    marginVertical: 0,
+  },
+  thumbnail_selected: {
     height: rowheight,
     width: rowheight,
     borderRadius: 0,

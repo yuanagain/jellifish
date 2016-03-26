@@ -48,6 +48,7 @@ var LoginPage = React.createClass({
         </Text>
         </View>
       </View>
+      
       <View style={styles.buttons_container}>
         <Button
           style={styles.save_button}

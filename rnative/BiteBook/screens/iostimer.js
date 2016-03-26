@@ -20,6 +20,8 @@ var {
   Image
 } = React;
 
+let bignum = 999999999999999
+
 var timerSizeDefault = windowSize.width * 3 / 4
 
 var TimerV1 = React.createClass({
@@ -62,6 +64,7 @@ var TimerV1 = React.createClass({
       title_text,
       size,
       index,
+      dead,
       ...props
     } = this.props;
 
@@ -102,18 +105,28 @@ var TimerV1 = React.createClass({
       this.setState({ _progress });
       setTimeout(() => {
         this.setState({ indeterminate: false });
-        setInterval(() => {
-          _progress += (this.props.getIncrement(this.props.index) / (this.props.totaltime * 1000 / 250));
+          setInterval(() => {
+          _progress += this.props.getIncrement(this.props.index) / this.intervalCt;
           if(_progress > 1) {
             _progress = 1;
           }
           this.setState({ _progress });
-        }, 250);
-      }, 1);
+          if (this.props.dead) {
+            this.setState({not_paused: false})
+            console.log('paused2')
+            return
+          }
+        }, this.interval);
+      }, this.interval);
     }
   },
 
   componentDidMount: function() {
+    this.interval = 100
+    this.intervalCt = this.props.totaltime * 1000 / this.interval
+    // if (this.props.dead) {
+    //   this.state.not_paused = false
+    // }
     this.animate();
   },
 

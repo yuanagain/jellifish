@@ -9,7 +9,7 @@ import CustomStyles from '../modules/customstyles'
 
 const _cvals = require('../modules/customvalues')
 let small_num = 0.0000000000000000000000000000001
-var tdata = []//['title1', 'title2', 'title3', 'title3', 'title4']
+var tdata = ['title1', 'title2', 'title3', 'title3', 'title4']
 
 var {
   AppRegistry,
@@ -33,6 +33,7 @@ var Thumb = React.createClass({
           title_text={this.props.title_text}
           getIncrement={this.props.getIncrement}
           size={'small'}
+          dead={true}
           index={1}
         />
       </View>
@@ -43,7 +44,7 @@ var Thumb = React.createClass({
 var createThumbRow = (text) => <Thumb title_text={text} getIncrement={getIncrement}/>;
 
 var getIncrement = function() {
-  return 0.000000000000000001
+  return small_num
 }
 
 var TimerPage = React.createClass({
@@ -53,8 +54,9 @@ var TimerPage = React.createClass({
         username: '',
         password: '',
         runStatus: 'running',
-        backgroundTimerCt: 4,
+        backgroundTimerCt: tdata.length,
         index: 0,
+        dummyData: "hello",
       }
     );
   },
@@ -62,6 +64,7 @@ var TimerPage = React.createClass({
     var {
       name,
       recipeName,
+      fetchData,
       ...props
     } = this.props;
 
@@ -69,7 +72,7 @@ var TimerPage = React.createClass({
       this.contentsize = {width: windowSize.width, justifyContent: 'center'}
     }
     else {
-      this.contentsize = {}
+      this.contentsize = {justifyContent: 'flex-start'}
     }
 
     return (
@@ -83,7 +86,7 @@ var TimerPage = React.createClass({
 
         <View style={styles.timers_container}>
           <Timer
-            totaltime={100}
+            totaltime={10}
             title_text={"test title"}
             getIncrement={this.getIncrement}
             index={0}
@@ -92,7 +95,6 @@ var TimerPage = React.createClass({
             style={[styles.scroll_container, ]}
             horizontal={true}
             contentContainerStyle={[styles.scroll_content_container, this.contentsize]}
-            showsHorizontalScrollIndicator={true}
             >
             <View style={styles.timer_container}>
               {tdata.map(createThumbRow)}
@@ -113,6 +115,25 @@ var TimerPage = React.createClass({
     );
   },
 
+  componentDidMount: function() {
+    console.log(this.props.fetchData);
+    this.animate();
+  },
+
+
+  animate: function() {
+    if (this.state.not_paused) {
+      var _data = this.props.fetchData()
+      this.setState({ _data });
+      setTimeout(() => {
+        setInterval(() => {
+          if (_data != this.props.fetchData()) {
+            console.log("data Changed")
+          }
+        }, 1000);
+      }, 1000);
+    }
+  },
 
   togglePause: function() {
     if (this.state.runStatus == 'paused') {
@@ -122,6 +143,7 @@ var TimerPage = React.createClass({
       this.setState({runStatus: 'paused'})
     }
   },
+
   getIncrement: function(index) {
     if (this.state.runStatus == 'paused') {
       return small_num
@@ -146,6 +168,7 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
   },
   timer_container: {
+    flexDirection: 'row',
     margin: 10,
   },
   email_input: {
@@ -163,7 +186,7 @@ var styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    backgroundColor: _cvals.skteal,
+    backgroundColor: _cvals.sknavy,
     opacity: 0.92,
     margin: 0,
   },
@@ -180,10 +203,12 @@ var styles = StyleSheet.create({
     height: 140
   },
   scroll_content_container: {
+    flexDirection: 'row',
     flex: 1,
     width: windowSize.width,
-    flex: 0,
     alignItems: 'center',
+    justifyContent: 'center',
+    height: 140,
     // justifyContent: 'center',
   },
   timers_container: {
@@ -192,7 +217,7 @@ var styles = StyleSheet.create({
     //height: windowSize.height * 2 / 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: _cvals.skteal,
+    backgroundColor: 'transparent',
     opacity: 1.0,
   },
   buttons_container: {
@@ -201,7 +226,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 0,
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
   },
   backgroundImage: {
     flex: 1,
@@ -216,12 +241,12 @@ var styles = StyleSheet.create({
     flex: 1,
     fontSize: 28,
     textAlign: 'center',
-    backgroundColor: _cvals.sknavy,
+    backgroundColor: _cvals.skkellygreen,
     width: windowSize.width,
     padding: 5,
     fontFamily: _cvals.mainfont,
     shadowRadius: 4,
-    shadowColor: 'black',
+    shadowColor: _cvals.skkellygreen,
     shadowOpacity: 0.5,
     shadowOffset: {width: 0, height: 3}
   },
