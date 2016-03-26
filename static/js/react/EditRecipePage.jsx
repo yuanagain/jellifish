@@ -1,5 +1,5 @@
 /*
-A EditRecipePage provides the interface for editing recipes in
+An EditRecipePage provides the interface for editing recipes in
 the database.
 */
 
@@ -29,19 +29,29 @@ class EditRecipePage extends React.Component {
 		this.state = {
 			totalTime: 0, // total time for the tasks
 			tasks: props.recipe.tasks, // all tasks
+			updated: false, // whether or not to trigger a new update
 			};
+		/* The updated state is used to force re-rendering when the tasks
+		array is changed, because otherwise a rerender is not performed.*/
 
 		this._elems = new Object();
 
 		// Bind functions to instance
 		this._addStep = this._addStep.bind(this);
+		this._onEdit = this._onEdit.bind(this);
 		}
 
 	render() {
 		// Render the component
+		var comp = this;
+
 		return (
 			<Content><Grid fluid className="center-horizontal">
-				<SectionHeaderButton header="New Recipe" button="Save" type="submit" data-parse-id="button-new-recipe" />
+				<SectionHeaderButton
+					header={this.props.recipe.name}
+					button="Update"
+					type="submit"
+					data-parse-id="button-update-recipe" />
 
 				<input type="hidden" name="oldname" value={this.props.recipe.name}></input>
 
@@ -115,7 +125,7 @@ class EditRecipePage extends React.Component {
 						Returns
 							(HTMLElement) rendered component
 						*/
-						return (<StepInput
+						return (<StepInput editable
 							name={task.name}
 							description={task.descr}
 							time={task.time}
@@ -123,6 +133,7 @@ class EditRecipePage extends React.Component {
 							max_wait={task.max_wait}
 							number={index + 1}
 							key={"new-task-" + Math.random()}
+							onEdit={(state) => comp._onEdit(state, index)}
 							/>);
 						})}
 				</div>
@@ -161,6 +172,23 @@ class EditRecipePage extends React.Component {
 			tasks: this.state.tasks.concat([newTask]),
 			totalTime: this.state.totalTime + newTask.time
 			});
+		}
+
+	/*
+	Callback for when a step is edited.
+
+	Parameters
+		Object task - task to display
+			String name - name
+			String descr - description
+			int time - time (in seconds)
+			int min_wait - min wait time (in seconds)
+			int max_wait - max wait time (in seconds)
+		int index - current task number
+	*/
+	_onEdit(task, index) {
+		this.state.tasks[index] = task;
+		this.setState({updated: ! this.state.updated});
 		}
 	}
 
