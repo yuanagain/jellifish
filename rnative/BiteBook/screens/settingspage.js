@@ -107,7 +107,7 @@ var styles = StyleSheet.create({
     margin: 0,
   },
   header_container: {
-    // height: windowSize.height * 6 / 10,
+    height: 70,
     width: windowSize.width,
     alignItems: 'center',
     backgroundColor: _cvals.skkellygreen,
