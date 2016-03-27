@@ -27,7 +27,6 @@ class NewRecipePage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			totalTime: 0, // total time for the tasks
 			tasks: new Array(), // all tasks
 			};
 
@@ -83,7 +82,6 @@ class NewRecipePage extends React.Component {
 					</Row>
 				</div>
 
-				<hr />
 				<FullRow className="center-horizontal padding-vertical">
 					<ReactBootstrap.Button
 						bsStyle="primary"
@@ -93,6 +91,7 @@ class NewRecipePage extends React.Component {
 					Add Step
 					</ReactBootstrap.Button>
 				</FullRow>
+				<hr />
 
 				<div id="tasks">
 					{this.state.tasks.map(function(task, index) {
@@ -153,10 +152,7 @@ class NewRecipePage extends React.Component {
 		this._elems.min_wait.value = 0;
 		this._elems.max_wait.value = 0;
 
-		this.setState({
-			tasks: this.state.tasks.concat([newTask]),
-			totalTime: this.state.totalTime + newTask.time
-			});
+		this.setState({tasks: this.state.tasks.concat([newTask])});
 		}
 	}
 

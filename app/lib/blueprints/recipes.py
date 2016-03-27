@@ -26,11 +26,7 @@ class RecipeRouter(route.Router):
 
 			Renders recipe_list.html
 			'''
-			return render_template("recipes.html",
-				recipes = self.recipes.value,
-				edit_url = url_for(".get_edit", recipe = ""),
-				delete_url = url_for(".get_delete", recipe = "")
-				)
+			return render_template("recipes.html", recipes = self.recipes.value)
 
 		@self.route("/new")
 		def get_new():
@@ -50,7 +46,7 @@ class RecipeRouter(route.Router):
 				Method: POST
 				Path: /new
 
-			Saves the recipe and redirects to /new.
+			Saves the recipe and redirects to /.
 			'''
 			name = request.form.get("name")
 			descr = request.form.get("description")
@@ -76,7 +72,7 @@ class RecipeRouter(route.Router):
 			self.recipes.refresh(True)
 
 			flash("Recipe {name} added.".format(name = name), "success")
-			return redirect(url_for("recipes.get_new"))
+			return redirect(url_for("recipes.get_index"))
 
 		@self.route("/edit/<recipe>")
 		def get_edit(recipe = ""):
