@@ -43,12 +43,9 @@ var LoginPage = React.createClass({
         </View>
 
         <View style={styles.inputs_container}>
-        <Text>
-          {"Settings available TBD"}
-        </Text>
         </View>
       </View>
-      
+
       <View style={styles.buttons_container}>
         <Button
           style={styles.save_button}
@@ -118,6 +115,7 @@ var styles = StyleSheet.create({
   },
   inputs_container: {
     width: windowSize.width,
+    height: 1,
     //height: windowSize.height * 2 / 10,
     alignItems: 'center',
     justifyContent: 'center',
