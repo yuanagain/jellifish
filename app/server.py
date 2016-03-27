@@ -33,7 +33,8 @@ class Server(Flask):
 
 		lib.blueprints.route.Router.updateGlobalData({
 			"database": self.database,
-			"recipes": self.recipes
+			"recipes": self.recipes,
+			"meals": self.meals
 			})
 
 	def shutdown(self):
@@ -58,23 +59,7 @@ class Server(Flask):
 			'''
 			return render_template("index.html", recipes = self.recipes.value)
 
-		@self.route("/ingredients", methods = ["POST"])
-		def post_ingredients():
-			'''
-			Handles a request to /ingredients
-				Method: POST
-				Path: /ingredients
-
-			Renders ingredients.html with the specified recipes and their associated
-			ingredients.
-			'''
-			selected_recipes = tuple(request.form.getlist("recipe"))
-			timer_data = self.meals[selected_recipes]
-			ingredients = [item["name"] for item in
-				filter(lambda item: item["time"] == 0, timer_data)]
-			return render_template("ingredients.html", ingredients = ingredients, selected_recipes = selected_recipes)
-
-		@self.route("/timers", methods = ["POST"])
+		@self.route("/timers/", methods = ["POST"])
 		def post_timers():
 			'''
 			Handles a request to /timers
@@ -88,8 +73,8 @@ class Server(Flask):
 			timer_data = {"recipes": selected_recipes, "active": self.meals[selected_recipes]}
 			return render_template("timers.html", data = timer_data)
 
-		@self.route("/ingredients")
-		@self.route("/timers")
+		@self.route("/ingredients/")
+		@self.route("/timers/")
 		def redirect_index():
 			'''
 			Handles a request to /ingredients OR /timers
@@ -100,10 +85,20 @@ class Server(Flask):
 			'''
 			return redirect(url_for(".get_index"))
 
+		self.configureBlueprints()
+
+	def configureBlueprints(self):
+		'''
+		Configure the blueprints for the server.
+		'''
 		# Add all appropriate blueprints
-		recipeRouter = lib.blueprints.recipes.RecipeRouter(
-			"recipes", __name__,
-			template_folder = "views",
-			url_prefix = "/recipes"
-			)
-		self.register_blueprint(recipeRouter)
+		recipeRouter = lib.blueprints.recipes.RecipeRouter("recipes", __name__,
+			template_folder = "views", url_prefix = "/recipes")
+		apiRouter = lib.blueprints.api.APIRouter("api", __name__,
+			template_folder = "views", url_prefix = "/api")
+
+		all_blueprints = [recipeRouter, apiRouter]
+
+		# Register each blueprint with the server
+		for blueprint in all_blueprints:
+			self.register_blueprint(blueprint)
