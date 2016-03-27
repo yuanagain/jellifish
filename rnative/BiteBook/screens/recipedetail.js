@@ -85,11 +85,11 @@ var styles = StyleSheet.create({
   },
   title_text: {
     color: 'white',
-    fontSize: 34,
-    fontFamily: mainfont,
-    fontWeight: 'bold',
-    paddingHorizontal: 10,
-    marginVertical: 5,
+    fontSize: 34 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+    paddingTop: 30 * _cvals.dscale,
+    paddingBottom: 5,
+    paddingHorizontal: 5
   },
   value_text: {
     color: 'black',
@@ -130,7 +130,7 @@ var styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
     backgroundColor: _cvals.skkellygreen,
-    height: 80,
+    height: _cvals.headerHeight + 5,
   },
   section_container: {
     width: windowSize.width,
@@ -158,7 +158,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    fontSize: 28,
+    fontSize: 28 * _cvals.dscale,
     textAlign: 'center',
     backgroundColor: _cvals.sknavy,
     width: windowSize.width,

@@ -64,9 +64,9 @@ var LoginPage = React.createClass({
 var styles = StyleSheet.create({
   title_text: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 30 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
-    paddingTop: 30,
+    paddingTop: 30 * _cvals.dscale,
     paddingBottom: 5,
   },
   save_button: {
@@ -76,7 +76,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    fontSize: 28,
+    fontSize: 28 * _cvals.dscale,
     textAlign: 'center',
     backgroundColor: _cvals.sknavy,
     width: windowSize.width,
@@ -107,7 +107,7 @@ var styles = StyleSheet.create({
     margin: 0,
   },
   header_container: {
-    height: 70,
+    height: _cvals.headerHeight,
     width: windowSize.width,
     alignItems: 'center',
     backgroundColor: _cvals.skkellygreen,

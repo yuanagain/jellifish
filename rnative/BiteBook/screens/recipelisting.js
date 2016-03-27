@@ -56,7 +56,7 @@ var RecipeListing = React.createClass({
     <View style={styles.container}>
       <View style={styles.body_container}>
         <View style={styles.header_container}>
-          <Text style={styles.header_text}>
+          <Text style={styles.title_text}>
             {"Recipes"}
           </Text>
           <View style={styles.divider_line}>
@@ -84,6 +84,10 @@ var RecipeListing = React.createClass({
       </View>
     </View>
     );
+  },
+
+  componentDidMount: function() {
+    console.log(windowSize.height)
   },
 
   runApp: function() {
@@ -136,19 +140,19 @@ var RecipeListing = React.createClass({
 
 var styles = StyleSheet.create({
   title_text: {
-    color: 'black',
-    fontSize: 20,
-    fontFamily: mainfont,
-    fontWeight: 'bold',
-    padding: 10
+    color: 'white',
+    fontSize: 30 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+    paddingTop: 30 * _cvals.dscale,
+    paddingBottom: 5,
   },
   header_text: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 30 * _cvals.dscale,
     fontFamily: mainfont,
     fontWeight: 'bold',
     paddingHorizontal: 10,
-    marginVertical: 5,
+    marginVertical: 5 * _cvals.dscale,
   },
   value_text: {
     color: 'black',
@@ -163,7 +167,7 @@ var styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'transparent',
     opacity: 1.00,
-    marginTop: 0,
+    margin: 0,
   },
   body_container: {
     flexDirection: 'column',
@@ -179,7 +183,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     backgroundColor: _cvals.skkellygreen,
-    height: 70,
+    height: _cvals.headerHeight,
   },
   section_container: {
     width: windowSize.width,
@@ -210,7 +214,7 @@ var styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       flex: 1,
-      fontSize: 28,
+      fontSize: 28 * _cvals.dscale,
       textAlign: 'center',
       backgroundColor: _cvals.sknavy,
       width: windowSize.width,

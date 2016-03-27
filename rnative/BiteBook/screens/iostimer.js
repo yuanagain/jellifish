@@ -22,7 +22,7 @@ var {
 
 let bignum = 999999999999999
 
-var timerSizeDefault = windowSize.width * 3 / 4
+var timerSizeDefault = windowSize.width * 3 / 4 * _cvals.dscale
 
 var TimerV1 = React.createClass({
   // propTypes: {
@@ -69,7 +69,7 @@ var TimerV1 = React.createClass({
     } = this.props;
 
     if (this.props.size == 'small') {
-      this.timerSize = 100
+      this.timerSize = 100 * _cvals.dscale
       this.timerTextSize = styles.timer_text_small
     }
     else {
@@ -144,16 +144,16 @@ var styles = StyleSheet.create({
   },
   timer_text: {
     color: 'white',
-    fontSize: 50,
+    fontSize: 50 * _cvals.dscale,
     textAlign: 'center'
   },
   timer_text_small: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 20 * _cvals.dscale,
     textAlign: 'center'
   },
   progress: {
-    margin: 10,
+    margin: 10 * _cvals.dscale,
   },
   timer_container: {
     alignItems: 'center',

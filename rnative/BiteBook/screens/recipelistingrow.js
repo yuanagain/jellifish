@@ -3,6 +3,7 @@
 var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
+var _cvals = require('../modules/customvalues')
 
 
 var {
@@ -16,7 +17,8 @@ var {
 } = React;
 
 var mainfont = 'avenir'
-var rowheight = 100
+var rowheight = 100 * _cvals.dscale
+
 
 // SHARED FORMATTING.
 // TODO: make univeral
@@ -93,13 +95,13 @@ var RecipeListingRow = React.createClass({
 var styles = StyleSheet.create({
   description_text: {
     color: 'black',
-    fontSize: 14,
+    fontSize: 14 * _cvals.dscale,
     fontFamily: mainfont,
   },
   name_text: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: 24 * _cvals.dscale,
     fontFamily: mainfont,
   },
   column_r_r: {
@@ -122,7 +124,7 @@ var styles = StyleSheet.create({
   content_container: {
     margin: 5,
     height: rowheight,
-    width: windowSize.width * 2 / 5
+    width: windowSize.width * 3 / 5
   },
   thumbnail_container: {
     height: rowheight

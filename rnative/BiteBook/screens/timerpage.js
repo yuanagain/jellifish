@@ -21,6 +21,8 @@ var {
   ScrollView,
 } = React;
 
+var marginSize = windowSize.height / 20
+
 var Thumb = React.createClass({
   shouldComponentUpdate: function(nextProps, nextState) {
     return false;
@@ -162,9 +164,9 @@ var TimerPage = React.createClass({
 var styles = StyleSheet.create({
   title_text: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 30 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
-    paddingTop: 30,
+    paddingTop: 30 * _cvals.dscale,
     paddingBottom: 5,
   },
   timer_container: {
@@ -191,7 +193,7 @@ var styles = StyleSheet.create({
     margin: 0,
   },
   header_container: {
-    height: 70,
+    height: _cvals.headerHeight,
     width: windowSize.width,
     alignItems: 'center',
     backgroundColor: _cvals.skkellygreen,
@@ -199,8 +201,8 @@ var styles = StyleSheet.create({
   },
   scroll_container: {
     flex: 1,
-    marginTop: 40,
-    height: 140,
+    marginTop: 10 * _cvals.dscale,
+    height: 140 * _cvals.dscale,
     width: windowSize.width
   },
   scroll_content_container: {
@@ -209,12 +211,12 @@ var styles = StyleSheet.create({
     //width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 140,
+    height: 140 * _cvals.dscale,
 
     // justifyContent: 'center',
   },
   timers_container: {
-    marginTop: 40,
+    marginTop: 40 * _cvals.dscale,
     width: windowSize.width,
     //height: windowSize.height * 2 / 10,
     alignItems: 'center',
@@ -241,7 +243,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    fontSize: 28,
+    fontSize: 28 * _cvals.dscale,
     textAlign: 'center',
     backgroundColor: _cvals.skkellygreen,
     width: windowSize.width,

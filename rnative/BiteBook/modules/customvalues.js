@@ -3,6 +3,8 @@ This module contains standard custom styling data for all apps
 */
 'use strict';
 var React = require('react-native');
+var Dimensions = require('Dimensions');
+var windowSize = Dimensions.get('window');
 
 const _cvals = {
   mainfont: 'avenir',
@@ -16,6 +18,10 @@ const _cvals = {
   headerTextSize: 24,
   normalTextSize: 20,
   detailTextSize: 14,
+  dscale: windowSize.height / 667,
+  headerHeight: 70 * this.dscale
 }
+
+
 
 module.exports = _cvals;
