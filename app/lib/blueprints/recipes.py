@@ -126,7 +126,7 @@ class RecipeRouter(route.Router):
 			self.recipes.refresh(True)
 
 			self.recipes.refresh(True)
-			return redirect(url_for(".get_edit", recipe = name))
+			return redirect(url_for(".get_index"))
 
 		@self.route("/delete/<recipe>")
 		def get_delete(recipe = ""):
