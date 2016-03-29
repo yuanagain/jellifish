@@ -96,6 +96,7 @@ var TimerPage = React.createClass({
           <ScrollView
             style={[styles.scroll_container, ]}
             horizontal={true}
+            showsHorizontalScrollIndicator={true}
             contentContainerStyle={[styles.scroll_content_container, this.contentsize]}
             >
             <View style={styles.timer_container}>
@@ -203,7 +204,9 @@ var styles = StyleSheet.create({
     flex: 1,
     marginTop: 10 * _cvals.dscale,
     height: 140 * _cvals.dscale,
-    width: windowSize.width
+    width: windowSize.width,
+    borderTopWidth: 1,
+    borderColor: 'white',
   },
   scroll_content_container: {
     flexDirection: 'row',

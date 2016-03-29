@@ -4,14 +4,10 @@ var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
 
-var RecipeListingRow = require('./recipelistingrow')
 
-var _cvals = require('../modules/customvalues')
-
-var mainfont = 'avenir'
-var skorange = '#F5A623'
-var skblue = '#4A90E2'
-var skgreen = '#46D5B5'
+var _cvals = require('../styles/customvals')
+var _cstyles = require('../styles/customstyles')
+import '../libs/customtools.js'
 
 var {
   AppRegistry,
@@ -23,50 +19,35 @@ var {
   ListView
 } = React;
 
-var RecipeDetail = require('./recipedetail')
-
 var RecipeListing = React.createClass({
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      dataSource: ds.cloneWithRows(
-        [
-          {'name': 'Recipe Name 1', 'descr': 'Description 1'},
-          {'name': 'Recipe Name 2', 'descr': 'Description 2'},
-          {'name': 'Recipe Name 3', 'descr': 'Description 3'},
-          {'name': 'Recipe Name 4', 'descr': 'Description 4'},
-          {'name': 'Recipe Name 5', 'descr': 'Description 5'},
-          {'name': 'Recipe Name 6', 'descr': 'Description 6'},
-          {'name': 'Recipe Name 7', 'descr': 'Description 7'},
-          {'name': 'Recipe Name 8', 'descr': 'Description 8'},
-          {'name': 'Recipe Name 9', 'descr': 'Description 9'},
-        ]
-      ),
-      selected: []
+      selected: this.props.selection
     };
   },
   render: function() {
     var {
-      name,
-      runApp,
+      title,
+      dataSource,
+      harvestSelection,
+      renderRow,
       ...props
     } = this.props;
 
+    console.log(this.props.items)
     return (
     <View style={styles.container}>
       <View style={styles.body_container}>
-        <View style={styles.header_container}>
-          <Text style={styles.title_text}>
-            {"Recipes"}
+        <View style={_cstyles.header_container}>
+          <Text style={_cstyles.title_text}>
+            {this.props.title}
           </Text>
-          <View style={styles.divider_line}>
-          </View>
         </View>
-
 
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={this.renderListingRow}
+          renderRow={this.renderRow}
           style={styles.listView}
         />
 
@@ -75,34 +56,41 @@ var RecipeListing = React.createClass({
       </View>
       <View style={styles.buttons_container}>
         <Button
-          style={styles.button}
+          style={_cstyles.wide_button}
           styleDisabled={{color: 'grey'}}
-          onPress={this.props.runApp.bind(this, this.state.selected)}
+          onPress={this.confirmSelection}
           >
-          {'Cook Selected!'}
+          {'Confirm Selection'}
         </Button>
       </View>
     </View>
     );
   },
 
+  renderRow
+
   componentDidMount: function() {
     console.log(windowSize.height)
   },
 
-  runApp: function() {
-    this.props.runApp('arg')
+  harvestSelection: function() {
+    this.props.harvestSelection(this.state.selected)
   },
 
-  renderListingRow(rowData) {
+  renderRow(rowData) {
     return (
-        <RecipeListingRow
-        onSelect={this.onSelect}
-        onDetail={this.onDetail}
-        name={rowData['name']}
-        description_text={rowData['descr']}
+      <View>
+        <TouchableOpacity onPress={this.select}
+          <Text>{"hello"}
+          </Text>
         />
+      </View>
     )
+  },
+
+  isSelected: function(rowData) {
+    if (this.state.selected.indexOf(rowData['name']) == -1) return false;
+    return true;
   },
 
   onSelect: function(name) {
@@ -121,22 +109,35 @@ var RecipeListing = React.createClass({
 
   onDetail: function(name) {
     console.log(name)
-    this.props.navigator.push({
-      id: "RecipeDetail",
-      component: RecipeDetail,
-      passProps: {
-        name: name,
-        imageLink: 'http://facebook.github.io/react/img/logo_og.png',
-        descr: "Description Text",
-        goBack: this.goBack,
-      }
-    })
   },
 
   goBack: function() {
     this.props.navigator.pop()
-  }
+  },
+
+
 });
+
+var RowContainer = React.createClass({
+  getInitialState: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+      selected: this.props.selection
+    };
+  },
+  render: function() {
+    var {
+      renderRow,
+      
+      ...props
+    } = this.props;
+
+    console.log(this.props.items)
+    return (
+    <View style={styles.container}>
+
+    );
+  },
 
 var styles = StyleSheet.create({
   title_text: {
@@ -149,7 +150,7 @@ var styles = StyleSheet.create({
   header_text: {
     color: 'white',
     fontSize: 30 * _cvals.dscale,
-    fontFamily: mainfont,
+    fontFamily: _cvals.mainfont,
     fontWeight: 'bold',
     paddingHorizontal: 10,
     marginVertical: 5 * _cvals.dscale,
@@ -157,7 +158,7 @@ var styles = StyleSheet.create({
   value_text: {
     color: 'black',
     fontSize: 20,
-    fontFamily: mainfont,
+    fontFamily: _cvals.mainfont,
     padding: 10,
   },
   container: {
@@ -191,7 +192,7 @@ var styles = StyleSheet.create({
     opacity: 1.0,
   },
   divider_line: {
-    backgroundColor: skgreen,
+    backgroundColor: _cvals.skgreen,
     height: 1.2,
     opacity: 0.3,
     width: windowSize.width
