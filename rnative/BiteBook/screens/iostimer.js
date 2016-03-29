@@ -113,7 +113,6 @@ var TimerV1 = React.createClass({
           this.setState({ _progress });
           if (this.props.dead) {
             this.setState({not_paused: false})
-            console.log('paused2')
             return
           }
         }, this.interval);

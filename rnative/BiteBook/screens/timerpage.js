@@ -43,7 +43,7 @@ var Thumb = React.createClass({
   }
 });
 
-var createThumbRow = (text) => <Thumb title_text={text} getIncrement={getIncrement}/>;
+var createThumbRow = (text) => <Thumb title_text={text} getIncrement={getIncrement} key={Math.random()} />;
 
 var getIncrement = function() {
   return small_num
