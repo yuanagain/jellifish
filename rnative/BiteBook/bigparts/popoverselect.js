@@ -72,7 +72,7 @@ var RecipeListing = React.createClass({
         <Button
           style={_cstyles.wide_button}
           styleDisabled={{color: 'grey'}}
-          onPress={this.confirmSelection}
+          onPress={this.harvestSelection}
           >
           {'Confirm Selection'}
         </Button>
@@ -82,7 +82,7 @@ var RecipeListing = React.createClass({
   },
 
   inSelectionRange: function() {
-    if (inRange())
+    if (inRange(this.props.minSelect, this.props.maxSelect))
   }
 
   harvestSelection: function() {
@@ -145,8 +145,6 @@ var RecipeListing = React.createClass({
   goBack: function() {
     this.props.navigator.pop()
   },
-
-
 });
 
 var RowContainer = React.createClass({
