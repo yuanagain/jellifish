@@ -15,6 +15,7 @@ var {
   View,
   Text,
   TextInput,
+  TouchableOpacity,
   Image,
   ListView
 } = React;
@@ -22,27 +23,46 @@ var {
 var PopoverSelector = React.createClass({
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    return {
-      selected: this.props.selection,
 
+    var mode = 'normal'
+    if (this.props.maxSelect == 1) {
+      mode = 'single'
+    }
+
+    var renderSelector = this.props.renderSelector
+    var selectorRenderMode = 'normal'
+    if (renderSelector == null) {
+      renderSelector = () => this.defaultRenderSelector()
+      selectorRenderMode = 'default'
+    }
+
+    return {
+      selection: this.props.selection,
+      mode: mode,
+      renderSelector: renderSelector,
+      accesses: 0,
     };
   },
 
   getDefaultProps: function() {
     return {
       title: "Select",
+      mode: 'normal',
       items: [],
       selection: [],
       minSelect: 0,
       maxSelect: Infinity,
+      harvestSelection: harvestSelection_default,
       selectedStyle: { opacity: 0.5, backgroundColor: _cvals.skorange },
+      renderSelector: null
     };
   },
 
   render: function() {
     var {
-      style,
       title,
+      mode,
+      renderSelector,
       items,
       harvestSelection,
       renderRow,
@@ -54,14 +74,40 @@ var PopoverSelector = React.createClass({
       ...props
     } = this.props;
 
-    return (
-      <Button
-        style={this.props.style}
-        onPress={this.enterSelector}
-        >
-        {this.props.title}
-      </Button>
-    );
+    if (this.state.selectorRenderMode == 'normal') {
+      return (
+        <TouchableOpacity onPress={this.enterSelector}>
+          {this.state.renderSelector()}
+        </TouchableOpacity>
+      );
+    }
+    else {
+      var selectionText = "Select"
+
+      if (this.state.selection.length > 0) {
+        selectionText = this.props.items[this.state.selection[0]]
+      }
+
+      return (
+        <TouchableOpacity onPress={this.enterSelector}>
+          <View style={styles.defaultRenderSelector}>
+            <Text style={_cstyles.section_header_text}>
+              {this.props.title}
+            </Text>
+            <Text style={[_cstyles.standard_text,
+                          {color: _cvals.skblue,
+                           marginRight: 15 * _cvals.dscale}]}>
+              {selectionText}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )
+    }
+  },
+
+  // to force view re-render
+  update: function() {
+    console.log('updating')
   },
 
   enterSelector: function() {
@@ -79,6 +125,8 @@ var PopoverSelector = React.createClass({
         maxSelect: this.props.maxSelect,
         navigator: this.props.navigator,
         selectedStyle: this.props.selectedStyle,
+
+        update: this.update
       }
     })
   },
@@ -86,20 +134,47 @@ var PopoverSelector = React.createClass({
   harvestSelection: function(selection) {
     this.props.harvestSelection(selection)
     this.props.navigator.pop()
+    console.log(this.state.selection)
+    this.forceUpdate()
   },
 
+  defaultRenderSelector: function() {
+    var selectionText = "Select"
 
+    if (this.state.selection.length > 1) {
+      selectionText = this.state.selection[0]
+    }
+
+    return (
+      <View style={styles.defaultRenderSelector}>
+        <Text style={_cstyles.section_header_text}>
+          {this.props.title}
+        </Text>
+        <Text style={[_cstyles.standard_text,
+                      {color: _cvals.skblue,
+                       marginRight: 15 * _cvals.dscale}]}>
+          {selectionText}
+        </Text>
+      </View>
+    )
+  },
 
 });
+
+function harvestSelection_default(selection) {
+  console.log("SELECTION: " + String(selection))
+}
 
 var styles = StyleSheet.create({
   selected_style: {
     opacity: 0.5,
     backgroundColor: _cvals.skorange
   },
-  selected_style: {
-    opacity: 0.5,
-    backgroundColor: _cvals.skkellygreen
+  defaultRenderSelector: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   container: {
     flexDirection: 'column',
@@ -123,12 +198,6 @@ var styles = StyleSheet.create({
     width: windowSize.width,
     backgroundColor: 'transparent',
     opacity: 1.0,
-  },
-  divider_line: {
-    backgroundColor: _cvals.skgreen,
-    height: 1.2,
-    opacity: 0.3,
-    width: windowSize.width
   },
   listView: {
     backgroundColor: 'transparent',

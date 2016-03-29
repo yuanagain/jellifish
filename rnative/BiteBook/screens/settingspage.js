@@ -50,11 +50,11 @@ var LoginPage = React.createClass({
       </View>
 
       <PopoverSelector
-        style={{backgroundColor: 'grey'}}
         title={"Select Item"}
         items={['text1', 'text2', 'text3']}
         renderRow={this.renderRow}
         navigator={this.props.navigator}
+        selection={[]}
         harvestSelection={this.harvestSelection}
       />
 

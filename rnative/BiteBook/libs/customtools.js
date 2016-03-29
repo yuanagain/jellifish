@@ -1,5 +1,8 @@
 'use strict';
 
+
+var _const = require('./constants')
+
 var isNumeric = function (n) {
   return (!isNaN(parseFloat(n)) && isFinite(n))
 }
@@ -53,4 +56,8 @@ var selectionNeedles = function(haystack, needles) {
   return indices
 }
 
-module.exports = {indexOf, supplementIndex, contains, inRange, traceIndices, };
+var randomKey = function() {
+  return Math.random(1, _const.bignum)
+}
+
+module.exports = {randomKey, indexOf, supplementIndex, contains, inRange, traceIndices, };

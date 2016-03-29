@@ -78,7 +78,7 @@ var PopoverSelect = React.createClass({
           style={_cstyles.wide_button}
           styleDisabled={{backgroundColor: 'grey'}}
           onPress={this.harvestSelection}
-          disabled={this.validSelection}
+          disabled={this.state.validSelection}
           >
           {'Confirm Selection'}
         </Button>
@@ -105,10 +105,12 @@ var PopoverSelect = React.createClass({
     var iselect = _ctools.traceIndices(this.props.items,
                                             this.state.selection)
     this.props.harvestSelection(iselect)
+    this.props.update()
   },
 
   cancelSelection: function() {
     this.props.cancelSelection([])
+    this.props.update()
   },
 
   toggleSelect: function(index) {
@@ -133,6 +135,7 @@ var PopoverSelect = React.createClass({
   renderRow: function(rowData) {
     return (
       <RowWrapper
+        key={_ctools.randomKey()}
         index={rowData['index']}
         selected={_ctools.contains(this.state.selection, rowData['index'])}
         toggleSelect={this.toggleSelect}
@@ -199,10 +202,7 @@ var RowWrapper = React.createClass({
 
 var styles = StyleSheet.create({
   row: {
-    height: 40,
-    width: 60,
-    borderWidth: 0.5,
-    borderColor: 'grey',
+    width: windowSize.width
   },
   selected_style: {
     opacity: 0.5,

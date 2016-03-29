@@ -5,11 +5,14 @@ var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
 var Timer = require('./iostimer')
-import CustomStyles from '../modules/customstyles'
 
+import CustomStyles from '../modules/customstyles'
 const _cvals = require('../modules/customvalues')
+import * as _ctools from '../libs/customtools.js'
+
 let small_num = 0.0000000000000000000000000000001
 var tdata = ['title1', 'title2', 'title3', 'title4', 'title5']
+
 
 var {
   AppRegistry,
@@ -43,7 +46,9 @@ var Thumb = React.createClass({
   }
 });
 
-var createThumbRow = (text) => <Thumb title_text={text} getIncrement={getIncrement}/>;
+var createThumbRow = (text) => <Thumb title_text={text}
+                                      getIncrement={getIncrement}
+                                      key={_ctools.randomKey()}/>;
 
 var getIncrement = function() {
   return small_num
