@@ -41,12 +41,21 @@ function stripIndex(indexedItems) {
   }
 }
 
-function contains(haystack, needle) {
+function indexOf(haystack, needle) {
   for (var i = 0; i < haystack.length, i++) {
-      if (needle == haystack[i]) { return true }
+      if (needle == haystack[i]) { return i }
   }
-  return false
+  return -1
 }
 
+function contains(haystack, needle) {
+  return (indexOf(haystack, needl) != -1)
+}
+
+function inRange(n, min, max) {
+  if (n > max) { return false }
+  if (n < min) { return false }
+  return true
+}
 
 module.exports = [isNumeric];

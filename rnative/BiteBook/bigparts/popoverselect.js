@@ -26,12 +26,26 @@ var RecipeListing = React.createClass({
       selected: this.props.selection
     };
   },
+
+  getDefaultProps: function() {
+    return {
+      title: "Select",
+      dataSource: [],
+      selection: [],
+      minSelect: 0,
+      maxSelect: Infinity,
+    };
+  },
+
   render: function() {
     var {
       title,
       dataSource,
       harvestSelection,
       renderRow,
+      selection,
+      minSelect,
+      maxSelect,
       ...props
     } = this.props;
 
@@ -67,24 +81,41 @@ var RecipeListing = React.createClass({
     );
   },
 
-  renderRow
-
-  componentDidMount: function() {
-    console.log(windowSize.height)
-  },
+  inSelectionRange: function() {
+    if (inRange())
+  }
 
   harvestSelection: function() {
-    this.props.harvestSelection(this.state.selected)
+    this.props.harvestSelection(this.state.selection)
   },
 
-  renderRow(rowData) {
+  cancelSelection: function() {
+    this.props.cancelSelection([])
+  },
+
+  toggleSelect: function(item) {
+    var index = indexOf(this.state.selected, item)
+    if (index != -1) {
+      var selection = this.state.selection.splice(index, 1)
+      this.setState( {selection} )
+    }
+    else {
+      this.setState( {selection: this.state.selection} )
+    }
+  },
+
+  rowStyle: function(item) {
+    if contains(this.state.selected, item) { return this.state.selected_style }
+    return {}
+  },
+
+  renderRow(item) {
     return (
-      <View>
-        <TouchableOpacity onPress={this.select}
-          <Text>{"hello"}
-          </Text>
-        />
-      </View>
+        <TouchableOpacity onPress={(item) => this.toggleSelect(item)} >
+          <View style = selectionStyle(item)>
+          {this.props.renderRow(rowData)}
+          </View>
+        <TouchableOpacity />
     )
   },
 
@@ -128,7 +159,7 @@ var RowContainer = React.createClass({
   render: function() {
     var {
       renderRow,
-      
+
       ...props
     } = this.props;
 
@@ -140,27 +171,11 @@ var RowContainer = React.createClass({
   },
 
 var styles = StyleSheet.create({
-  title_text: {
-    color: 'white',
-    fontSize: 30 * _cvals.dscale,
-    fontFamily: _cvals.mainfont,
-    paddingTop: 30 * _cvals.dscale,
-    paddingBottom: 5,
-  },
-  header_text: {
-    color: 'white',
-    fontSize: 30 * _cvals.dscale,
-    fontFamily: _cvals.mainfont,
-    fontWeight: 'bold',
-    paddingHorizontal: 10,
-    marginVertical: 5 * _cvals.dscale,
-  },
-  value_text: {
-    color: 'black',
-    fontSize: 20,
-    fontFamily: _cvals.mainfont,
-    padding: 10,
-  },
+
+  selected_style: {
+    opacity: 0.5,
+    backgroundColor: _cvals.skkellygreen
+  }
   container: {
     flexDirection: 'column',
     flex: 1,
@@ -178,13 +193,6 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
     opacity: 1.00,
     marginTop: 0,
-  },
-  header_container: {
-    width: windowSize.width,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    backgroundColor: _cvals.skkellygreen,
-    height: _cvals.headerHeight,
   },
   section_container: {
     width: windowSize.width,
@@ -207,24 +215,6 @@ var styles = StyleSheet.create({
       justifyContent: 'center',
       flex: 0,
       backgroundColor: 'transparent',
-    },
-    button: {
-      color: 'white',
-      //height: windowSize.height * 1 / 10,
-      //width: windowSize.width,
-      alignItems: 'center',
-      justifyContent: 'center',
-      flex: 1,
-      fontSize: 28 * _cvals.dscale,
-      textAlign: 'center',
-      backgroundColor: _cvals.sknavy,
-      width: windowSize.width,
-      padding: 5,
-      fontFamily: _cvals.mainfont,
-      shadowRadius: 4,
-      shadowColor: 'black',
-      shadowOpacity: 0.5,
-      shadowOffset: {width: 0, height: 3}
     },
 })
 
