@@ -42,3 +42,8 @@ function getOptimized(recipes, callback) {
 			})
 		}).then((res) => res.json()).then(callback);
 	}
+
+module.exports = {
+	getRecipes: getRecipes,
+	getOptimized: getOptimized
+	}
