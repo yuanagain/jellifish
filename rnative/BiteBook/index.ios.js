@@ -16,7 +16,7 @@ import TabNavigator from 'react-native-tab-navigator';
 
 var LoginPage = require('./screens/loginpage')
 var RecipeListing = require('./screens/recipelisting')
-var SettingsPage = require('./screens/settingspage')
+var SettingsRoot = require('./screens/settingsroot')
 var TimerPage = require('./screens/timerpage')
 var RecipeListingRoot = require('./screens/recipelistingroot')
 
@@ -82,7 +82,7 @@ class BiteBook extends Component {
               });
             }
             }>
-            <SettingsPage />
+            <SettingsRoot />
           </TabNavigator.Item>
         </TabNavigator>
 

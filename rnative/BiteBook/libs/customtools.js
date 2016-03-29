@@ -1,61 +1,56 @@
 'use strict';
 
-var React = require('react-native');
-
-
-var {
-  AppRegistry,
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  Image
-} = React;
-
-
-function isNumeric (n) {
+var isNumeric = function (n) {
   return (!isNaN(parseFloat(n)) && isFinite(n))
 }
 
-function isValidScore(n) {
-  if (isNumeric(n)) {
-    if (n >= 0) {
-      return true
-    }
-  }
-  return false
-}
-
-function upplementIndex(items) {
-  indexedItems = []
+var supplementIndex = function(items) {
+  var indexedItems = []
   for (var i = 0; i < items.length; i++) {
     indexedItems.push({'index': i, 'item': items[i]})
   }
   return indexedItems
 }
 
-function stripIndex(indexedItems) {
-  items = []
+var stripIndex = function(indexedItems) {
+  var items = []
   for (var i = 0; i < indexedItems.length; i++) {
     items.push(indexedItems[i]['item'])
   }
 }
 
-function indexOf(haystack, needle) {
-  for (var i = 0; i < haystack.length, i++) {
+var indexOf = function(haystack, needle) {
+  for (var i = 0; i < haystack.length; i++) {
       if (needle == haystack[i]) { return i }
   }
   return -1
 }
 
-function contains(haystack, needle) {
-  return (indexOf(haystack, needl) != -1)
+var contains = function(haystack, needle) {
+  return (indexOf(haystack, needle) != -1)
 }
 
-function inRange(n, min, max) {
+var inRange = function(n, min, max) {
   if (n > max) { return false }
   if (n < min) { return false }
   return true
 }
 
-module.exports = [isNumeric];
+var traceIndices = function(haystack, indices) {
+  var items = []
+  for (var i = 0; i < indices.length; i++) {
+    items.push(haystack[indices[i]])
+  }
+  return items
+}
+
+var selectionNeedles = function(haystack, needles) {
+  var indices = []
+  for (var i = 0; i < needles.length; i++) {
+    var index = indexOf(haystack, needles[i])
+    indices.push(i)
+  }
+  return indices
+}
+
+module.exports = {indexOf, supplementIndex, contains, inRange, traceIndices, };
