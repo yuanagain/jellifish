@@ -6,7 +6,7 @@ var {
 } = React;
 
 // TODO change to app server URL
-var BASE_URL = "http://localhost:8080/api/";
+var BASE_URL = "http://app.jelli.fish/api/";
 var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
 
 // Login/load user data

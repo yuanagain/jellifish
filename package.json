@@ -4,6 +4,7 @@
   "description": "A GPS for the kitchen",
   "main": "index.js",
   "dependencies": {
+    "browserify": "^13.0.0",
     "jquery": "^2.1.4",
     "moment": "^2.10.6",
     "parse": "^1.7.0",
@@ -15,6 +16,9 @@
   "devDependencies": {
     "reactify": "^1.1.1"
   },
+  "scripts": {
+    "postinstall": "npm bin"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yuanagain/jellifish.git"
