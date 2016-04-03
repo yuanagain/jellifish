@@ -49,7 +49,7 @@ var RecipeListingRow = React.createClass({
 
     return (
       <View >
-        <View style={styles.container}>
+        <View style={[styles.container, ]}>
           <View style={[styles.thumbnail_container, this.state.selectedStyle]}>
             <TouchableHighlight onPress={() => this.onSelect()}>
               <Image
@@ -131,6 +131,7 @@ var styles = StyleSheet.create({
   },
   selectedStyle: {
     opacity: 0.5,
+    //backgroundColor: _cvals.skkellygreen
   },
   thumbnail: {
     height: rowheight,

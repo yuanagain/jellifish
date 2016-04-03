@@ -8,6 +8,8 @@ import CustomStyles from '../modules/customstyles'
 
 const _cvals = require('../modules/customvalues')
 
+var PopoverSelector = require('../bigparts/popoverselector')
+
 var {
   AppRegistry,
   StyleSheet,
@@ -30,6 +32,7 @@ var LoginPage = React.createClass({
     var {
       name,
       loginFunction,
+      navigator,
       ...props
     } = this.props;
 
@@ -46,6 +49,15 @@ var LoginPage = React.createClass({
         </View>
       </View>
 
+      <PopoverSelector
+        title={"Select Item"}
+        items={['text1', 'text2', 'text3']}
+        renderRow={this.renderRow}
+        navigator={this.props.navigator}
+        selection={[]}
+        harvestSelection={this.harvestSelection}
+      />
+
       <View style={styles.buttons_container}>
         <Button
           style={styles.save_button}
@@ -59,6 +71,16 @@ var LoginPage = React.createClass({
     </View>
     );
   },
+
+  harvestSelection: function(selection) {
+    console.log("SELECTION: " + String(selection))
+  },
+
+  renderRow: function(rowData) {
+    return (
+      <Text>{rowData}</Text>
+    );
+  }
 });
 
 var styles = StyleSheet.create({
