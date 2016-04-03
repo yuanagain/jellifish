@@ -11,7 +11,7 @@ const _cvals = require('../modules/customvalues')
 import * as _ctools from '../libs/customtools.js'
 
 let small_num = 0.0000000000000000000000000000001
-var tdata = ['title1', 'title2', 'title3', 'title4', 'title5']
+var tdata = []//['title1', ]//'title2', ]//'title3', 'title4', 'title5']
 
 
 var {

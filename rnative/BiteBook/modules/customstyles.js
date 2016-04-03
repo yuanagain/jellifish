@@ -35,6 +35,49 @@ const _cvals = require('../modules/customvalues')
 
 /* using multiple styles: <View style={[styles.element, this.props.elementStyle]} /> */
 var CustomStyles = StyleSheet.create({
+  title_text: {
+    color: 'white',
+    fontSize: 30 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+    // marginTop: 30 * _cvals.dscale,
+  },
+  section_header_text: {
+    color: 'black',
+    fontSize: 26 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+    paddingHorizontal: 10 * _cvals.dscale,
+  },
+  header_text: {
+    color: 'black',
+    fontSize: 23 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+    paddingHorizontal: 8 * _cvals.dscale,
+    marginVertical: 4 * _cvals.dscale,
+  },
+  standard_text: {
+    color: 'black',
+    fontSize: 20 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+  },
+  detail_text: {
+    color: 'black',
+    fontSize: 16 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+  },
+  light_text: {
+    color: 'grey',
+    fontSize: 12 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+  },
+  header_container: {
+    height: _cvals.headerHeight,
+    width: windowSize.width,
+    flexDirection: 'row',
+
+    alignItems: 'flex-end',
+    backgroundColor: _cvals.skkellygreen,
+    justifyContent: 'space-between',
+  },
   mainfont: {
     fontFamily: 'avenir'
   },

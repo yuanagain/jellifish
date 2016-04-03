@@ -104,35 +104,29 @@ var TimerV1 = React.createClass({
       var _progress = this.state._progress
       this.setState({ _progress });
       setTimeout(() => {
-        this.setState({ indeterminate: false });
           setInterval(() => {
           _progress += this.props.getIncrement(this.props.index) / this.intervalCt;
           if(_progress > 1) {
             _progress = 1;
           }
           this.setState({ _progress });
-          if (this.props.dead) {
-            this.setState({not_paused: false})
-            console.log('paused2')
-            return
-          }
+          // if (this.props.dead) {
+          //   this.setState({not_paused: false})
+          //   console.log('paused2')
+          //   return
+          // }
         }, this.interval);
       }, this.interval);
     }
   },
 
   componentDidMount: function() {
+    this.setState({ indeterminate: false });
     this.interval = 100
     this.intervalCt = this.props.totaltime * 1000 / this.interval
-    // if (this.props.dead) {
-    //   this.state.not_paused = false
-    // }
     this.animate();
   },
 
-  _handlePress_toRecord(event) {
-    this.setState({show_screen: "recordscreen"})
-  },
 });
 
 var styles = StyleSheet.create({
