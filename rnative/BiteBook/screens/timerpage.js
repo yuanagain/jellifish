@@ -124,7 +124,7 @@ var TimerPage = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log(this.props.fetchData);
+    // console.log(this.props.fetchData);
     this.animate();
   },
 
@@ -136,7 +136,7 @@ var TimerPage = React.createClass({
       setTimeout(() => {
         setInterval(() => {
           if (_data != this.props.fetchData()) {
-            console.log("data Changed")
+            // console.log("data Changed")
           }
         }, 1000);
       }, 1000);

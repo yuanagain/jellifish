@@ -110,6 +110,9 @@ var TimerV1 = React.createClass({
             _progress = 1;
           }
           this.setState({ _progress });
+
+
+
           // if (this.props.dead) {
           //   this.setState({not_paused: false})
           //   console.log('paused2')
@@ -157,8 +160,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-
-
 })
 
 module.exports = TimerV1;
