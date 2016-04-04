@@ -33,7 +33,7 @@ class DatabaseClient(object):
         """
         Returns list of recipes by name
         """
-        return self.dbm.fetch_seq_names()
+        return self.dbm.fetch_sequences()
 
     def fetch_recipe(self, name):
         """

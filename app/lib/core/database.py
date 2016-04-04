@@ -111,6 +111,21 @@ class DatabaseManager(object):
             cur.close()
             return names
 
+    def fetch_sequences(self):
+        """
+        returns an array of dictionaries in the form of 
+            {name: name, description: description}
+        """
+        with self.connect:
+            cur = self.connect.cursor()
+
+            cur.execute('SELECT name, descr FROM seqs')
+            rows = cur.fetchall()
+            data = [{"name": r[0], "descr": r[1]} for r in rows]
+
+            cur.close()
+            return data
+
     def load_seq_by_name(self, name):
         """
         Loads the first task sequence with a given name

@@ -39,12 +39,19 @@ var page = {
 	Render the selection page.
 
 	Parameters
-		[String, ...] selections - list of selection options to render
+		[Task, ...] selections - list of selection options to render
+			Object Task -
+				String name - name of task
+				String descr - descr of task
 	*/
 	selection: function(selections) {
 		main();
+		data = new Array(selections.length);
+		for (var index in selections) {
+			data[index] = selections[index].name;
+			}
 		ReactDOM.render(
-			<SelectionPage selections={selections}/>,
+			<SelectionPage selections={data}/>,
 			utils.getElem("#selection")
 			);
 		},
@@ -99,8 +106,12 @@ var page = {
 	*/
 	recipes: function(recipes, urls) {
 		main();
+		data = new Array(recipes.length);
+		for (var index in recipes) {
+			data[index] = recipes[index].name;
+			}
 		ReactDOM.render(
-			<RecipesPage recipes={recipes} urls={urls} />,
+			<RecipesPage recipes={data} urls={urls} />,
 			utils.getElem("#recipes")
 			);
 		},

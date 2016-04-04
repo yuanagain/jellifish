@@ -25,7 +25,7 @@ class APIRouter(route.Router):
 
 			Returns list of recipes
 			'''
-			data_out = {"recipes": self.recipes.value}
+			data_out = {"data": self.recipes.value}
 			return jsonify(**data_out)
 
 		@self.route("/tasks/", methods = ["POST"])
@@ -41,6 +41,6 @@ class APIRouter(route.Router):
 			selected_recipes = tuple(data.get("recipes"))
 			data_out = {
 				"recipes": selected_recipes,
-				"active": self.meals[selected_recipes]
+				"data": self.meals[selected_recipes]
 				}
 			return jsonify(**data_out)
