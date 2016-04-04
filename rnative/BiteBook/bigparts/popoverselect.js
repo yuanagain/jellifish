@@ -4,7 +4,7 @@ var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
 
-
+var Header = require('../parts/header')
 var _cvals = require('../modules/customvalues')
 var _cstyles = require('../modules/customstyles')
 
@@ -58,11 +58,9 @@ var PopoverSelect = React.createClass({
     return (
     <View style={styles.container}>
       <View style={styles.body_container}>
-        <View style={_cstyles.header_container}>
-          <Text style={_cstyles.title_text}>
-            {this.props.title}
-          </Text>
-        </View>
+        <Header title={this.props.title}
+                mode={'nav'}
+                navigator={this.props.navigator} />
 
         <ListView
           dataSource={this.state.dataSource}
@@ -73,18 +71,34 @@ var PopoverSelect = React.createClass({
         <View style={styles.divider_line}>
         </View>
       </View>
-      <View style={styles.buttons_container}>
+      <View style={[styles.buttons_container,
+                     this.canConfirm()]}>
         <Button
-          style={_cstyles.wide_button}
+          style={[_cstyles.wide_button, this.canConfirm()]}
           styleDisabled={{backgroundColor: 'grey'}}
           onPress={this.harvestSelection}
-          disabled={this.state.validSelection}
+          disabled={this.isDisabled()}
           >
           {'Confirm Selection'}
         </Button>
       </View>
     </View>
     );
+  },
+
+  // used to hide confirm button in single case
+  canConfirm: function() {
+    if (this.props.mode == "single") {
+      return {height: 0, opacity: 0.0}
+    }
+    return {}
+  },
+
+  isDisabled: function() {
+    if (this.props.mode == 'single') {
+      return true
+    }
+    return false
   },
 
   inSelectionRange: function() {
@@ -99,12 +113,13 @@ var PopoverSelect = React.createClass({
     this.setState({validSelection: _ctools.inRange(this.props.minSelect,
                                                    this.props.maxSelect,
                                                    this.state.selection.length)})
+    return _ctools.inRange(this.props.minSelect, this.props.maxSelect, this.state.selection.length)
   },
 
   harvestSelection: function() {
-    var iselect = _ctools.traceIndices(this.props.items,
-                                            this.state.selection)
-    this.props.harvestSelection(iselect)
+    this.state.selection.sort()
+    this.setState( {selection: this.state.selection })
+    this.props.harvestSelection(this.state.selection)
     this.props.update()
   },
 
@@ -119,17 +134,29 @@ var PopoverSelect = React.createClass({
     // if already in selection
     if (loc != -1) {
       this.state.selection.splice(loc, 1)
+      // if (this.props.mode == 'single') {
+      //   this.setState({selection: []})
+      // }
     }
     // if not in selection
     else {
       this.state.selection.push(index)
+      if (this.props.mode == 'single') {
+        this.setState({selection: [index]})
+        console.log(this.state.selection)
+        this.harvestSelection()
+        return
+      }
     }
     this.setState( {selection: this.state.selection} )
-    console.log(this.state.selection)
+
   },
 
   inSelection: function(index) {
-    return _ctools.contains(this.state.selection, index)
+    var result =  _ctools.contains(this.state.selection, index)
+//    console.log('index: ' + String(index) + ': '+ String(result))
+
+    return result
   },
 
   renderRow: function(rowData) {
@@ -137,7 +164,7 @@ var PopoverSelect = React.createClass({
       <RowWrapper
         key={_ctools.randomKey()}
         index={rowData['index']}
-        selected={_ctools.contains(this.state.selection, rowData['index'])}
+        selected={this.inSelection(rowData['index'])}
         toggleSelect={this.toggleSelect}
         inSelection={this.inSelection}
         rowData={rowData['item']}
@@ -146,7 +173,6 @@ var PopoverSelect = React.createClass({
         />
     );
   },
-
   goBack: function() {
     this.props.goBack()
   },
@@ -178,18 +204,23 @@ var RowWrapper = React.createClass({
     } = this.props;
 
     return (
-        <TouchableOpacity
-          onPress={this.toggleSelect}
-          style={[styles.row, this.state.style]}>
-            {this.props.renderRow(rowData)}
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            onPress={this.toggleSelect}
+            style={[styles.row, this.state.style]}>
+              {this.props.renderRow(rowData)}
+
+          </TouchableOpacity>
+          <View style={_cstyles.divider_line}>
+          </View>
+        </View>
 
     );
   },
   toggleSelect: function() {
     this.props.toggleSelect(this.props.index)
     var selected = this.props.inSelection(this.props.index)
-    console.log(selected)
+
     var new_style = {}
     if (selected) {
       new_style = this.props.selectedStyle
@@ -205,8 +236,8 @@ var styles = StyleSheet.create({
     width: windowSize.width
   },
   selected_style: {
-    opacity: 0.5,
-    backgroundColor: _cvals.skorange
+    // opacity: 0.5,
+    backgroundColor: _cvals.skbluelight
   },
   container: {
     flexDirection: 'column',

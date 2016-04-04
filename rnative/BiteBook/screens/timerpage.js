@@ -11,7 +11,7 @@ const _cvals = require('../modules/customvalues')
 import * as _ctools from '../libs/customtools.js'
 
 let small_num = 0.0000000000000000000000000000001
-var tdata = ['title1', 'title2', 'title3', 'title4', 'title5']
+var tdata = []//['title1', ]//'title2', ]//'title3', 'title4', 'title5']
 
 
 var {
@@ -124,7 +124,7 @@ var TimerPage = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log(this.props.fetchData);
+    // console.log(this.props.fetchData);
     this.animate();
   },
 
@@ -136,7 +136,7 @@ var TimerPage = React.createClass({
       setTimeout(() => {
         setInterval(() => {
           if (_data != this.props.fetchData()) {
-            console.log("data Changed")
+            // console.log("data Changed")
           }
         }, 1000);
       }, 1000);
