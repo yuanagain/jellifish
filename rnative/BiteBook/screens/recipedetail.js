@@ -17,6 +17,8 @@ var {
   ScrollView,
 } = React;
 
+var Header = require('../parts/header')
+
 var MatchPage = React.createClass({
   getInitialState: function() {
     return (
@@ -37,11 +39,9 @@ var MatchPage = React.createClass({
     return (
     <View style={styles.container}>
       <View style={styles.top_container}>
-        <View style={styles.header_container}>
-          <Text style={styles.title_text}>
-            {this.props.name}
-          </Text>
-        </View>
+        <Header title={this.props.name}
+                mode={'nav'}
+                navigator={this.props.navigator} />
         <View style={styles.body_container}>
           <ScrollView
             style={[styles.scroll_container, ]}
@@ -56,15 +56,6 @@ var MatchPage = React.createClass({
             </Text>
           </ScrollView>
         </View>
-      </View>
-      <View style={styles.buttons_container}>
-        <Button
-          style={styles.button}
-          styleDisabled={{color: 'grey'}}
-          onPress={this.props.goBack}
-          >
-          {'Go Back'}
-        </Button>
       </View>
     </View>
     );

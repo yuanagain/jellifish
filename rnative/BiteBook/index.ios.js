@@ -67,7 +67,8 @@ class BiteBook extends Component {
             }>
             <TimerPage
               fetchData={(arg) => this.fetchData()}
-              recipeName={"RECIPE NAME"}
+              recipeName={"Cook"}
+              selection={this.state.selection}
             />
           </TabNavigator.Item>
           <TabNavigator.Item
@@ -95,14 +96,15 @@ class BiteBook extends Component {
     this.setState({selectedTab: 'home'})
   }
 
-  runApp(selected) {
-    console.log(selected)
+  runApp(selection) {
+    this.setState({selection: selection})
     this.setState({selectedTab: 'timer'})
+    this.setState({updates_inherited: false})
   }
 
   fetchData() {
-    console.log("fetching data")
-    return 69
+    this.setState({updates_inherited: true})
+    return this.state.selection
   }
 }
 

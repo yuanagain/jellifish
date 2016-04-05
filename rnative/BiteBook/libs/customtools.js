@@ -1,10 +1,18 @@
 'use strict';
 
-
 var _const = require('./constants')
 
 var isNumeric = function (n) {
   return (!isNaN(parseFloat(n)) && isFinite(n))
+}
+
+var isValidScore = function(n) {
+  if (isNumeric(n)) {
+    if (n >= 0) {
+      return true
+    }
+  }
+  return false
 }
 
 var supplementIndex = function(items) {
@@ -39,6 +47,10 @@ var inRange = function(n, min, max) {
   return true
 }
 
+/*
+takes list of indices, recovers corresponding list
+of items
+*/
 var traceIndices = function(haystack, indices) {
   var items = []
   for (var i = 0; i < indices.length; i++) {
@@ -47,6 +59,10 @@ var traceIndices = function(haystack, indices) {
   return items
 }
 
+/*
+takes list of item, recovers corresponding list
+of indices
+*/
 var selectionNeedles = function(haystack, needles) {
   var indices = []
   for (var i = 0; i < needles.length; i++) {
@@ -60,4 +76,6 @@ var randomKey = function() {
   return Math.random(1, _const.bignum)
 }
 
-module.exports = {randomKey, indexOf, supplementIndex, contains, inRange, traceIndices, };
+module.exports = {indexOf, supplementIndex, contains, inRange,
+                  traceIndices, isValidScore, randomKey,
+                  selectionNeedles};

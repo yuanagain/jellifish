@@ -41,12 +41,6 @@ var CustomStyles = StyleSheet.create({
     fontFamily: _cvals.mainfont,
     // marginTop: 30 * _cvals.dscale,
   },
-  section_header_text: {
-    color: 'black',
-    fontSize: 26 * _cvals.dscale,
-    fontFamily: _cvals.mainfont,
-    paddingHorizontal: 10 * _cvals.dscale,
-  },
   header_text: {
     color: 'black',
     fontSize: 23 * _cvals.dscale,
@@ -55,12 +49,12 @@ var CustomStyles = StyleSheet.create({
     marginVertical: 4 * _cvals.dscale,
   },
   standard_text: {
-    color: 'black',
-    fontSize: 20 * _cvals.dscale,
+    color: 'white',
+    fontSize: 21 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
   },
   detail_text: {
-    color: 'black',
+    color: 'white',
     fontSize: 16 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
   },
@@ -68,24 +62,6 @@ var CustomStyles = StyleSheet.create({
     color: 'grey',
     fontSize: 12 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
-  },
-  header_container: {
-    height: _cvals.headerHeight,
-    width: windowSize.width,
-    flexDirection: 'row',
-
-    alignItems: 'flex-end',
-    backgroundColor: _cvals.skkellygreen,
-    justifyContent: 'space-between',
-  },
-  mainfont: {
-    fontFamily: 'avenir'
-  },
-  skkellygreen: {
-    color: "#7ED321"
-  },
-  skblue: {
-    color: '#4A90E2'
   },
   container: {
     flexDirection: 'column',
@@ -103,11 +79,6 @@ var CustomStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  header_container: {
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   title_text: {
     color: 'white',
     fontSize: 30 * _cvals.dscale,
@@ -120,18 +91,6 @@ var CustomStyles = StyleSheet.create({
     fontSize: 26 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
     paddingHorizontal: 10 * _cvals.dscale,
-  },
-  standard_text: {
-    color: 'black',
-    fontSize: 20 * _cvals.dscale,
-    fontFamily: _cvals.mainfont,
-  },
-  header_container: {
-    height: _cvals.headerHeight,
-    width: windowSize.width,
-    alignItems: 'center',
-    backgroundColor: _cvals.skkellygreen,
-    justifyContent: 'flex-end',
   },
   buttons_container: {
     width: windowSize.width,
@@ -159,6 +118,31 @@ var CustomStyles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: {width: 0, height: -1}
   },
+  left_arrow: {
+    height: 28 * _cvals.dscale,
+    width: 28 * _cvals.dscale,
+    marginLeft: 12 * _cvals.dscale,
+    paddingTop: 10
+  },
+  right_arrow: {
+    height: 28 * _cvals.dscale,
+    width: 28 * _cvals.dscale,
+    marginRight: 15 * _cvals.dscale,
+  },
+  header_container: {
+    height: _cvals.headerHeight,
+    width: windowSize.width,
+    flexDirection: 'row',
+
+    alignItems: 'flex-end',
+    backgroundColor: _cvals.skkellygreen,
+    justifyContent: 'space-between',
+  },
+  divider_line: {
+    height: 1,
+    width: windowSize.width,
+    backgroundColor: 'grey',
+  }
 })
 
 module.exports = CustomStyles;

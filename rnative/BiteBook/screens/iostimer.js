@@ -22,7 +22,7 @@ var {
 
 let bignum = 999999999999999
 
-var timerSizeDefault = windowSize.width * 3 / 4 * _cvals.dscale
+var timerSizeDefault = windowSize.width * 5 / 7
 
 var TimerV1 = React.createClass({
   // propTypes: {
@@ -37,7 +37,7 @@ var TimerV1 = React.createClass({
 
 	_getFormattedTime() {
 		var text,
-			timeRemaining = this.props.totaltime * this.state._progress,
+			timeRemaining = this.props.totaltime * (1 - this.state._progress),
 			momentTime = moment().set({hours: 0, minutes: 0, seconds: timeRemaining});
 		if (timeRemaining > 36000) text = momentTime.format("HH:mm:ss");
     if (timeRemaining > 3600) text = momentTime.format("H:mm:ss");
@@ -52,7 +52,7 @@ var TimerV1 = React.createClass({
         username: '',
         // progress: 0.3,
         indeterminate: false,
-        _progress: 0.0,
+        _progress: 0,
         not_paused: true,
       }
     );
@@ -64,6 +64,9 @@ var TimerV1 = React.createClass({
       title_text,
       size,
       index,
+      getProgress,
+      nextTask,
+      updateProgress,
       dead,
       ...props
     } = this.props;
@@ -105,32 +108,27 @@ var TimerV1 = React.createClass({
       this.setState({ _progress });
       setTimeout(() => {
           setInterval(() => {
-          _progress += this.props.getIncrement(this.props.index) / this.intervalCt;
-          if(_progress > 1) {
-            _progress = 1;
+          _progress += this.props.getIncrement(this.props.index) / this.getIntervalCt();
+          if(_progress >= 1) {
+            // TODO Indicate to parent that we're done
+            this.props.nextTask()
+            _progress = 0
           }
-          this.setState({ _progress });
+          this.setState({ _progress})
 
-
-
-          // if (this.props.dead) {
-          //   this.setState({not_paused: false})
-          //   console.log('paused2')
-          //   return
-          // }
-          if (this.props.dead) {
-            this.setState({not_paused: false})
-            return
-          }
         }, this.interval);
       }, this.interval);
     }
   },
 
+  getIntervalCt: function() {
+    console.log(this.props.totaltime)
+    return this.props.totaltime * 1000 / this.interval
+  },
+
   componentDidMount: function() {
     this.setState({ indeterminate: false });
     this.interval = 100
-    this.intervalCt = this.props.totaltime * 1000 / this.interval
     this.animate();
   },
 
