@@ -133,12 +133,14 @@ var TimerPage = React.createClass({
               totaltime={Math.abs(currentTask.time)}
               title_text={currentTask.name}
               getIncrement={this.getIncrement}
-              progress={0}
+              progress={this.state.progress}
               index={this.state.index}
               nextTask={this.nextTask}
               updateProgress={this.updateProgress}
               getTotalTime={this.getTotalTime}
+              fetchData={this.fetchData}
             />
+
             <View style={styles.descr}>
               <Text style={_cstyles.standard_text}>
                 {currentTask.descr}
@@ -181,12 +183,27 @@ var TimerPage = React.createClass({
       );
   },
 
+  fetchData: function() {
+    var data = this.props.fetchData()
+    if (data == false) {
+      return false
+    }
+    else {
+      // reset
+      this.setState({selection: data})
+      this.setState({progress: 0})
+      this.setState({runStatus: 'running'})
+      this.setState({index: 0})
+      DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
+      return true
+    }
+  },
+
   // increments
   nextTask: function() {
     if (this.state.index < this.state.sequence.length) {
       this.setState({index: this.state.index + 1})
     }
-    console.log("NEXT TASK")
   },
 
   updateProgress: function(progress) {
@@ -204,14 +221,12 @@ var TimerPage = React.createClass({
   componentDidMount: function() {
     // console.log(this.props.fetchData);
     DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
-
   },
 
   harvestData: function(task_sequence) {
     this.setState({sequence: task_sequence.active})
     this.setState({loaded: true})
   },
-
 
   togglePause: function() {
     if (this.state.runStatus == 'paused') {

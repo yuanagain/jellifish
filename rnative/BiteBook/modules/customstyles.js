@@ -83,7 +83,7 @@ var CustomStyles = StyleSheet.create({
     color: 'white',
     fontSize: 30 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
-    paddingTop: 30 * _cvals.dscale,
+    paddingTop: 20 * _cvals.dscale,
     paddingBottom: 5,
   },
   section_header_text: {
@@ -133,7 +133,6 @@ var CustomStyles = StyleSheet.create({
     height: _cvals.headerHeight,
     width: windowSize.width,
     flexDirection: 'row',
-
     alignItems: 'flex-end',
     backgroundColor: _cvals.skkellygreen,
     justifyContent: 'space-between',

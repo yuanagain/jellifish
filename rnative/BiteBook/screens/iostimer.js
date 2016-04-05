@@ -57,6 +57,14 @@ var TimerV1 = React.createClass({
       }
     );
   },
+
+  getDefaultProps: function() {
+    return (
+      {
+        progress: 0,
+      }
+    )
+  },
   render: function() {
     var {
       totaltime,
@@ -104,7 +112,7 @@ var TimerV1 = React.createClass({
 
   animate: function() {
     if (this.state.not_paused) {
-      var _progress = this.state._progress
+      var _progress = this.props.progress
       this.setState({ _progress });
       setTimeout(() => {
           setInterval(() => {
@@ -114,15 +122,26 @@ var TimerV1 = React.createClass({
             this.props.nextTask()
             _progress = 0
           }
-          this.setState({ _progress})
+
+          if (this.fetchData() != true) {
+            this.setState({ _progress})
+          }
 
         }, this.interval);
       }, this.interval);
     }
   },
 
+  fetchData: function() {
+    if (this.props.fetchData()) {
+      this.setState({ _progress : 0})
+      console.log(this.state._progress)
+      return true
+    }
+    return false
+  },
+
   getIntervalCt: function() {
-    console.log(this.props.totaltime)
     return this.props.totaltime * 1000 / this.interval
   },
 
