@@ -22,8 +22,8 @@ var {
   StyleSheet,
   View,
   Text,
-  TextInput,
   Image,
+  TouchableOpacity,
   ScrollView,
 } = React;
 
@@ -147,13 +147,18 @@ var TimerPage = React.createClass({
         </View>
 
         <View style={styles.buttons_container}>
-          <Button
-            style={styles.pause_button}
-            styleDisabled={{color: 'grey'}}
-            onPress={() => this.togglePause()}
-            >
-            {"Pause"}
-          </Button>
+          <TouchableOpacity onPress={() => this.backtrack()}>
+              <Image style={styles.pause} source={require('../assets/back.png')}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.togglePause()}>
+              <Image style={styles.pause} source={this.getPausePlayIcon()}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.fast_forward()}>
+              <Image style={styles.pause} source={require('../assets/fforward.png')}/>
+          </TouchableOpacity>
+
         </View>
       </View> ); }
 
@@ -168,6 +173,17 @@ var TimerPage = React.createClass({
           </View>
         </View>
       );
+  },
+
+  wait: function() {
+    while (true) {
+        setInterval(() => {
+        if (this.fetchData()) {
+          return;
+        }
+
+      }, 500 );
+    }
   },
 
   animate: function() {
@@ -189,6 +205,13 @@ var TimerPage = React.createClass({
         }, 1000 / this.props.fps);
       }, 1000 / this.props.fps);
     }
+  },
+
+  getPausePlayIcon: function() {
+    if (this.state.paused) {
+      return require('../assets/play.png')
+    }
+    return require('../assets/pause.png')
   },
 
   getFormattedTime: function() {
@@ -231,7 +254,7 @@ var TimerPage = React.createClass({
   fetchData: function() {
     var data = this.props.fetchData()
     if (data == false) {
-      return
+      return false
     }
     else {
       // reset
@@ -240,7 +263,7 @@ var TimerPage = React.createClass({
       this.state.paused = false
       this.state.index = 0
       DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
-      // this.animate()
+      return true
     }
   },
 
@@ -258,6 +281,7 @@ var TimerPage = React.createClass({
   },
 
   backtrack: function() {
+    this.state.progress = 0
     this.setState({index: Math.max(0, this.state.index - 1)})
   },
 
@@ -343,28 +367,18 @@ var styles = StyleSheet.create({
     opacity: 1.0,
   },
   buttons_container: {
-    //height: windowSize.height * 1 / 10,
+    flexDirection: 'row',
     width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
     flex: 0,
-    backgroundColor: 'white',
-  },
-  pause_button: {
-    color: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    fontSize: 28 * _cvals.dscale,
-    textAlign: 'center',
     backgroundColor: _cvals.skkellygreen,
-    width: windowSize.width,
-    padding: 5,
-    fontFamily: _cvals.mainfont,
-    shadowRadius: 4,
-    shadowColor: _cvals.skkellygreen,
-    shadowOpacity: 0.5,
-    shadowOffset: {width: 0, height: 3}
+  },
+  pause: {
+    height: 33 * _cvals.dscale,
+    width: 33 * _cvals.dscale,
+    margin: 13 * _cvals.dscale,
+    marginHorizontal: 23 * _cvals.dscale
   },
   scroll_timer_container: {
     alignItems: 'center',
