@@ -92,7 +92,6 @@ class BiteBook extends Component {
   }
 
   loginFunc() {
-    console.log("GOING HOME")
     this.setState({selectedTab: 'home'})
   }
 
@@ -103,8 +102,14 @@ class BiteBook extends Component {
   }
 
   fetchData() {
-    this.setState({updates_inherited: true})
-    return this.state.selection
+    if (this.state.updates_inherited) {
+      return false
+    }
+    else {
+      console.log("updates not yet inherited")
+      this.setState({updates_inherited: true})
+      return this.state.selection
+    }
   }
 }
 

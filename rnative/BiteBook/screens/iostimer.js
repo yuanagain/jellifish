@@ -37,7 +37,7 @@ var TimerV1 = React.createClass({
 
 	_getFormattedTime() {
 		var text,
-			timeRemaining = this.props.totaltime * (1 - this.state._progress),
+			timeRemaining = this.props.task.time * (1 - this.state.progress),
 			momentTime = moment().set({hours: 0, minutes: 0, seconds: timeRemaining});
 		if (timeRemaining > 36000) text = momentTime.format("HH:mm:ss");
     if (timeRemaining > 3600) text = momentTime.format("H:mm:ss");
@@ -52,7 +52,7 @@ var TimerV1 = React.createClass({
         username: '',
         // progress: 0.3,
         indeterminate: false,
-        _progress: 0,
+        progress: 0,
         not_paused: true,
       }
     );
@@ -112,7 +112,7 @@ var TimerV1 = React.createClass({
 
   animate: function() {
     if (this.state.not_paused) {
-      var _progress = this.props.progress
+      var _progress = this.props.getProgress()
       this.setState({ _progress });
       setTimeout(() => {
           setInterval(() => {

@@ -4,7 +4,7 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
-var Timer = require('./iostimer')
+var Progress = require('react-native-progress');
 
 import CustomStyles from '../modules/customstyles'
 const _cvals = require('../modules/customvalues')
@@ -15,7 +15,7 @@ import * as _ctools from '../libs/customtools.js'
 var DummyTimer = require('../parts/dummytimer')
 var DataFetcher = require('../modules/datafetcher')
 
-let small_num = 0.0000000000000000000000000000001
+var moment = require('moment')
 
 var {
   AppRegistry,
@@ -44,50 +44,30 @@ let endTask = {
 //============================
 
 
-var Thumb = React.createClass({
+var Dummy = React.createClass({
   render: function() {
     return (
-      <View style={styles.timer_container}>
+      <View style={styles.dummy_timer_container}>
         <DummyTimer
-          totaltime={10}
-          title={this.props.title}
-          getIncrement={this.props.getIncrement}
-          size={'small'}
-          dead={true}
-          index={1}
+          task={this.props.task}
         />
       </View>
     );
   }
 });
 
-var createThumbRow = (data) => <Thumb title={data.name}
-                                      getIncrement={getIncrement}
-                                      key={_ctools.randomKey()}/>;
-
-
-var getIncrement = function() {
-  return small_num
-}
+var createDummyRow = (task) => <Dummy task={task} key={_ctools.randomKey()}/>;
 
 var TimerPage = React.createClass({
   getInitialState: function() {
     return (
       {
         loaded: false,
-        runStatus: 'running',
         index: 0,
-        dummyData: "hello",
-        selection: this.props.selection,
         progress: 0,
         sequence: [],
-        currentTask: {
-          descr: 'No Task Selected',
-          end: 0,
-          name: 'Wait',
-          start: 0,
-          time: 0.1,
-        },
+        selection: this.props.selection,
+        paused: false,
       }
     );
   },
@@ -95,7 +75,9 @@ var TimerPage = React.createClass({
   getDefaultProps: function() {
     return ({
       selection: [],
-      recipeName: "COOK"
+      recipeName: "COOK",
+      timerSize: windowSize.width * 5 / 7,
+      fps: 10, // fps = 1000 / interval
     })
   },
 
@@ -108,17 +90,14 @@ var TimerPage = React.createClass({
       ...props
     } = this.props;
 
-    if (this.state.sequence.slice(this.state.index + 1).length < 4) {
+    if (this.getFutureTasks().length < 4) {
       this.contentsize = {width: windowSize.width, justifyContent: 'center'}
     }
     else {
       this.contentsize = {justifyContent: 'flex-start'}
     }
 
-    var currentTask = endTask
-    if (this.state.index < this.state.sequence.length) {
-      currentTask = this.state.sequence[this.state.index]
-    }
+    var title_text = this.getCurrentTask().name
 
     if (this.state.loaded) {
       return (
@@ -129,21 +108,26 @@ var TimerPage = React.createClass({
 
           <View style={styles.timers_container}>
 
-            <Timer
-              totaltime={Math.abs(currentTask.time)}
-              title_text={currentTask.name}
-              getIncrement={this.getIncrement}
-              progress={this.state.progress}
-              index={this.state.index}
-              nextTask={this.nextTask}
-              updateProgress={this.updateProgress}
-              getTotalTime={this.getTotalTime}
-              fetchData={this.fetchData}
-            />
+            <View style={styles.big_timer_container}>
+              <Progress.Circle
+                  style={{margin: 10 * _cvals.dscale}}
+                  progress={this.state.progress}
+                  indeterminate={this.state.indeterminate}
+                  direction="clockwise"
+                  size = {this.props.timerSize}
+                  color = {'orange'}
+                  unfilledColor={'#EFEFEF'}
+                  borderWidth={0}
+                  thickness={5}
+                  textStyle={styles.timer_text}
+                  showsText={true}
+                  formatText={(progress) => title_text + '\n' + this.getFormattedTime()}
+              />
+            </View>
 
             <View style={styles.descr}>
               <Text style={_cstyles.standard_text}>
-                {currentTask.descr}
+                {this.getCurrentTask().descr}
               </Text>
             </View>
 
@@ -153,17 +137,20 @@ var TimerPage = React.createClass({
               showsHorizontalScrollIndicator={true}
               contentContainerStyle={[styles.scroll_content_container, this.contentsize]}
               >
-              <View style={styles.timer_container}>
-                {this.state.sequence.slice(this.state.index + 1).map(createThumbRow)}
+
+              <View style={styles.scroll_timer_container}>
+                {this.getFutureTasks().map(createDummyRow)}
               </View>
+
             </ScrollView>
           </View>
         </View>
+
         <View style={styles.buttons_container}>
           <Button
             style={styles.pause_button}
             styleDisabled={{color: 'grey'}}
-            onPress={()=>this.togglePause()}
+            onPress={() => this.togglePause()}
             >
             {"Pause"}
           </Button>
@@ -183,20 +170,99 @@ var TimerPage = React.createClass({
       );
   },
 
+  animate: function() {
+    if (this.state.paused != true) {
+      setTimeout(() => {
+          setInterval(() => {
+          if (this.state.paused != true) {
+            this.state.progress += 1 / (this.getCurrentTask_time() * this.props.fps);
+          }
+          if (this.state.progress >= 1) {
+            // TODO Indicate to parent that we're done
+            this.nextTask()
+            this.state.progress = 0
+          }
+          this.fetchData()
+
+          this.setState({ progress: this.state.progress })
+
+        }, 1000 / this.props.fps);
+      }, 1000 / this.props.fps);
+    }
+  },
+
+  getFormattedTime: function() {
+    var text,
+      timeRemaining = this.getCurrentTask_time() * (1 - this.state.progress),
+      momentTime = moment().set({hours: 0, minutes: 0, seconds: timeRemaining});
+    if (timeRemaining > 36000) text = momentTime.format("HH:mm:ss");
+    if (timeRemaining > 3600) text = momentTime.format("H:mm:ss");
+    if (timeRemaining > 600) text = momentTime.format("mm:ss");
+    else text = momentTime.format("m:ss");
+    return text;
+  },
+
+  getIncrement: function() {
+    if (this.state.paused) {
+      return 0
+    }
+    else {
+      return 1
+    }
+  },
+
+  getCurrentTask_time: function() {
+    return Math.abs(this.getCurrentTask().time)
+  },
+
+  getFutureTasks: function() {
+    return this.state.sequence.slice(this.state.index + 1)
+  },
+
+  getCurrentTask: function() {
+    if (this.state.index < this.state.sequence.length) {
+      return this.state.sequence[this.state.index]
+    }
+    else {
+      return endTask
+    }
+  },
+
   fetchData: function() {
     var data = this.props.fetchData()
     if (data == false) {
-      return false
+      return
     }
     else {
       // reset
-      this.setState({selection: data})
-      this.setState({progress: 0})
-      this.setState({runStatus: 'running'})
-      this.setState({index: 0})
+      this.state.selecton = data
+      this.state.progress = 0
+      this.state.paused = false
+      this.state.index = 0
       DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
-      return true
+      // this.animate()
     }
+  },
+
+  togglePause: function() {
+    if (this.state.paused) {
+      this.setState({paused: false})
+    }
+    else {
+      this.setState({paused: true})
+    }
+  },
+
+  resetTask: function() {
+    this.setState({progress: 0})
+  },
+
+  backtrack: function() {
+    this.setState({index: Math.max(0, this.state.index - 1)})
+  },
+
+  fast_forward: function() {
+    this.setState({progress: 1})
   },
 
   // increments
@@ -214,41 +280,14 @@ var TimerPage = React.createClass({
     return this.state.progress
   },
 
-  getTotalTime: function() {
-    return this.state.sequence[this.state.index].time
-  },
-
   componentDidMount: function() {
-    // console.log(this.props.fetchData);
-    DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
+    this.fetchData()
+    this.animate()
   },
 
   harvestData: function(task_sequence) {
     this.setState({sequence: task_sequence.active})
     this.setState({loaded: true})
-  },
-
-  togglePause: function() {
-    if (this.state.runStatus == 'paused') {
-      this.setState({runStatus: 'running'})
-    }
-    else if (this.state.runStatus == 'running') {
-      this.setState({runStatus: 'paused'})
-    }
-  },
-
-  getIncrement: function(index) {
-    if (this.state.runStatus == 'paused') {
-      return small_num
-    }
-    if (this.state.runStatus == 'running') {
-      if (this.state.index == index) {
-        return 1;
-      }
-      else {
-        return small_num;
-      }
-    }
   },
 });
 
@@ -260,7 +299,7 @@ var styles = StyleSheet.create({
     paddingTop: 30 * _cvals.dscale,
     paddingBottom: 5,
   },
-  timer_container: {
+  dummy_timer_container: {
     flexDirection: 'row',
     margin: 10 * _cvals.dscale,
   },
@@ -278,18 +317,15 @@ var styles = StyleSheet.create({
     marginTop: 0 * _cvals.dscale,
     height: 130 * _cvals.dscale,
     width: windowSize.width,
-    borderTopWidth: 1,
+    borderTopWidth: 0,
     borderColor: 'white',
+
   },
   scroll_content_container: {
     flexDirection: 'row',
     flex: 1,
-    //width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
-    //height: 100 * _cvals.dscale,
-
-    // justifyContent: 'center',
   },
   descr: {
     marginHorizontal: 10 * _cvals.dscale,
@@ -329,6 +365,22 @@ var styles = StyleSheet.create({
     shadowColor: _cvals.skkellygreen,
     shadowOpacity: 0.5,
     shadowOffset: {width: 0, height: 3}
+  },
+  scroll_timer_container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  timer_text: {
+    color: 'white',
+    fontSize: 50 * _cvals.dscale,
+    textAlign: 'center'
+  },
+  big_timer_container: {
+    flexDirection: 'column',
+    flex: 1,
+    backgroundColor: 'transparent',
+    margin: 0,
   },
 })
 
