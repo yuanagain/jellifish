@@ -1,0 +1,22 @@
+# Site settings
+title: Jellifish
+email: yuanw@princeton.edu
+url: jelli.fish
+description: "The Digital Cookbook"
+
+# Color settings (hex-codes without the leading hash-tag)
+color:
+  primary-dark: '#000000'
+  links: '#46D5B5'
+
+# Footer settings
+footer: Jellifish
+
+# Social networks usernames (many more available: google-plus, flickr, dribbble, pinterest, instagram, tumblr, linkedin, etc.)
+social:
+  - title: facebook
+    url:
+
+# Build settings
+markdown: kramdown
+permalink: pretty
