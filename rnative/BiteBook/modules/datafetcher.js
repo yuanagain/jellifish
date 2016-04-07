@@ -20,11 +20,13 @@ var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'}
 *	Function callback - function for when the request finishes
 *		Object data - JSON data received from server
 */
+
+// TODO return with descriptions.
 function getRecipes(callback) {
 	fetch(BASE_URL + "/list/", {
 		headers: HEADERS
 		}).then((res) => res.json()).then(callback);
-	} 
+	}
 
 /*
 * Get the optimized ordering of a list of recipes.

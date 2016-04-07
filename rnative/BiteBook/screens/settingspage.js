@@ -7,7 +7,8 @@ var Button = require('react-native-button');
 import CustomStyles from '../modules/customstyles'
 
 const _cvals = require('../modules/customvalues')
-
+const _cstyles = require('../modules/customstyles')
+var Header = require('../parts/header')
 var PopoverSelector = require('../bigparts/popoverselector')
 
 var {
@@ -39,24 +40,20 @@ var LoginPage = React.createClass({
     return (
     <View style={styles.container}>
       <View>
-        <View style={styles.header_container}>
-          <Text style={styles.title_text}>
-            Settings
-          </Text>
-        </View>
+        <Header title={"Settings"}
+                navigator={this.props.navigator} />
 
-        <View style={styles.inputs_container}>
+        <PopoverSelector
+          title={"Language"}
+          items={['English', ]}
+          mode={'single'}
+          navigator={this.props.navigator}
+          selection={['English']}
+          harvestSelection={this.harvestSelection}
+        />
+        <View style={_cstyles.divider_line}>
         </View>
       </View>
-
-      <PopoverSelector
-        title={"Select Item"}
-        items={['text1', 'text2', 'text3']}
-        renderRow={this.renderRow}
-        navigator={this.props.navigator}
-        selection={[]}
-        harvestSelection={this.harvestSelection}
-      />
 
       <View style={styles.buttons_container}>
         <Button
@@ -67,6 +64,7 @@ var LoginPage = React.createClass({
           Save Changes
         </Button>
       </View>
+
 
     </View>
     );

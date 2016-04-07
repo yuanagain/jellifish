@@ -19,7 +19,7 @@ const _cvals = {
   normalTextSize: 20,
   detailTextSize: 14,
   dscale: windowSize.height / 667,
-  headerHeight: 70 * this.dscale
+  headerHeight: 50 * this.dscale
 }
 
 

@@ -4,166 +4,314 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
-var Timer = require('./iostimer')
+var Progress = require('react-native-progress');
 
 import CustomStyles from '../modules/customstyles'
 const _cvals = require('../modules/customvalues')
+const _cstyles = require('../modules/customstyles')
+
 import * as _ctools from '../libs/customtools.js'
 
-let small_num = 0.0000000000000000000000000000001
-var tdata = []//['title1', ]//'title2', ]//'title3', 'title4', 'title5']
+var DummyTimer = require('../parts/dummytimer')
+var DataFetcher = require('../modules/datafetcher')
 
+var moment = require('moment')
 
 var {
   AppRegistry,
   StyleSheet,
   View,
   Text,
-  TextInput,
   Image,
+  TouchableOpacity,
   ScrollView,
 } = React;
 
 var marginSize = windowSize.height / 20
 
-var Thumb = React.createClass({
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return false;
-  },
+var Header = require('../parts/header')
+
+//============================
+
+let endTask = {
+  descr: '',
+  end: 0,
+  name: 'Done!',
+  start: 0,
+  time: 0.01,
+};
+
+//============================
+
+
+var Dummy = React.createClass({
   render: function() {
     return (
-      <View style={styles.timer_container}>
-        <Timer
-          totaltime={10}
-          title_text={this.props.title_text}
-          getIncrement={this.props.getIncrement}
-          size={'small'}
-          dead={true}
-          index={1}
+      <View style={styles.dummy_timer_container}>
+        <DummyTimer
+          task={this.props.task}
         />
       </View>
     );
   }
 });
 
-var createThumbRow = (text) => <Thumb title_text={text}
-                                      getIncrement={getIncrement}
-                                      key={_ctools.randomKey()}/>;
-
-var getIncrement = function() {
-  return small_num
-}
+var createDummyRow = (task) => <Dummy task={task} key={_ctools.randomKey()}/>;
 
 var TimerPage = React.createClass({
   getInitialState: function() {
     return (
       {
-        username: '',
-        password: '',
-        runStatus: 'running',
-        backgroundTimerCt: tdata.length,
+        loaded: false,
         index: 0,
-        dummyData: "hello",
+        progress: 0,
+        sequence: [],
+        selection: this.props.selection,
+        paused: false,
       }
     );
   },
+
+  getDefaultProps: function() {
+    return ({
+      selection: [],
+      recipeName: "COOK",
+      timerSize: windowSize.width * 5 / 7,
+      fps: 10, // fps = 1000 / interval
+    })
+  },
+
   render: function() {
     var {
       name,
       recipeName,
       fetchData,
+      selection,
       ...props
     } = this.props;
 
-    if (this.state.backgroundTimerCt < 4) {
+    if (this.getFutureTasks().length < 4) {
       this.contentsize = {width: windowSize.width, justifyContent: 'center'}
     }
     else {
       this.contentsize = {justifyContent: 'flex-start'}
     }
 
-    return (
-    <View style={styles.container}>
-      <View>
-        <View style={styles.header_container}>
-          <Text style={styles.title_text}>
-            {this.props.recipeName}
-          </Text>
-        </View>
+    var title_text = this.getCurrentTask().name
 
-        <View style={styles.timers_container}>
-          <Timer
-            totaltime={10}
-            title_text={"test title"}
-            getIncrement={this.getIncrement}
-            index={0}
-          />
-          <ScrollView
-            style={[styles.scroll_container, ]}
-            horizontal={true}
-            showsHorizontalScrollIndicator={true}
-            contentContainerStyle={[styles.scroll_content_container, this.contentsize]}
-            >
-            <View style={styles.timer_container}>
-              {tdata.map(createThumbRow)}
+    if (this.state.loaded) {
+      return (
+      <View style={styles.container}>
+        <View>
+          <Header title={this.props.recipeName}
+                  navigator={this.props.navigator} />
+
+          <View style={styles.timers_container}>
+
+            <View style={styles.big_timer_container}>
+              <Progress.Circle
+                  style={{margin: 10 * _cvals.dscale}}
+                  progress={this.state.progress}
+                  indeterminate={this.state.indeterminate}
+                  direction="clockwise"
+                  size = {this.props.timerSize}
+                  color = {'orange'}
+                  unfilledColor={'#EFEFEF'}
+                  borderWidth={0}
+                  thickness={5}
+                  textStyle={styles.timer_text}
+                  showsText={true}
+                  formatText={(progress) => title_text + '\n' + this.getFormattedTime()}
+              />
             </View>
-          </ScrollView>
+
+            <View style={styles.descr}>
+              <Text style={_cstyles.standard_text}>
+                {this.getCurrentTask().descr}
+              </Text>
+            </View>
+
+            <ScrollView
+              style={[styles.scroll_container, ]}
+              horizontal={true}
+              showsHorizontalScrollIndicator={true}
+              contentContainerStyle={[styles.scroll_content_container, this.contentsize]}
+              >
+
+              <View style={styles.scroll_timer_container}>
+                {this.getFutureTasks().map(createDummyRow)}
+              </View>
+
+            </ScrollView>
+          </View>
         </View>
-      </View>
-      <View style={styles.buttons_container}>
-        <Button
-          style={styles.pause_button}
-          styleDisabled={{color: 'grey'}}
-          onPress={()=>this.togglePause()}
-          >
-          Pause
-        </Button>
-      </View>
-    </View>
-    );
+
+        <View style={styles.buttons_container}>
+          <TouchableOpacity onPress={() => this.backtrack()}>
+              <Image style={styles.pause} source={require('../assets/back.png')}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.togglePause()}>
+              <Image style={styles.pause} source={this.getPausePlayIcon()}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.fast_forward()}>
+              <Image style={styles.pause} source={require('../assets/fforward.png')}/>
+          </TouchableOpacity>
+
+        </View>
+      </View> ); }
+
+      else return (
+        <View style={styles.container}>
+          <View>
+            <Header title={"Loading"}
+                    navigator={this.props.navigator} />
+
+          </View>
+          <View style={styles.buttons_container}>
+          </View>
+        </View>
+      );
   },
 
-  componentDidMount: function() {
-    // console.log(this.props.fetchData);
-    this.animate();
-  },
+  wait: function() {
+    while (true) {
+        setInterval(() => {
+        if (this.fetchData()) {
+          return;
+        }
 
+      }, 500 );
+    }
+  },
 
   animate: function() {
-    if (this.state.not_paused) {
-      var _data = this.props.fetchData()
-      this.setState({ _data });
+    if (this.state.paused != true) {
       setTimeout(() => {
-        setInterval(() => {
-          if (_data != this.props.fetchData()) {
-            // console.log("data Changed")
+          setInterval(() => {
+          if (this.state.paused != true) {
+            this.state.progress += 1 / (this.getCurrentTask_time() * this.props.fps);
           }
-        }, 1000);
-      }, 1000);
+          if (this.state.progress >= 1) {
+            // TODO Indicate to parent that we're done
+            this.nextTask()
+            this.state.progress = 0
+          }
+          this.fetchData()
+
+          this.setState({ progress: this.state.progress })
+
+        }, 1000 / this.props.fps);
+      }, 1000 / this.props.fps);
+    }
+  },
+
+  getPausePlayIcon: function() {
+    if (this.state.paused) {
+      return require('../assets/play.png')
+    }
+    return require('../assets/pause.png')
+  },
+
+  getFormattedTime: function() {
+    var text,
+      timeRemaining = this.getCurrentTask_time() * (1 - this.state.progress),
+      momentTime = moment().set({hours: 0, minutes: 0, seconds: timeRemaining});
+    if (timeRemaining > 36000) text = momentTime.format("HH:mm:ss");
+    if (timeRemaining > 3600) text = momentTime.format("H:mm:ss");
+    if (timeRemaining > 600) text = momentTime.format("mm:ss");
+    else text = momentTime.format("m:ss");
+    return text;
+  },
+
+  getIncrement: function() {
+    if (this.state.paused) {
+      return 0
+    }
+    else {
+      return 1
+    }
+  },
+
+  getCurrentTask_time: function() {
+    return Math.abs(this.getCurrentTask().time)
+  },
+
+  getFutureTasks: function() {
+    return this.state.sequence.slice(this.state.index + 1)
+  },
+
+  getCurrentTask: function() {
+    if (this.state.index < this.state.sequence.length) {
+      return this.state.sequence[this.state.index]
+    }
+    else {
+      return endTask
+    }
+  },
+
+  fetchData: function() {
+    var data = this.props.fetchData()
+    if (data == false) {
+      return false
+    }
+    else {
+      // reset
+      this.state.selecton = data
+      this.state.progress = 0
+      this.state.paused = false
+      this.state.index = 0
+      DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
+      return true
     }
   },
 
   togglePause: function() {
-    if (this.state.runStatus == 'paused') {
-      this.setState({runStatus: 'running'})
+    if (this.state.paused) {
+      this.setState({paused: false})
     }
-    else if (this.state.runStatus == 'running') {
-      this.setState({runStatus: 'paused'})
+    else {
+      this.setState({paused: true})
     }
   },
 
-  getIncrement: function(index) {
-    if (this.state.runStatus == 'paused') {
-      return small_num
+  resetTask: function() {
+    this.setState({progress: 0})
+  },
+
+  backtrack: function() {
+    this.state.progress = 0
+    this.setState({index: Math.max(0, this.state.index - 1)})
+  },
+
+  fast_forward: function() {
+    this.setState({progress: 1})
+  },
+
+  // increments
+  nextTask: function() {
+    if (this.state.index < this.state.sequence.length) {
+      this.setState({index: this.state.index + 1})
     }
-    if (this.state.runStatus == 'running') {
-      if (this.state.index == index) {
-        return 1;
-      }
-      else {
-        return small_num
-      }
-    }
+  },
+
+  updateProgress: function(progress) {
+    this.state.progress = progress
+  },
+
+  getProgress: function() {
+    return this.state.progress
+  },
+
+  componentDidMount: function() {
+    this.fetchData()
+    this.animate()
+  },
+
+  harvestData: function(task_sequence) {
+    this.setState({sequence: task_sequence.active})
+    this.setState({loaded: true})
   },
 });
 
@@ -175,19 +323,9 @@ var styles = StyleSheet.create({
     paddingTop: 30 * _cvals.dscale,
     paddingBottom: 5,
   },
-  timer_container: {
+  dummy_timer_container: {
     flexDirection: 'row',
-    margin: 6,
-  },
-  email_input: {
-    height: 20,
-    borderWidth: 0,
-    fontSize: 20,
-    textShadowColor: 'white',
-    color: 'white',
-    margin: 15,
-    marginVertical: 18,
-    fontFamily: _cvals.mainfont,
+    margin: 10 * _cvals.dscale,
   },
   container: {
     flexDirection: 'column',
@@ -198,33 +336,29 @@ var styles = StyleSheet.create({
     opacity: 0.92,
     margin: 0,
   },
-  header_container: {
-    height: _cvals.headerHeight,
-    width: windowSize.width,
-    alignItems: 'center',
-    backgroundColor: _cvals.skkellygreen,
-    justifyContent: 'flex-end',
-  },
   scroll_container: {
     flex: 1,
-    marginTop: 10 * _cvals.dscale,
-    height: 140 * _cvals.dscale,
+    marginTop: 0 * _cvals.dscale,
+    height: 130 * _cvals.dscale,
     width: windowSize.width,
-    borderTopWidth: 1,
+    borderTopWidth: 0,
     borderColor: 'white',
+
   },
   scroll_content_container: {
     flexDirection: 'row',
     flex: 1,
-    //width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 140 * _cvals.dscale,
-
-    // justifyContent: 'center',
+  },
+  descr: {
+    marginHorizontal: 10 * _cvals.dscale,
+    height: windowSize.width * 0.18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   timers_container: {
-    marginTop: 40 * _cvals.dscale,
+    marginTop: 10 * _cvals.dscale,
     width: windowSize.width,
     //height: windowSize.height * 2 / 10,
     alignItems: 'center',
@@ -233,34 +367,34 @@ var styles = StyleSheet.create({
     opacity: 1.0,
   },
   buttons_container: {
-    //height: windowSize.height * 1 / 10,
+    flexDirection: 'row',
     width: windowSize.width,
     alignItems: 'center',
     justifyContent: 'center',
     flex: 0,
-    backgroundColor: 'white',
+    backgroundColor: _cvals.skkellygreen,
   },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover', // or 'stretch'
-    width:320,
-    height:480,
+  pause: {
+    height: 33 * _cvals.dscale,
+    width: 33 * _cvals.dscale,
+    margin: 13 * _cvals.dscale,
+    marginHorizontal: 23 * _cvals.dscale
   },
-  pause_button: {
-    color: 'white',
+  scroll_timer_container: {
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  timer_text: {
+    color: 'white',
+    fontSize: 50 * _cvals.dscale,
+    textAlign: 'center'
+  },
+  big_timer_container: {
+    flexDirection: 'column',
     flex: 1,
-    fontSize: 28 * _cvals.dscale,
-    textAlign: 'center',
-    backgroundColor: _cvals.skkellygreen,
-    width: windowSize.width,
-    padding: 5,
-    fontFamily: _cvals.mainfont,
-    shadowRadius: 4,
-    shadowColor: _cvals.skkellygreen,
-    shadowOpacity: 0.5,
-    shadowOffset: {width: 0, height: 3}
+    backgroundColor: 'transparent',
+    margin: 0,
   },
 })
 

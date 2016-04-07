@@ -13,6 +13,10 @@ var skorange = '#F5A623'
 var skblue = '#4A90E2'
 var skgreen = '#46D5B5'
 
+var Header = require('../parts/header')
+
+var DataFetcher = require('../modules/datafetcher')
+
 var {
   AppRegistry,
   StyleSheet,
@@ -42,7 +46,8 @@ var RecipeListing = React.createClass({
           {'name': 'Recipe Name 9', 'descr': 'Description 9'},
         ]
       ),
-      selected: []
+      recipes: [],
+      selection: []
     };
   },
   render: function() {
@@ -52,20 +57,18 @@ var RecipeListing = React.createClass({
       ...props
     } = this.props;
 
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var dataSource = ds.cloneWithRows(this.state.recipes)
+
     return (
     <View style={styles.container}>
       <View style={styles.body_container}>
-        <View style={styles.header_container}>
-          <Text style={styles.title_text}>
-            {"Recipes"}
-          </Text>
-          <View style={styles.divider_line}>
-          </View>
-        </View>
+        <Header title={"Recipes"}
+                navigator={this.props.navigator} />
 
 
         <ListView
-          dataSource={this.state.dataSource}
+          dataSource={dataSource}
           renderRow={this.renderListingRow}
           style={styles.listView}
         />
@@ -77,7 +80,7 @@ var RecipeListing = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={{color: 'grey'}}
-          onPress={this.props.runApp.bind(this, this.state.selected)}
+          onPress={this.props.runApp.bind(this, this.state.selection)}
           >
           {'Cook Selected!'}
         </Button>
@@ -86,8 +89,12 @@ var RecipeListing = React.createClass({
     );
   },
 
+  setData: function(data) {
+    this.setState({recipes : data.recipes})
+  },
+
   componentDidMount: function() {
-    console.log(windowSize.height)
+    DataFetcher.getRecipes((data)=>this.setData(data))
   },
 
   runApp: function() {
@@ -99,35 +106,34 @@ var RecipeListing = React.createClass({
         <RecipeListingRow
         onSelect={this.onSelect}
         onDetail={this.onDetail}
-        name={rowData['name']}
-        description_text={rowData['descr']}
+        name={rowData}
+        description_text={rowData}
+        navigator={this.props.navigator}
         />
     )
   },
 
   onSelect: function(name) {
     // if not contained in selection
-    if (this.state.selected.indexOf(name) == -1) {
-      this.state.selected.push(name)
+    if (this.state.selection.indexOf(name) == -1) {
+      this.state.selection.push(name)
     }
     // if already contained in selection
     else {
-      var index = this.state.selected.indexOf(name)
-      this.state.selected.splice(index, 1)
+      var index = this.state.selection.indexOf(name)
+      this.state.selection.splice(index, 1)
 
     }
-    console.log(this.state.selected)
   },
 
   onDetail: function(name) {
-    console.log(name)
     this.props.navigator.push({
       id: "RecipeDetail",
       component: RecipeDetail,
       passProps: {
         name: name,
         imageLink: 'http://facebook.github.io/react/img/logo_og.png',
-        descr: "Description Text",
+        descr: name,
         goBack: this.goBack,
       }
     })

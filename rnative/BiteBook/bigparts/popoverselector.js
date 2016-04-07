@@ -124,7 +124,7 @@ var PopoverSelector = React.createClass({
               {this.props.title}
             </Text>
             <Text style={[_cstyles.standard_text,
-                          {color: _cvals.skblue,
+                          {color: _cvals.skkellygreen,
                            marginRight: 15 * _cvals.dscale}]}>
               {selectionText}
             </Text>
@@ -201,11 +201,12 @@ function harvestSelection_default(selection) {
 var styles = StyleSheet.create({
   selected_style: {
     // opacity: 0.5,
-    backgroundColor: _cvals.skbluelight
+    backgroundColor: _cvals.skkellygreen_light
   },
   defaultRenderSelector: {
     flexDirection: 'row',
     flex: 1,
+    width: windowSize.width,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
