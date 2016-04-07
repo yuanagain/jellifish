@@ -22,7 +22,7 @@ class SectionHeaderButton extends React.Component {
 	/*
 	Construct a new SectionHeaderButton
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {
@@ -40,7 +40,12 @@ class SectionHeaderButton extends React.Component {
 			<Row className = "section-header">
 				<Col md={6} className="center-horizontal"><h3>{this.props.header}</h3></Col>
 				<Col md={6} className="center-horizontal">
-					<ReactBootstrap.Button bsStyle="primary" onClick={this.props.onClick} type={this.props.type} disabled={! this.state.buttonActive} data-parse-id={this.props["data-parse-id"]}>
+					<ReactBootstrap.Button
+						bsStyle="primary"
+						onClick={this.props.onClick}
+						type={this.props.type}
+						disabled={! this.state.buttonActive}
+						data-parse-id={this.props["data-parse-id"]}>
 						{this.props.button}
 					</ReactBootstrap.Button>
 				</Col>
@@ -51,7 +56,7 @@ class SectionHeaderButton extends React.Component {
 	/*
 	Change the button state
 
-	Arguments
+	Parameters
 		bool state (optional) - what state to set the button to
 
 	Returns

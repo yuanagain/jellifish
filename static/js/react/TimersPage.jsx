@@ -37,11 +37,10 @@ class TimersPage extends React.Component {
 	/*
 	Create a new TimersPage
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {
-		// Create a new TimersPage
 		super(props);
 		this.state = {
 			activePointer: 0, // pointer to current active task
@@ -142,6 +141,9 @@ class TimersPage extends React.Component {
 		this.state.activeTimer.once(0, this._updateActive);
 
 		// Prepare passive tasks on queue
+		// TODO delete passive tasks code once new interface is agreed upon
+		// Currently disabled while figuring out new interface
+		/*
 		var passiveTimer = this.state.passiveTimer;
 
 		for (var i = 0; i < this.props.passive.length; i++) {
@@ -164,6 +166,7 @@ class TimersPage extends React.Component {
 		passiveTimer.each(function(elapsed) {
 			for (var i = 1; i <= 3; i++) comp.refs["timer_passive" + i].step(elapsed);
 			});
+		*/
 		}
 
 	componentWillUnmount() {
@@ -199,8 +202,8 @@ class TimersPage extends React.Component {
 
 			// Set the timer's display to the new task's data
 			this.refs[task.ref].reset(
-				task.name, task.description,
-				task.start_time, task.duration, newProgress);
+				task.name, task.descr,
+				task.start_time, task.time, newProgress);
 			}
 
 		/* Cleanup all unused timer displays. The +1 is mandatory, otherwise the
@@ -221,7 +224,7 @@ class TimersPage extends React.Component {
 			comp = this;
 
 		// set the new primary task and update the upcoming tasks
-		timer_active.reset(task.name, task.description, task.start_time, task.duration);
+		timer_active.reset(task.name, task.descr, task.start_time, task.time);
 		this._updateUpcoming()
 
 		this.state.activeTimer.once(task.end_time, function() {
@@ -247,7 +250,7 @@ class TimersPage extends React.Component {
 			// upcoming tasks exist
 			if (pointer < activeData.length) {
 				var task = activeData[pointer];
-				ref.reset(task.name, task.description, task.start_time, task.duration);
+				ref.reset(task.name, task.descr, task.start_time, task.time);
 				}
 			else {
 				/* next task does not exist, so destroy the reference and move on

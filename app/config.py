@@ -9,7 +9,7 @@ def recursiveMerge(x, y):
 	'''
 	Recursively merge two dictionaries
 
-	Arguments
+	Parameters
 		dict x - first dictionary to merge
 		dict y - second dictionary to merge
 

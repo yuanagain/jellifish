@@ -1,0 +1,15 @@
+{
+  "name": "BiteBook",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "moment": "^2.12.0",
+    "react-native": "^0.20.0",
+    "react-native-button": "^1.4.2",
+    "react-native-progress": "^2.2.1",
+    "react-native-tab-navigator": "^0.2.17"
+  }
+}

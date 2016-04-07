@@ -18,7 +18,7 @@ class SelectionInput extends React.Component {
 	/*
 	Create a new SelectionInput
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {
