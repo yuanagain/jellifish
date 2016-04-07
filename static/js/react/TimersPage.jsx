@@ -81,7 +81,7 @@ class TimersPage extends React.Component {
 				<CollapsibleList list={this.props.recipes} header="Recipes" data-parse-id="button-timers-view-recipes" />
 				<br/>
 				<Row>
-					<Col md={6} xs={12} className="center-horizontal display-height">
+					<Col md={8} xs={12} className="center-horizontal display-height">
 						<FullRow><header>Active Task</header></FullRow>
 						<br/>
 						<FullRow className="timer primary"><Timer ref="timer_active" primary /></FullRow>
@@ -106,23 +106,19 @@ class TimersPage extends React.Component {
 						</Row>
 						<br/>
 					</Col>
-					<Col md={6} xs={12} className="center-horizontal display-height secondary">
+					<Col md={4} xs={12} className="center-horizontal display-height secondary">
 						<Row>
-							<Col xs={6} className="timer secondary"><header>Upcoming Tasks</header></Col>
-							<Col xs={6} className="timer secondary"><header>Background Tasks</header></Col>
+							<Col xs={12} className="timer secondary"><header>Upcoming Tasks</header></Col>
 						</Row>
 						<br/>
 						<Row>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_upcoming1" /></Col>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_passive1" /></Col>
+							<Col xs={12} className="timer secondary"><Timer ref="timer_upcoming1" /></Col>
 						</Row>
 						<Row>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_upcoming2" /></Col>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_passive2" /></Col>
+							<Col xs={12} className="timer secondary"><Timer ref="timer_upcoming2" /></Col>
 						</Row>
 						<Row>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_upcoming3" /></Col>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_passive3" /></Col>
+							<Col xs={12} className="timer secondary"><Timer ref="timer_upcoming3" /></Col>
 						</Row>
 					</Col>
 				</Row>
@@ -203,7 +199,7 @@ class TimersPage extends React.Component {
 			// Set the timer's display to the new task's data
 			this.refs[task.ref].reset(
 				task.name, task.descr,
-				task.start_time, task.time, newProgress);
+				task.start, task.time, newProgress);
 			}
 
 		/* Cleanup all unused timer displays. The +1 is mandatory, otherwise the
@@ -224,10 +220,10 @@ class TimersPage extends React.Component {
 			comp = this;
 
 		// set the new primary task and update the upcoming tasks
-		timer_active.reset(task.name, task.descr, task.start_time, task.time);
+		timer_active.reset(task.name, task.descr, task.start, task.time);
 		this._updateUpcoming()
 
-		this.state.activeTimer.once(task.end_time, function() {
+		this.state.activeTimer.once(task.end, function() {
 			pointer++;
 			// propagate change through the state
 			comp.setState({activePointer: pointer});
@@ -250,7 +246,7 @@ class TimersPage extends React.Component {
 			// upcoming tasks exist
 			if (pointer < activeData.length) {
 				var task = activeData[pointer];
-				ref.reset(task.name, task.descr, task.start_time, task.time);
+				ref.reset(task.name, task.descr, task.start, task.time);
 				}
 			else {
 				/* next task does not exist, so destroy the reference and move on

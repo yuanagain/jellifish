@@ -46,10 +46,7 @@ var page = {
 	*/
 	selection: function(selections) {
 		main();
-		data = new Array(selections.length);
-		for (var index in selections) {
-			data[index] = selections[index].name;
-			}
+		data = selections.map((item) => item.name);
 		ReactDOM.render(
 			<SelectionPage selections={data}/>,
 			utils.getElem("#selection")
@@ -81,7 +78,6 @@ var page = {
 		ReactDOM.render(
 			<TimersPage
 				active={data.active}
-				passive={data.passive}
 				recipes={data.recipes} />,
 			utils.getElem("#timers")
 			);
@@ -106,10 +102,7 @@ var page = {
 	*/
 	recipes: function(recipes, urls) {
 		main();
-		data = new Array(recipes.length);
-		for (var index in recipes) {
-			data[index] = recipes[index].name;
-			}
+		data = recipes.map((item) => item.name);
 		ReactDOM.render(
 			<RecipesPage recipes={data} urls={urls} />,
 			utils.getElem("#recipes")
