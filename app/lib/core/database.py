@@ -1,6 +1,6 @@
 """
 Supports methods for storing and accessing recipes
-from an SQLite database
+from a PostGresSQL database
 
 The database created has two tables:
 1. data : this table stores all task names
@@ -8,14 +8,14 @@ The database created has two tables:
 2. seqs : this table stores all complete recipes, with references 
 to individual tasks in the data table.
 
-Author: Yuan Wang
+Author: Yuan Wang, Ilya Krasnovsky
 Copyright Jellifish 2015-2016
 """
 
 import marshal
-import sqlite3
+import psycopg2
 
-from . import node
+import node #from . import node
 
 class DatabaseManager(object):
     """
@@ -26,11 +26,18 @@ class DatabaseManager(object):
         min_wait - minimum waiting time of a task
         max_wait - maximum waiting time of a task
     """
-    def __init__(self, conn):
-        # Disabling the "check_same_thread" fixes the issue of incorrectly accessing
-        # the database from multiple threads (i.e a Flask request). However, this
-        # is potentially risky and should be avoided if possible.
-        self.connect = sqlite3.connect(conn, check_same_thread = False)
+    def __init__(self, database, user, password, host):
+        '''
+        Default:
+        Connects to database "postgres" with user "postgres"
+        on "localhost" with password "jellifishrulez". Note
+        that you have to create this database, user, and password
+        locally yourself using psql prior in order for this to work.
+        '''
+        self.connect = psycopg2.connect(database=database,
+                                        user=user,
+                                        password=password,
+                                        host=host)
 
     def close(self):
         """
@@ -133,7 +140,8 @@ class DatabaseManager(object):
         with self.connect:
             cur = self.connect.cursor() 
 
-            cur.execute('SELECT name, descr, tasks FROM seqs WHERE name=:name', {"name": name})
+            queryname = "{" + name + "}"
+            cur.execute('''SELECT name, descr, tasks FROM seqs WHERE name=ANY(%s);''', (queryname,))
             seq_data = cur.fetchone()
 
             if seq_data == None:
@@ -144,8 +152,9 @@ class DatabaseManager(object):
             # load tasks by task id
             tasks = []
             for task_id in task_ids:
+                querytask_id = "{" + str(task_id) + "}"
                 cur.execute("SELECT name, descr, time, min_wait, max_wait "
-                    + "FROM data WHERE id=:id", {"id": task_id})
+                    + "FROM data WHERE id=ANY(%s)", (querytask_id,))
                 task_data = cur.fetchone()
 
                 if task_data == None:
@@ -167,7 +176,7 @@ class DatabaseManager(object):
         Adds data from dictionary, task_data, with the key-value pairs: name (String), 
         descr (String), time, min_wait (float), and max_wait (float)
         """
-        entry = (None, task_data["name"], task_data["descr"], task_data["time"],
+        entry = (task_data["name"], task_data["descr"], task_data["time"],
                  task_data["min_wait"], task_data["max_wait"])
         self.store_task_from_tuple(entry)
   
@@ -178,7 +187,9 @@ class DatabaseManager(object):
 
         """
         with self.connect:
-            self.connect.execute("INSERT INTO data VALUES(?, ?, ?, ?, ?, ?)", entry)
+            cur = self.connect.cursor()
+            cur.execute('''INSERT INTO data (name, descr, time, min_wait, max_wait) VALUES (%s, %s, %s, %s, %s);''', entry)
+            cur.close()
 
     def store_seq(self, name, descr = "", tasks = None):
         """
@@ -186,13 +197,29 @@ class DatabaseManager(object):
         and binarized list of tasks (tasks).
         """
         with self.connect:
-            self.connect.execute("INSERT INTO seqs VALUES(?, ?, ?, ?)", (None, name, descr, tasks)) 
-            
+            cur = self.connect.cursor()
+            cur.execute('''INSERT INTO seqs (name, descr, tasks) VALUES (%s, %s, %s);''', (name, descr, tasks))
+            cur.close()
+
     def initialize(self):
         """
-        First time setup, creates data tables.
+        First time setup, creates data tables. Simply prints
+        to standard out if they were already created.
         """
-        create_data = "CREATE TABLE data(id integer primary key, name TEXT, descr TEXT, time REAL, min_wait REAL, max_wait REAL)"
-        create_seqs = "CREATE TABLE seqs(id integer primary key, name TEXT, descr TEXT, tasks BLOB)"
-        self.connect.execute(create_data)
-        self.connect.execute(create_seqs)
+        create_data = '''CREATE TABLE IF NOT EXISTS data
+                    (id SERIAL primary key,
+                     name TEXT,
+                     descr TEXT,
+                     time REAL,
+                     min_wait REAL,
+                     max_wait REAL);'''
+        create_seqs = '''CREATE TABLE IF NOT EXISTS seqs
+                    (id SERIAL primary key,
+                     name TEXT,
+                     descr TEXT,
+                     tasks BYTEA);'''
+        with self.connect:
+            cur = self.connect.cursor()
+            cur.execute(create_data)
+            cur.execute(create_seqs)
+            cur.close()

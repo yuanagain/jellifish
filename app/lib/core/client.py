@@ -1,27 +1,30 @@
 """
-Implements a client for DatabaseManager and TaskSequence, 
-used to maintain library of recipes.
+Implements a client for DatabaseManager (PostgreSQL)
+and TaskSequence, used to maintain library of recipes.
 
 Author: Yuan Wang
 Copyright Jellifish 2015
 """
 
-from . import database
-from . import node
-from . import patch
+from database import DatabaseManager #from . import database
+import node #from . import node
+import patch #from . import patch
 
 import os
 
 class DatabaseClient(object):
-    def __init__(self, conn):
-        # The file is automatically created if it does not exist by sqlite3
-        # and so, we should check, prior to creating the connection,
-        # if the file exists or not. Then it can be initialized if it does
-        # not exist.
-        should_init = not os.path.exists(conn)
-        self.dbm = database.DatabaseManager(conn)
-        if should_init:
-            self.dbm.initialize()
+    def __init__(self, database, user, password, host):
+        '''
+        DatabaseManager.initialize() always called.
+        This is not an issue because the table 
+        creation is wrapped in a try 
+        except block in database.py
+        '''
+        self.dbm = DatabaseManager(database=database,
+                                            user=user,
+                                            password=password,
+                                            host=host)
+        self.dbm.initialize()
 
     def close(self):
         """

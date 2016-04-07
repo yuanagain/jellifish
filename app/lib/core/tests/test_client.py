@@ -1,7 +1,7 @@
 """
 Test client for client.py
 
-Author: Yuan Wang
+Author: Yuan Wang, Ilya Krasnovsky
 Copyright Jellifish 2015
 """
 
