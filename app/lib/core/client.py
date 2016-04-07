@@ -2,7 +2,7 @@
 Implements a client for DatabaseManager (PostgreSQL)
 and TaskSequence, used to maintain library of recipes.
 
-Author: Yuan Wang
+Author: Yuan Wang, Ilya Krasnovsky
 Copyright Jellifish 2015
 """
 
