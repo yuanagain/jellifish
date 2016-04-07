@@ -42,7 +42,7 @@ class TaskSequence:
     """
     A TaskSequence is a list of tasks.
     """
-    def __init__(self, name, descr = "", tasks = []):
+    def __init__(self, name, descr = "", tasks = [], ingredients=[]):
         self.name = name
         self.descr = descr
         self.tasks = tasks
@@ -50,6 +50,7 @@ class TaskSequence:
         self.min_t = -1.0
         self.wait_t = -1.0
         self.act_t= -1.0
+        self.ingredients = ingredients
 
     def load(self, tasks):
         """
