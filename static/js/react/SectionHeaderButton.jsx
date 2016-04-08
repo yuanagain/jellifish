@@ -10,6 +10,7 @@ Optional Props
 	Function onClick - callback when button is clicked
 	String type - button type to use
 	String data-parse-id - Parse analytics ID for when the button is clicked
+	String href - link for button, converts to <a> tag instead of <button>
 */
 
 var React = require("react"),
@@ -45,7 +46,9 @@ class SectionHeaderButton extends React.Component {
 						onClick={this.props.onClick}
 						type={this.props.type}
 						disabled={! this.state.buttonActive}
-						data-parse-id={this.props["data-parse-id"]}>
+						data-parse-id={this.props["data-parse-id"]}
+						href={this.props.href}
+						>
 						{this.props.button}
 					</ReactBootstrap.Button>
 				</Col>

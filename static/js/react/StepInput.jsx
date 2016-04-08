@@ -10,10 +10,13 @@ Required Props
 Optional Props
 	Boolean editable - whether or not the input is editable
 	Function onEdit - callback for when an edit is made and saved
+	Function onDelete - callback for when a step is deleted
 
 Callback Parameters
 	onEdit
 		Object state - current values of step input
+	onDelete
+			
 */
 
 var React = require("react"),
@@ -101,12 +104,15 @@ class StepInput extends React.Component {
 				{this.props.editable ?
 				(<Row>
 					<Col md={6}>
-						<ReactBootstrap.Button
-							bsStyle="primary"
-							onClick={this._edit}
-							type="button"
-							>
-						{this.state.editing ? "Save" : "Edit"}
+						<ReactBootstrap.Button bsStyle="primary" type="button"
+							onClick={this._edit}>
+							{this.state.editing ? "Save" : "Edit"}
+						</ReactBootstrap.Button>
+					</Col>
+					<Col md={6}>
+						<ReactBootstrap.Button bsStyle="primary" type="button"
+							onClick={this.props.onDelete ? this.props.onDelete: null}>
+							Delete
 						</ReactBootstrap.Button>
 					</Col>
 				</Row>)
@@ -126,10 +132,11 @@ class StepInput extends React.Component {
 		}
 
 	/*
-	* Called when edit (or save) button is pressed.
+	* Called when the edit (or save) button is pressed.
 	*/
 	_edit() {
-		if (this.state.editing && this.props.onEdit) this.props.onEdit(this._data);
+		if (this.state.editing && this.props.onEdit)
+			this.props.onEdit(this._data);
 		this.setState({editing: ! this.state.editing});
 		}
 	}
