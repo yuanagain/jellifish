@@ -28,13 +28,6 @@ class BiteBook extends Component {
     };
   }
 
-  getInitialState() {
-    return (
-    {
-      selection: []
-      
-    })
-  }
 
   render() {
     if (this.state.selectedTab == 'loginpage') {
