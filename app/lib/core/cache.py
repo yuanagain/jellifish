@@ -77,10 +77,9 @@ class CachedValue(object):
 	'''
 	def __init__(self, refresh = None, timeout = 60, prefetch = False):
 		self.timeout = timeout
-		self.refresh = refresh if refresh else lambda: None
+		self._refresh = refresh if refresh else lambda: None
 		if prefetch:
-			self.lastRetrieved = time.time()
-			self._value = self.refresh()
+			self.refresh(True)
 		else:
 			self.lastRetrieved = time.time() - (timeout + 1) # ensure that on the first request, the data is retrieved
 			self._value = None
@@ -105,12 +104,21 @@ class CachedValue(object):
 		Returns
 			<value> last cached value
 		'''
-		currentTime = time.time()
-		if (currentTime - self.lastRetrieved) > self.timeout:
-			# if the value is stale, refresh the value
-			self._value = self.refresh()
-			self.lastRetrieved = currentTime
+		self.refresh()
 		return self._value
+
+	def refresh(self, force = False):
+		'''
+		Refresh the value, with force if necessary.
+
+		Parameters
+			bool force - force the refresh, regardless of time (default: False)
+		'''
+		currentTime = time.time()
+		if force or ((currentTime - self.lastRetrieved) > self.timeout):
+			# if the value is stale, refresh the value
+			self._value = self._refresh()
+			self.lastRetrieved = currentTime
 
 	@value.setter
 	def value(self, newValue):

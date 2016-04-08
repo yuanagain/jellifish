@@ -13,6 +13,7 @@ var React = require("react"),
 	Col = ReactBootstrap.Col;
 
 function FullRow(props) {
+	// Render the FullRow
 	return <Row {...props}><Col xs={12}>{props.children}</Col></Row>;
 	}
 

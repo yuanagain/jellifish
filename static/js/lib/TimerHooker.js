@@ -19,7 +19,7 @@ class TimerHooker {
 	/*
 	Subscribe a callback to each second passing
 
-	Arguments
+	Parameters
 		function callback - the callback to register
 		hashable id (optional) - a ID for the callback (randomly generated
 			if not provided)
@@ -50,7 +50,7 @@ class TimerHooker {
 	/*
 	Add a callback that is called once when a specific elapsed time is reached
 
-	Arguments
+	Parameters
 		int second - the elapsed time (in seconds) for when the callback
 			should be called (a second value less than 0 renders this moot)
 		function callback - function to be called at the given time

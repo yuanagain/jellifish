@@ -4,6 +4,6 @@
 {% endblock %}
 {% block postbody %}
 	<script type="text/javascript">
-		pages.timers({{ data|safe }});
+		pages.timers({{ data | tojson | safe }});
 	</script>
 {% endblock %}

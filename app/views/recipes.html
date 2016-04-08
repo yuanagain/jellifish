@@ -1,0 +1,12 @@
+{% extends "page.html" %}
+{% block content %}
+	<div id="recipes"></div>
+{% endblock %}
+{% block postbody %}
+	<script type="text/javascript">
+		pages.recipes({{ recipes | tojson | safe }}, {
+			edit: {{ edit_url | tojson | safe }},
+			delete: {{ delete_url | tojson | safe }}
+			});
+	</script>
+{% endblock %}

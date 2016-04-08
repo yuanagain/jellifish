@@ -73,7 +73,7 @@ class DatabaseManager(object):
             cur = self.connect.cursor() 
 
             for task in task_seq.tasks:
-                task_data = task.dump_data_v2()
+                task_data = task.dump_data()
                 self.add_task(task_data)
 
                 # recover last inserted key id, 
@@ -84,6 +84,16 @@ class DatabaseManager(object):
             # serialize list
             ids = marshal.dumps(task_id_list)
             self.store_seq(task_seq.name, task_seq.descr, ids)
+
+            cur.close()
+
+    def delete_sequence(self, name):
+        """
+        Deletes the recipe, by name, from the database.
+        """
+        with self.connect:
+            cur = self.connect.cursor()
+            cur.execute('DELETE FROM seqs WHERE name=:name', {"name": name})
 
             cur.close()
 
@@ -100,6 +110,21 @@ class DatabaseManager(object):
 
             cur.close()
             return names
+
+    def fetch_sequences(self):
+        """
+        returns an array of dictionaries in the form of 
+            {name: name, description: description}
+        """
+        with self.connect:
+            cur = self.connect.cursor()
+
+            cur.execute('SELECT name, descr FROM seqs')
+            rows = cur.fetchall()
+            data = [{"name": r[0], "descr": r[1]} for r in rows]
+
+            cur.close()
+            return data
 
     def load_seq_by_name(self, name):
         """

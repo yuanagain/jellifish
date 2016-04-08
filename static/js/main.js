@@ -12,7 +12,10 @@ var React = require("react"),
 var GlobalHeader = require("./react/GlobalHeader.jsx"),
 	SelectionPage = require("./react/SelectionPage.jsx"),
 	IngredientsPage = require("./react/IngredientsPage.jsx"),
-	TimersPage = require("./react/TimersPage.jsx");
+	TimersPage = require("./react/TimersPage.jsx"),
+	NewRecipePage = require("./react/NewRecipePage.jsx"),
+	RecipesPage = require("./react/RecipesPage.jsx"),
+	EditRecipePage = require("./react/EditRecipePage.jsx");
 
 function main() {
 	// Render main components
@@ -33,23 +36,27 @@ function postRender() {
 
 var page = {
 	/*
-	Render the selection page
+	Render the selection page.
 
-	Arguments
-		[String, ...] selections - list of selection options to render
+	Parameters
+		[Task, ...] selections - list of selection options to render
+			Object Task -
+				String name - name of task
+				String descr - descr of task
 	*/
 	selection: function(selections) {
 		main();
+		data = selections.map((item) => item.name);
 		ReactDOM.render(
-			<SelectionPage selections={selections}/>,
+			<SelectionPage selections={data}/>,
 			utils.getElem("#selection")
 			);
 		},
 
 	/*
-	Render the ingredients page
+	Render the ingredients page.
 
-	Arguments
+	Parameters
 		[String, ...] ingredients - list of ingredients to render
 	*/
 	ingredients: function(ingredients) {
@@ -61,9 +68,9 @@ var page = {
 		},
 
 	/*
-	Render the timers page
+	Render the timers page.
 
-	Arguments
+	Parameters
 		Object data - list of ingredients to render
 	*/
 	timers: function(data) {
@@ -71,10 +78,48 @@ var page = {
 		ReactDOM.render(
 			<TimersPage
 				active={data.active}
-				passive={data.passive}
 				recipes={data.recipes} />,
 			utils.getElem("#timers")
 			);
+		},
+
+	/*
+	Render the new_recipe page.
+	*/
+	new_recipe: function() {
+		main();
+		ReactDOM.render(
+			<NewRecipePage />,
+			utils.getElem("#new-recipe")
+			);
+		},
+
+	/*
+	Render the recipe page.
+
+	Parameters
+		[String, ...] recipes - list of recipes to render
+	*/
+	recipes: function(recipes, urls) {
+		main();
+		data = recipes.map((item) => item.name);
+		ReactDOM.render(
+			<RecipesPage recipes={data} urls={urls} />,
+			utils.getElem("#recipes")
+			);
+		},
+
+	/*
+	Render a recipe to edit.
+
+	Parameters
+		Object recipe - recipe to edit
+	*/
+	edit_recipe: function(recipe) {
+		main();
+		ReactDOM.render(
+			<EditRecipePage recipe={recipe} />,
+			utils.getElem("#edit-recipe"));
 		}
 	}
 

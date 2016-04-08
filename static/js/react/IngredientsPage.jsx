@@ -21,7 +21,7 @@ function IngredientsPage(props) {
 	function renderIngredient(ingredient, index) {
 		/* Internal - render a specific ingredient
 
-		Arguments
+		Parameters
 			String ingredient - ingredient name to display
 			int index - index of the current ingredient
 

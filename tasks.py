@@ -12,6 +12,22 @@ import config
 
 STATIC_PATH = os.path.join(os.getcwd(), "static")
 
+@task(name = "push")
+def push(remote = "aws", branch = "master", f = False):
+	'''Pushes files to the server
+	
+	Arguments
+		str remote - remote to push to (default: aws)
+		str branch - branch to push form (default: master)
+		bool f - whether or not to force push
+	'''
+	if f and not config.DEV_MODE:
+		print("ERROR: Cannot force push if not in dev mode.")
+		return
+	flags = "-f" if f else "" 
+	run("git push --no-verify {remote} {branch}:master {flags}".format(
+		remote = remote, branch = branch, flags = flags))
+
 @task(name = "build")
 def build(external = False):
 	'''Run all build tasks
@@ -67,7 +83,7 @@ def browserify(in_path, out_path, deps):
 			in_stream = ""
 		additional = ""
 
-	command = "browserify {in_path} -t [ reactify --everything --es6 ] -o {out_path} {additional}".format(
+	command = "node_modules/.bin/browserify {in_path} -t [ reactify --everything --es6 ] -o {out_path} {additional}".format(
 		in_path = in_stream, out_path = output_path, additional = additional)
 
 	run(command)

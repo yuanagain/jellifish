@@ -1,5 +1,5 @@
 /*
-A SelectionPage provides the interface for the selection interface
+A SelectionPage provides the interface for recipe selection.
 
 Required Props
 	[String, ...] selections - list of recipe selections

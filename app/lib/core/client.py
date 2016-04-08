@@ -33,7 +33,7 @@ class DatabaseClient(object):
         """
         Returns list of recipes by name
         """
-        return self.dbm.fetch_seq_names()
+        return self.dbm.fetch_sequences()
 
     def fetch_recipe(self, name):
         """
@@ -87,6 +87,12 @@ class DatabaseClient(object):
         self.dbm.add_sequence(recipe)
         # TODO error handling
         return
+
+    def delete_recipe(self, name):
+        """
+        Deletes a recipe, by name, from the database.
+        """
+        return self.dbm.delete_sequence(name)
 
     def import_recipes(self, dbmc, overwrite = False):
         """

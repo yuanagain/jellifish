@@ -4,7 +4,6 @@ A TimersPage provides the interface for the timers page.
 Required Props
 	[String, ...] recipes - list of recipes used
 	[Task, ...] active - active tasks to display
-	[Task, ...] passive - passive tasks to display
 
 Prop data types
 	Object Task =
@@ -37,43 +36,35 @@ class TimersPage extends React.Component {
 	/*
 	Create a new TimersPage
 
-	Arguments
+	Parameters
 		Object props - properties for component
 	*/
 	constructor(props) {
-		// Create a new TimersPage
 		super(props);
 		this.state = {
 			activePointer: 0, // pointer to current active task
 			activeTimer: new TimerHooker(), // timer for active tasks
-			passiveTimer: new TimerHooker(), // timer for passive tasks
 
 			started: false, // whether or not the app has been started
 			paused: false, // whether or not app is paused
-			stopped: false // whether or not the app has been stopped
 			};
 		/* the timers are decoupled so that pauses and skips can be handled
 		separately */
 
 		// bind various functions to the "this" instance
 		this._updateActive = this._updateActive.bind(this);
-		this._updatePassive = this._updatePassive.bind(this);
 		this._updateUpcoming = this._updateUpcoming.bind(this);
 
 		// bind the buttons to the "this" instance
 		this._startTimers = this._startTimers.bind(this);
 		this._pauseActiveTimer = this._pauseActiveTimer.bind(this);
 		this._skipCurrentTask = this._skipCurrentTask.bind(this);
-		this._stopTimers = this._stopTimers.bind(this);
 		}
 
 	render() {
 		// Render the component
-		var iconOptions = {}, stopIconOptions = {};
+		var iconOptions = {};
 		if (! this.state.started) iconOptions.disabled = "disabled";
-		else if (this.state.stopped || this.state.paused) {
-			stopIconOptions.disabled = "disabled";
-			}
 
 		return (
 			<Content><Grid fluid>
@@ -82,24 +73,18 @@ class TimersPage extends React.Component {
 				<CollapsibleList list={this.props.recipes} header="Recipes" data-parse-id="button-timers-view-recipes" />
 				<br/>
 				<Row>
-					<Col md={6} xs={12} className="center-horizontal display-height">
+					<Col md={8} xs={12} className="center-horizontal display-height">
 						<FullRow><header>Active Task</header></FullRow>
 						<br/>
 						<FullRow className="timer primary"><Timer ref="timer_active" primary /></FullRow>
 						<br/>
 						<Row>
-							<Col xs={4}>
-								<i {...iconOptions} {...stopIconOptions}
-									className="ionicons ion-stop clickable-icon"
-									onClick={this._stopTimers}
-									data-parse-id="button-timers-stop"></i>
-							</Col>
-							<Col xs={4}>
+							<Col xs={6}>
 								<i {...iconOptions} onClick={this._pauseActiveTimer}
-								className={"clickable-icon ionicons ion-ios-" + (this.state.paused || this.state.stopped ? "play": "pause")}
+								className={"clickable-icon ionicons ion-ios-" + (this.state.paused ? "play": "pause")}
 								data-parse-id="button-timers-pause"></i>
 							</Col>
-							<Col xs={4}>
+							<Col xs={6}>
 								<i {...iconOptions} onClick={this._skipCurrentTask}
 								className="ionicons ion-ios-skipforward clickable-icon"
 								data-parse-id="button-timers-skip"></i>
@@ -107,23 +92,19 @@ class TimersPage extends React.Component {
 						</Row>
 						<br/>
 					</Col>
-					<Col md={6} xs={12} className="center-horizontal display-height secondary">
+					<Col md={4} xs={12} className="center-horizontal display-height secondary">
 						<Row>
-							<Col xs={6} className="timer secondary"><header>Upcoming Tasks</header></Col>
-							<Col xs={6} className="timer secondary"><header>Background Tasks</header></Col>
+							<Col xs={12} className="timer secondary"><header>Upcoming Tasks</header></Col>
 						</Row>
 						<br/>
 						<Row>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_upcoming1" /></Col>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_passive1" /></Col>
+							<Col xs={12} className="timer secondary"><Timer ref="timer_upcoming1" /></Col>
 						</Row>
 						<Row>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_upcoming2" /></Col>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_passive2" /></Col>
+							<Col xs={12} className="timer secondary"><Timer ref="timer_upcoming2" /></Col>
 						</Row>
 						<Row>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_upcoming3" /></Col>
-							<Col xs={6} className="timer secondary"><Timer ref="timer_passive3" /></Col>
+							<Col xs={12} className="timer secondary"><Timer ref="timer_upcoming3" /></Col>
 						</Row>
 					</Col>
 				</Row>
@@ -140,74 +121,14 @@ class TimersPage extends React.Component {
 			comp.refs.timer_active.step(elapsed);
 			});
 		this.state.activeTimer.once(0, this._updateActive);
-
-		// Prepare passive tasks on queue
-		var passiveTimer = this.state.passiveTimer;
-
-		for (var i = 0; i < this.props.passive.length; i++) {
-			var passiveTask = this.props.passive[i];
-			passiveTask.available = false;
-
-			(function(index, task) {
-				passiveTimer.once(passiveTask.start_time, function() {
-					// can now display the item and so, update tasks as well
-					task.available = true;
-					comp._updatePassive();
-					});
-				passiveTimer.once(passiveTask.end_time, function() {
-					task.available = false;
-					comp._updatePassive();
-					});
-				})(i, passiveTask);
-			}
-
-		passiveTimer.each(function(elapsed) {
-			for (var i = 1; i <= 3; i++) comp.refs["timer_passive" + i].step(elapsed);
-			});
 		}
 
 	componentWillUnmount() {
 		// Hook right before component unmounts
 		if (this.state.activeTimer != null) this.state.activeTimer.stop();
-		if (this.state.passiveTimer != null) this.state.passiveTimer.stop();
 
 		// dereference the timers
-		this.setState({activeTimer: null, passiveTimer: null});
-		}
-	
-	/*
-	Update all of the passive tasks
-	*/
-	_updatePassive() {
-		// Find the tasks that can be displayed and sort by time remaining
-		var to_display = this.props.passive.filter(x => x.available);
-		to_display.sort((a, b) => (a.end_time > b.end_time));
-		
-		/* We do not want to iterate over all of the display-able items, only
-		the top 3 (or all if there are fewer than 3) */
-		for (var index = 0; index < Math.min(to_display.length, 3); index++) {
-			var task = to_display[index],
-				newProgress = 1;
-			/* This condition is true if the task is currently being displayed, but
-			perhaps in another position. So, we want to make sure wherever iti is
-			rendered next, it starts at the correct progress value. */
-			if (task.ref != null && task.ref != undefined) {
-				newProgress = this.refs[task.ref].getProgress();
-				}
-			// Triggers above condition in next call of _updatePassive
-			task.ref = "timer_passive" + (index + 1);
-
-			// Set the timer's display to the new task's data
-			this.refs[task.ref].reset(
-				task.name, task.description,
-				task.start_time, task.duration, newProgress);
-			}
-
-		/* Cleanup all unused timer displays. The +1 is mandatory, otherwise the
-		current timer is erroneously removed*/
-		for (var j = to_display.length + 1; j <= 3; j++) {
-			this.refs["timer_passive" + j].remove();
-			}
+		this.setState({activeTimer: null});
 		}
 
 	/*
@@ -221,10 +142,10 @@ class TimersPage extends React.Component {
 			comp = this;
 
 		// set the new primary task and update the upcoming tasks
-		timer_active.reset(task.name, task.description, task.start_time, task.duration);
+		timer_active.reset(task.name, task.descr, task.start, task.time);
 		this._updateUpcoming()
 
-		this.state.activeTimer.once(task.end_time, function() {
+		this.state.activeTimer.once(task.end, function() {
 			pointer++;
 			// propagate change through the state
 			comp.setState({activePointer: pointer});
@@ -247,7 +168,7 @@ class TimersPage extends React.Component {
 			// upcoming tasks exist
 			if (pointer < activeData.length) {
 				var task = activeData[pointer];
-				ref.reset(task.name, task.description, task.start_time, task.duration);
+				ref.reset(task.name, task.descr, task.start, task.time);
 				}
 			else {
 				/* next task does not exist, so destroy the reference and move on
@@ -269,9 +190,8 @@ class TimersPage extends React.Component {
 		(bool) Whether or not the timers started successfully
 	*/
 	_startTimers() {
-		if (this.state.activeTimer && this.state.passiveTimer && ! this.state.started) {
+		if (this.state.activeTimer && ! this.state.started) {
 			this.state.activeTimer.start();
-			this.state.passiveTimer.start();
 			this.setState({started: true});
 			this.refs.button_header.changeButtonState(false);
 			return true;
@@ -288,13 +208,7 @@ class TimersPage extends React.Component {
 	_pauseActiveTimer() {
 		if (! this.state.started) return null;
 		var timer = this.state.activeTimer;
-		if (this.state.stopped) {
-			timer.start();
-			this.state.passiveTimer.start();
-			this.setState({stopped: false});
-			return true;
-			}
-		else if (timer.isRunning()) {
+		if (timer.isRunning()) {
 			timer.stop();
 			this.setState({paused: true});
 			return false;
@@ -318,30 +232,12 @@ class TimersPage extends React.Component {
 			timer = this.state.activeTimer,
 			currentState = timer.isRunning();
 
-		var toSkip = currentTask.end_time - timer.elapsed;
+		var toSkip = currentTask.end - timer.elapsed;
 		for (var t = 0; t < toSkip; t++) {
 			timer.progress();
 			}
 
 		return toSkip;
-		}
-
-	/*
-	Stop the current active and passive task
-
-	Returns
-		(bool) Whether or not the app was stopped
-	*/
-	_stopTimers() {
-		if (! this.state.started || this.state.paused) return false;
-		var activeTimer = this.state.activeTimer,
-			passiveTimer = this.state.passiveTimer;
-
-		if (activeTimer.isRunning()) activeTimer.stop();
-		if (passiveTimer.isRunning()) passiveTimer.stop();
-		this.setState({stopped: true});
-
-		return true;
 		}
 	}
 
