@@ -1,25 +1,31 @@
 /*
 An EditRecipePage provides the interface for editing recipes in
 the database.
+
+Required Props
+	Object recipe - contains an object representation of a recipe
+		String name - name of the recipe
+		String descr - description of the recipe
+		[Task, ...] tasks - list of tasks in the recipe
 */
 
 var React = require("react"),
 	ReactBootstrap = require("react-bootstrap"),
 	Row = ReactBootstrap.Row,
 	Col = ReactBootstrap.Col,
-	Grid = ReactBootstrap.Grid,
-	utils = require("../lib/utils.js");
+	Grid = ReactBootstrap.Grid;
 
 // React components
 var Content = require("./Content.jsx"),
 	SectionHeaderButton = require("./SectionHeaderButton.jsx"),
 	InputRow = require('./InputRow.jsx'),
 	FullRow = require('./FullRow.jsx'),
-	StepInput = require("./StepInput.jsx");
+	StepInput = require("./StepInput.jsx"),
+	NewStep = require("./NewStep.jsx");
 
 class EditRecipePage extends React.Component {
 	/*
-	Create a new EditRecipePage
+	Create a new EditRecipePage.
 
 	Parameters
 		Object props - properties for component
@@ -27,14 +33,11 @@ class EditRecipePage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			totalTime: 0, // total time for the tasks
 			tasks: props.recipe.tasks, // all tasks
 			updated: false, // whether or not to trigger a new update
 			};
 		/* The updated state is used to force re-rendering when the tasks
 		array is changed, because otherwise a rerender is not performed.*/
-
-		this._elems = new Object();
 
 		// Bind functions to instance
 		this._addStep = this._addStep.bind(this);
@@ -54,6 +57,7 @@ class EditRecipePage extends React.Component {
 					data-parse-id="button-update-recipe" />
 
 				<input type="hidden" name="oldname" value={this.props.recipe.name}></input>
+				<input type="hidden" name="tasks" value={JSON.stringify(this.state.tasks)} />
 
 				<InputRow label="Name" name="name"
 					rowClass="padding-vertical" inputClass="width-full"
@@ -64,49 +68,8 @@ class EditRecipePage extends React.Component {
 					value = {this.props.recipe.descr} />
 
 				<hr />
-				<FullRow>
-					<h3>Steps</h3>
-				</FullRow>
-
-				<input type="hidden" name="tasks" value={JSON.stringify(this.state.tasks)} />
-
-				<div id="new-task" className="center-horizontal">
-					<InputRow label="Name" id="new-task-name" labelSize={4} 
-						rowClass="padding-vertical" inputClass="width-full" />
-					<InputRow label="Description" id="new-task-descr" labelSize={4}
-						rowClass="padding-vertical" inputClass="width-full" />
-					<Row className="padding-vertical">
-						<Col md={4} xs={12}>
-							<Row className="center-horizontal"><span>Time (s)</span></Row>
-							<Row className="center-horizontal padding-vertical">
-								<input type="number" id="new-task-time" />
-							</Row>
-						</Col>
-						<Col md={4} xs={12}>
-							<Row className="center-horizontal"><span>Min. Wait (s)</span></Row>
-							<Row className="center-horizontal padding-vertical">
-								<input type="number" id="new-task-min-wait" />
-							</Row>
-						</Col>
-						<Col md={4} xs={12}>
-							<Row className="center-horizontal"><span>Max. Wait (s)</span></Row>
-							<Row className="center-horizontal padding-vertical">
-								<input type="number" id="new-task-max-wait" />
-							</Row>
-						</Col>
-					</Row>
-				</div>
-
+				<NewStep onAdd={this._addStep} />
 				<hr />
-				<FullRow className="center-horizontal padding-vertical">
-					<ReactBootstrap.Button
-						bsStyle="primary"
-						onClick={this._addStep}
-						type="button"
-						data-parse-id="button-new-recipe-add-step">
-					Add Step
-					</ReactBootstrap.Button>
-				</FullRow>
 
 				<div id="tasks">
 					{this.state.tasks.map(function(task, index) {
@@ -134,6 +97,7 @@ class EditRecipePage extends React.Component {
 							number={index + 1}
 							key={"new-task-" + Math.random()}
 							onEdit={(state) => comp._onEdit(state, index)}
+							onDelete={() => comp._onDelete(index)}
 							/>);
 						})}
 				</div>
@@ -141,37 +105,14 @@ class EditRecipePage extends React.Component {
 			);
 		}
 
-	componentDidMount() {
-		// Hook right after component mounts
-		this._elems.name = utils.getElem("#new-task-name");
-		this._elems.descr = utils.getElem("#new-task-descr");
-		this._elems.time = utils.getElem("#new-task-time");
-		this._elems.min_wait = utils.getElem("#new-task-min-wait");
-		this._elems.max_wait = utils.getElem("#new-task-max-wait");
-		}
-
 	/*
 	Add a step to the recipe.
+
+	Parameters
+		Object task - task just added
 	*/
-	_addStep() {
-		var newTask = {
-			name: this._elems.name.value,
-			descr: this._elems.descr.value,
-			time: Number.parseInt(this._elems.time.value),
-			min_wait: Number.parseInt(this._elems.min_wait.value),
-			max_wait: Number.parseInt(this._elems.max_wait.value)
-			};
-
-		this._elems.name.value = "";
-		this._elems.descr.value = "";
-		this._elems.time.value = 0;
-		this._elems.min_wait.value = 0;
-		this._elems.max_wait.value = 0;
-
-		this.setState({
-			tasks: this.state.tasks.concat([newTask]),
-			totalTime: this.state.totalTime + newTask.time
-			});
+	_addStep(task) {
+		this.setState({tasks: this.state.tasks.concat([task])});
 		}
 
 	/*
@@ -188,6 +129,17 @@ class EditRecipePage extends React.Component {
 	*/
 	_onEdit(task, index) {
 		this.state.tasks[index] = task;
+		this.setState({updated: ! this.state.updated});
+		}
+
+	/*
+	Callback for when a step is deleted.
+
+	Parameters
+		int index - index to delete
+	*/
+	_onDelete(index) {
+		this.state.tasks.splice(index, 1);
 		this.setState({updated: ! this.state.updated});
 		}
 	}

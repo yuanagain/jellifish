@@ -3,6 +3,7 @@
 
 from flask import render_template, request, redirect, url_for, flash
 import json
+import hashlib
 
 from .. import core
 from . import route
@@ -16,8 +17,14 @@ class RecipeRouter(route.Router):
 		'''
 		Add routes to the router.
 		'''
+		self.auth = core.auth.AuthenticationManager(
+			authenticate_route = ".get_login",
+			already_authenticated_route = ".get_index"
+			)
+
 		@self.route("/index")
 		@self.route("/")
+		@self.auth.authentication_required
 		def get_index():
 			'''
 			Handles a request to / or /index
@@ -26,13 +33,57 @@ class RecipeRouter(route.Router):
 
 			Renders recipe_list.html
 			'''
-			return render_template("recipes.html",
-				recipes = self.recipes.value,
-				edit_url = url_for(".get_edit", recipe = ""),
-				delete_url = url_for(".get_delete", recipe = "")
-				)
+			return render_template("recipes.html", recipes = self.recipes.value)
+
+		@self.route("/login")
+		@self.auth.not_authentication_required
+		def get_login():
+			'''
+			Handles a request to /login
+				Method: GET
+				Path: /login
+
+			Renders login.html
+			'''
+			return render_template("login.html")
+
+		@self.route("/logout")
+		@self.auth.authentication_required
+		def get_logout():
+			'''
+			Handles a request to /logout
+				Method: GET
+				Path: /logout
+
+			Redirects to .get_index.
+			'''
+			self.auth.unauthentiate()
+			return redirect(url_for(".get_index"))
+
+		@self.route("/login", methods = ["POST"])
+		def post_login():
+			'''
+			Handles a request to /login
+				Method: POST
+				Path: /login
+
+			Authenticates the user if possible, or flashes an error message
+			and redirects the user.
+
+			If the user is successfully logged in, redirects to .get_index, otherwise
+			redirects to .get_login.
+			'''
+			actual_hash = "5b77bb0816e454137cea52f4a3fb9694620e0937fc3e1a8f8f3a80be9a81ea24"
+			password = request.form.get("password")
+			if hashlib.sha256(password.encode('utf-8')).hexdigest() == actual_hash:
+				self.auth.authenticate()
+				return redirect(url_for(".get_index"))
+			else:
+				flash("Incorrect password!")
+				return redirect(url_for(".get_login"))
 
 		@self.route("/new")
+		@self.auth.authentication_required
 		def get_new():
 			'''
 			Handles a request to /new
@@ -44,13 +95,14 @@ class RecipeRouter(route.Router):
 			return render_template("new_recipe.html")
 
 		@self.route("/new", methods = ["POST"])
+		@self.auth.authentication_required
 		def post_new():
 			'''
 			Handles a request to /new
 				Method: POST
 				Path: /new
 
-			Saves the recipe and redirects to /new.
+			Saves the recipe and redirects to /.
 			'''
 			name = request.form.get("name")
 			descr = request.form.get("description")
@@ -76,9 +128,10 @@ class RecipeRouter(route.Router):
 			self.recipes.refresh(True)
 
 			flash("Recipe {name} added.".format(name = name), "success")
-			return redirect(url_for("recipes.get_new"))
+			return redirect(url_for("recipes.get_index"))
 
 		@self.route("/edit/<recipe>")
+		@self.auth.authentication_required
 		def get_edit(recipe = ""):
 			'''
 			Handles a request to /edit
@@ -100,6 +153,7 @@ class RecipeRouter(route.Router):
 				return redirect(url_for(".get_index"))
 
 		@self.route("/edit", methods = ["POST"])
+		@self.auth.authentication_required
 		def post_edit():
 			'''
 			Handles a request to /edit
@@ -130,9 +184,10 @@ class RecipeRouter(route.Router):
 			self.recipes.refresh(True)
 
 			self.recipes.refresh(True)
-			return redirect(url_for(".get_edit", recipe = name))
+			return redirect(url_for(".get_index"))
 
 		@self.route("/delete/<recipe>")
+		@self.auth.authentication_required
 		def get_delete(recipe = ""):
 			'''
 			Handles a request to /delete
