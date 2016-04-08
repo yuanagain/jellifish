@@ -262,7 +262,9 @@ var TimerPage = React.createClass({
       this.state.progress = 0
       this.state.paused = false
       this.state.index = 0
-      DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
+      if (this.state.selection.length != 0) {
+        DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
+      }
       return true
     }
   },
@@ -311,6 +313,8 @@ var TimerPage = React.createClass({
 
   harvestData: function(task_sequence) {
     this.setState({sequence: task_sequence.active})
+    console.log("AKSIASNDJNLAOISDS")
+    console.log(task_sequence)
     this.setState({loaded: true})
   },
 });

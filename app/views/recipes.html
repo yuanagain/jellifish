@@ -5,8 +5,9 @@
 {% block postbody %}
 	<script type="text/javascript">
 		pages.recipes({{ recipes | tojson | safe }}, {
-			edit: {{ edit_url | tojson | safe }},
-			delete: {{ delete_url | tojson | safe }}
+			edit: {{ url_for(".get_edit", recipe = "") | tojson | safe }},
+			delete: {{ url_for(".get_delete", recipe = "") | tojson | safe }},
+			new: {{ url_for(".get_new") | tojson | safe }}
 			});
 	</script>
 {% endblock %}
