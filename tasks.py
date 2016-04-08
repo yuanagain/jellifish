@@ -13,20 +13,29 @@ import config
 STATIC_PATH = os.path.join(os.getcwd(), "static")
 
 @task(name = "push")
-def push(remote = "aws", branch = "master", f = False):
+def push(remote = "aws", branch = "master", f = False, images = False):
 	'''Pushes files to the server
 	
 	Arguments
 		str remote - remote to push to (default: aws)
 		str branch - branch to push form (default: master)
 		bool f - whether or not to force push
+		bool images - whether or not to push images
 	'''
-	if f and not config.DEV_MODE:
-		print("ERROR: Cannot force push if not in dev mode.")
-		return
-	flags = "-f" if f else "" 
-	run("git push --no-verify {remote} {branch}:master {flags}".format(
-		remote = remote, branch = branch, flags = flags))
+	if images:
+		cmd = "rsync -arlPv ./static/images/ {user}@{url}:/var/www/{url}/static/images/".format(
+			user = config.DEPLOY_SETTINGS["user"],
+			url = config.BASE_URL,
+			)
+		print(cmd)
+		run(cmd)
+	else:
+		if f and not config.DEV_MODE:
+			print("ERROR: Cannot force push if not in dev mode.")
+			return
+		flags = "-f" if f else "" 
+		run("git push --no-verify {remote} {branch}:master {flags}".format(
+			remote = remote, branch = branch, flags = flags))
 
 @task(name = "build")
 def build(external = False):
