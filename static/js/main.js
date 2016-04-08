@@ -15,7 +15,8 @@ var GlobalHeader = require("./react/GlobalHeader.jsx"),
 	TimersPage = require("./react/TimersPage.jsx"),
 	NewRecipePage = require("./react/NewRecipePage.jsx"),
 	RecipesPage = require("./react/RecipesPage.jsx"),
-	EditRecipePage = require("./react/EditRecipePage.jsx");
+	EditRecipePage = require("./react/EditRecipePage.jsx"),
+	LoginPage = require("./react/LoginPage.jsx");
 
 function main() {
 	// Render main components
@@ -116,6 +117,16 @@ var page = {
 		ReactDOM.render(
 			<EditRecipePage recipe={recipe} />,
 			utils.getElem("#edit-recipe"));
+		},
+
+	/*
+	Render the login page.
+	*/
+	login: function() {
+		main();
+		ReactDOM.render(
+			<LoginPage />,
+			utils.getElem("#login"));
 		}
 	}
 

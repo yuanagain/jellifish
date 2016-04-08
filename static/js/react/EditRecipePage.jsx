@@ -1,14 +1,19 @@
 /*
 An EditRecipePage provides the interface for editing recipes in
 the database.
+
+Required Props
+	Object recipe - contains an object representation of a recipe
+		String name - name of the recipe
+		String descr - description of the recipe
+		[Task, ...] tasks - list of tasks in the recipe
 */
 
 var React = require("react"),
 	ReactBootstrap = require("react-bootstrap"),
 	Row = ReactBootstrap.Row,
 	Col = ReactBootstrap.Col,
-	Grid = ReactBootstrap.Grid,
-	utils = require("../lib/utils.js");
+	Grid = ReactBootstrap.Grid;
 
 // React components
 var Content = require("./Content.jsx"),
@@ -20,7 +25,7 @@ var Content = require("./Content.jsx"),
 
 class EditRecipePage extends React.Component {
 	/*
-	Create a new EditRecipePage
+	Create a new EditRecipePage.
 
 	Parameters
 		Object props - properties for component
