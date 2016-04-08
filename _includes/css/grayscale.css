@@ -276,7 +276,7 @@ a:focus {
     }
 
     .download-section {
-        padding: 100px 0;
+        padding: 250px 0;
     }
 
     #map {
@@ -364,4 +364,26 @@ img::-moz-selection {
 
 body {
     webkit-tap-highlight-color: rgba(255,255,255,.2);
+}
+
+.logo {
+   width: 32px; 
+   height: 32px;
+   display: inline-block !important;
+}
+
+.phone {
+    width: 25%;
+}
+
+.frenchfood {
+    width: 75%;
+}
+
+.padCol {
+    padding-top: 50px;
+}
+
+.desktop {
+    width: 75%;
 }
