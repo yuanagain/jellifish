@@ -6,9 +6,14 @@ Author: Yuan Wang, Ilya Krasnovsky
 Copyright Jellifish 2015
 """
 
-from database import DatabaseManager #from . import database
-import node #from . import node
-import patch #from . import patch
+#from database import DatabaseManager 
+from . import database
+
+import node 
+#from . import node
+
+import patch 
+#from . import patch
 
 import os
 
