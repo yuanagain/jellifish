@@ -15,6 +15,8 @@ var skgreen = '#46D5B5'
 
 var Header = require('../parts/header')
 
+var IngredientsListing = require('../screens/ingredientslisting')
+
 var DataFetcher = require('../modules/datafetcher')
 
 var {
@@ -31,21 +33,8 @@ var RecipeDetail = require('./recipedetail')
 
 var RecipeListing = React.createClass({
   getInitialState: function() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     return {
-      dataSource: ds.cloneWithRows(
-        [
-          {'name': 'Recipe Name 1', 'descr': 'Description 1'},
-          {'name': 'Recipe Name 2', 'descr': 'Description 2'},
-          {'name': 'Recipe Name 3', 'descr': 'Description 3'},
-          {'name': 'Recipe Name 4', 'descr': 'Description 4'},
-          {'name': 'Recipe Name 5', 'descr': 'Description 5'},
-          {'name': 'Recipe Name 6', 'descr': 'Description 6'},
-          {'name': 'Recipe Name 7', 'descr': 'Description 7'},
-          {'name': 'Recipe Name 8', 'descr': 'Description 8'},
-          {'name': 'Recipe Name 9', 'descr': 'Description 9'},
-        ]
-      ),
       recipes: [],
       selection: []
     };
@@ -57,6 +46,7 @@ var RecipeListing = React.createClass({
       ...props
     } = this.props;
 
+    this.state.recipes=[] // this.state.recipes
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var dataSource = ds.cloneWithRows(this.state.recipes)
 
@@ -80,13 +70,29 @@ var RecipeListing = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={{color: 'grey'}}
-          onPress={this.props.runApp.bind(this, this.state.selection)}
+          onPress={()=>this.listIngredients()}
           >
-          {'Cook Selected!'}
+          {'Cook Selected'}
         </Button>
       </View>
     </View>
     );
+  },
+
+  listIngredients: function() {
+    console.log("listing ingredients")
+    this.props.navigator.push({
+      id: 'ingredientslisting',
+      component: IngredientsListing,
+      passProps: {
+        runApp: this.runApp,
+        // ingredients:
+      }
+    })
+  },
+
+  runApp: function() {
+    this.props.runApp(this.state.selection)
   },
 
   setData: function(data) {
