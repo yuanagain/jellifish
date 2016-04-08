@@ -37,8 +37,10 @@ class RecipesPage extends React.Component {
 		var comp = this;
 		return (
 			<Content><Grid fluid>
-			<FullRow className="center-horizontal"><h3>Recipes</h3></FullRow>
+			<SectionHeaderButton header="Recipes" button="New" type="button"
+				href={this.props.urls.new} />
 
+			<div id="recipes" className="padding-vertical">
 			{this.props.recipes.filter((recipe) => comp.state[recipe]).map(
 				function(recipe) {
 				return (
@@ -58,6 +60,7 @@ class RecipesPage extends React.Component {
 						</Col>
 					</Row>);
 				})}
+			</div>
 			</Grid></Content>
 			);
 		}

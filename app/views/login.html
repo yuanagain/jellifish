@@ -1,0 +1,9 @@
+{% extends "page.html" %}
+{% block content %}
+	<form id="login" method="POST" action="{{ url_for('.post_login') }}"></form>
+{% endblock %}
+{% block postbody %}
+	<script type="text/javascript">
+		pages.login();
+	</script>
+{% endblock %}

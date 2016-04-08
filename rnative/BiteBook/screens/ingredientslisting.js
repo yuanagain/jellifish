@@ -3,19 +3,10 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
-
-var RecipeListingRow = require('./recipelistingrow')
-
 var _cvals = require('../modules/customvalues')
-
-var mainfont = 'avenir'
-var skorange = '#F5A623'
-var skblue = '#4A90E2'
-var skgreen = '#46D5B5'
+var _cstyles = require('../modules/customstyles')
 
 var Header = require('../parts/header')
-
-var IngredientsListing = require('../screens/ingredientslisting')
 
 var DataFetcher = require('../modules/datafetcher')
 
@@ -31,35 +22,46 @@ var {
 
 var RecipeDetail = require('./recipedetail')
 
-var RecipeListing = React.createClass({
+var IngredientsListing = React.createClass({
   getInitialState: function() {
 
     return {
-      recipes: [],
-      selection: []
+      
     };
   },
+
+  getDefaultProps: function() {
+    return (
+      {
+        ingredients: [[1, 'oz', 'milk'], [400, 'grams', 'whole wheat flour']],
+        runApp: function() {
+          console.log("running app")
+        },
+      })
+  },
+
   render: function() {
+    console.log(this.props.ingredients)
     var {
-      name,
+      ingredients,
       runApp,
       ...props
     } = this.props;
 
-    this.state.recipes=[] // this.state.recipes
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var dataSource = ds.cloneWithRows(this.state.recipes)
+    var dataSource = ds.cloneWithRows(this.props.ingredients)
 
     return (
     <View style={styles.container}>
       <View style={styles.body_container}>
-        <Header title={"Recipes"}
+        <Header title={"Ingredients"}
+                mode={'nav'}
                 navigator={this.props.navigator} />
 
 
         <ListView
           dataSource={dataSource}
-          renderRow={this.renderListingRow}
+          renderRow={this.renderRow}
           style={styles.listView}
         />
 
@@ -70,29 +72,18 @@ var RecipeListing = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={{color: 'grey'}}
-          onPress={()=>this.listIngredients()}
+          onPress={()=>this.runApp()}
           >
-          {'Cook Selected'}
+          {"I'm ready. Let's Cook!"}
         </Button>
       </View>
     </View>
     );
   },
 
-  listIngredients: function() {
-    console.log("listing ingredients")
-    this.props.navigator.push({
-      id: 'ingredientslisting',
-      component: IngredientsListing,
-      passProps: {
-        runApp: this.runApp,
-        // ingredients:
-      }
-    })
-  },
-
   runApp: function() {
-    this.props.runApp(this.state.selection)
+    this.props.runApp()
+    this.goBack()
   },
 
   setData: function(data) {
@@ -107,15 +98,28 @@ var RecipeListing = React.createClass({
     this.props.runApp('arg')
   },
 
-  renderListingRow(rowData) {
+  renderRow(rowData) {
     return (
-        <RecipeListingRow
-        onSelect={this.onSelect}
-        onDetail={this.onDetail}
-        name={rowData}
-        description_text={rowData}
-        navigator={this.props.navigator}
-        />
+        <View style={styles.rowStyle}>
+          <View style={styles.rowPart}>
+            <Text style={_cstyles.standard_text_black}>
+              {rowData[0]}
+            </Text>
+          </View>
+
+          <View style={styles.rowPart2}>
+            <Text style={_cstyles.standard_text_black}>
+              {rowData[1]}
+            </Text>
+          </View>
+          
+          <View style={styles.rowPart3}>
+            <Text style={_cstyles.standard_text_black}>
+              {rowData[2]}
+            </Text>
+          </View>
+
+        </View>
     )
   },
 
@@ -132,46 +136,12 @@ var RecipeListing = React.createClass({
     }
   },
 
-  onDetail: function(name) {
-    this.props.navigator.push({
-      id: "RecipeDetail",
-      component: RecipeDetail,
-      passProps: {
-        name: name,
-        imageLink: 'http://facebook.github.io/react/img/logo_og.png',
-        descr: name,
-        goBack: this.goBack,
-      }
-    })
-  },
-
   goBack: function() {
     this.props.navigator.pop()
   }
 });
 
 var styles = StyleSheet.create({
-  title_text: {
-    color: 'white',
-    fontSize: 30 * _cvals.dscale,
-    fontFamily: _cvals.mainfont,
-    paddingTop: 30 * _cvals.dscale,
-    paddingBottom: 5,
-  },
-  header_text: {
-    color: 'white',
-    fontSize: 30 * _cvals.dscale,
-    fontFamily: mainfont,
-    fontWeight: 'bold',
-    paddingHorizontal: 10,
-    marginVertical: 5 * _cvals.dscale,
-  },
-  value_text: {
-    color: 'black',
-    fontSize: 20,
-    fontFamily: mainfont,
-    padding: 10,
-  },
   container: {
     flexDirection: 'column',
     flex: 1,
@@ -203,7 +173,7 @@ var styles = StyleSheet.create({
     opacity: 1.0,
   },
   divider_line: {
-    backgroundColor: skgreen,
+    backgroundColor: _cvals.skgreen,
     height: 1.2,
     opacity: 0.3,
     width: windowSize.width
@@ -237,6 +207,40 @@ var styles = StyleSheet.create({
       shadowOpacity: 0.5,
       shadowOffset: {width: 0, height: 3}
     },
+
+    rowStyle: {
+      marginHorizontal: 10 * _cvals.dscale,
+      marginVertical: 5 * _cvals.dscale,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      width: windowSize.width,
+    },
+
+    rowPart: {
+      marginHorizontal: 5 * _cvals.dscale,
+      width: 20 * _cvals.dscale,
+      flexDirection: 'row',
+      justifyContent: 'center',
+
+    },
+
+    rowPart2: {
+      marginHorizontal: 5 * _cvals.dscale,
+      width: 80 * _cvals.dscale,
+      flexDirection: 'row',
+      justifyContent: 'center',
+
+    },
+
+    rowPart3: {
+      marginHorizontal: 5 * _cvals.dscale,
+      marginLeft: 10 * _cvals.dscale,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+
+    }
+
 })
 
-module.exports = RecipeListing;
+module.exports = IngredientsListing;
