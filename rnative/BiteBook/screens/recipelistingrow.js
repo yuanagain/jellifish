@@ -4,6 +4,7 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var _cvals = require('../modules/customvalues')
+var ImageFetcher = require('../modules/imagefetcher')
 
 
 var {
@@ -32,7 +33,8 @@ var RecipeListingRow = React.createClass({
       {
         status: 0,
         selected: false,
-        selectedStyle: {}
+        selectedStyle: {},
+        image: {uri: 'http://facebook.github.io/react/img/logo_og.png'}
       }
     );
   },
@@ -53,7 +55,7 @@ var RecipeListingRow = React.createClass({
           <View style={[styles.thumbnail_container, this.state.selectedStyle]}>
             <TouchableHighlight onPress={() => this.onSelect()}>
               <Image
-                source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
+                source={this.state.image}
                 style={styles.thumbnail}
               />
             </TouchableHighlight>
@@ -76,6 +78,26 @@ var RecipeListingRow = React.createClass({
         </View>
       </View>
     );
+  },
+
+  setData: function(data) {
+    console.log("THIS IS OUR URI")
+    console.log(data)
+    this.setState({image : {uri : data} })
+
+  },
+
+  componentDidMount: function() {
+    ImageFetcher.GetImage('images/' + this.props.data.name, 
+                            (data)=>this.setData(data))
+  },
+
+  setData: function(data) {
+    this.setState({image : {uri : data} })
+  },
+
+  componentDidMount: function() {
+    // ImageFetcher.getImage((data)=>this.setData(data))
   },
   
   onSelect: function() {

@@ -3,6 +3,7 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
+var ImageFetcher = require('../modules/imagefetcher')
 
 var _cvals = require('../modules/customvalues')
 var mainfont = _cvals.mainfont
@@ -23,7 +24,8 @@ var MatchPage = React.createClass({
   getInitialState: function() {
     return (
       {
-        status: 0
+        status: 0, 
+        image: {uri: this.props.data.imageLink}
       }
     );
   },
@@ -46,9 +48,13 @@ var MatchPage = React.createClass({
             contentContainerStyle={[styles.scroll_content_container]}
             >
             <Image
-              source={{uri: this.props.data.imageLink}}
+              source={this.state.image}
               style={styles.pic}
             />
+            <Text style={styles.name_text}
+                  numberOfLines={3} >
+              {this.props.data.name}
+            </Text>
             <Text style={styles.value_text}>
               {this.props.data.descr}
             </Text>
@@ -58,6 +64,17 @@ var MatchPage = React.createClass({
     </View>
     );
   },
+
+  setData: function(data) {
+    this.setState({image : {uri : data} })
+    console.log(data)
+  },
+
+  componentDidMount: function() {
+    ImageFetcher.GetImage('images/' + this.props.data.name, 
+                            (data)=>this.setData(data))
+  },
+
 });
 
 var styles = StyleSheet.create({
@@ -83,6 +100,13 @@ var styles = StyleSheet.create({
   value_text: {
     color: 'black',
     fontSize: 20,
+    fontFamily: mainfont,
+    padding: 10,
+  },
+  name_text: {
+    color: 'black',
+    fontSize: 30,
+    fontFamily: 'bold',
     fontFamily: mainfont,
     padding: 10,
   },
