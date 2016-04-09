@@ -84,8 +84,8 @@ var IngredientsListing = React.createClass({
   },
 
   setData: function(data) {
-    var ingredients = this.state.ingredients.concat(_ctools.listify(data))
-    this.setState({ingredients : ingredients})
+    this.state.ingredients = this.state.ingredients.concat(_ctools.listify(data))
+    this.setState({dummy : 1})
   },
 
   componentDidMount: function() {
@@ -94,8 +94,8 @@ var IngredientsListing = React.createClass({
       FBaseFetcher.GetIngredients('ingredients/' + this.props.selection[i], 
                                      (data)=>this.setData(data))
     }
-    FBaseFetcher.GetIngredients('ingredients/'
-               + 'chicken tacos', (data)=>this.setData(data))
+    // FBaseFetcher.GetIngredients('ingredients/'
+    //            + 'chicken tacos', (data)=>this.setData(data))
     
   },
 

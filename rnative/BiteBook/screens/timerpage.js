@@ -15,6 +15,8 @@ import * as _ctools from '../libs/customtools.js'
 var DummyTimer = require('../parts/dummytimer')
 var DataFetcher = require('../modules/datafetcher')
 
+var framerate = 1000
+
 var moment = require('moment')
 
 var {
@@ -68,6 +70,7 @@ var TimerPage = React.createClass({
         sequence: [],
         selection: this.props.selection,
         paused: false,
+        frames: 0,
       }
     );
   },
@@ -77,7 +80,7 @@ var TimerPage = React.createClass({
       selection: [],
       recipeName: "COOK",
       timerSize: windowSize.width * 5 / 7,
-      fps: 10, // fps = 1000 / interval
+      fps: 6, // fps = 1000 / interval
     })
   },
 
@@ -195,18 +198,18 @@ var TimerPage = React.createClass({
           setInterval(() => {
           if (this.state.paused != true) {
             this.state.progress += 1 / (this.getCurrentTask_time() * this.props.fps);
-          }
-          if (this.state.progress >= 1) {
-            // TODO Indicate to parent that we're done
-            this.nextTask()
-            this.state.progress = 0
+            if (this.state.progress >= 1) {
+              // TODO Indicate to parent that we're done
+              this.nextTask()
+              this.state.progress = 0
+            }
           }
           this.fetchData()
 
           this.setState({ progress: this.state.progress })
 
-        }, 1000 / this.props.fps);
-      }, 1000 / this.props.fps);
+        }, framerate / this.props.fps);
+      }, framerate / this.props.fps);
     }
   },
 

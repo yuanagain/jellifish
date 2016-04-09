@@ -95,10 +95,6 @@ var RecipeListingRow = React.createClass({
   setData: function(data) {
     this.setState({image : {uri : data} })
   },
-
-  componentDidMount: function() {
-    // ImageFetcher.getImage((data)=>this.setData(data))
-  },
   
   onSelect: function() {
     if (this.state.selected) {

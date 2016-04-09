@@ -3,10 +3,14 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
-var ImageFetcher = require('../modules/imagefetcher')
 
+var _cstyles = require('../modules/customstyles')
 var _cvals = require('../modules/customvalues')
+import * as _ctools from '../libs/customtools'
 var mainfont = _cvals.mainfont
+
+var FBaseFetcher = require('../modules/firebasefetcher')
+var ImageFetcher = require('../modules/imagefetcher')
 
 var {
   AppRegistry,
@@ -25,7 +29,8 @@ var MatchPage = React.createClass({
     return (
       {
         status: 0, 
-        image: {uri: this.props.data.imageLink}
+        image: {uri: this.props.data.imageLink},
+        ingredients: []
       }
     );
   },
@@ -37,43 +42,88 @@ var MatchPage = React.createClass({
     } = this.props;
 
     return (
+  
     <View style={styles.container}>
       <View style={styles.top_container}>
         <Header title={this.props.data.name}
                 mode={'nav'}
                 navigator={this.props.navigator} />
-        <View style={styles.body_container}>
-          <ScrollView
-            style={[styles.scroll_container, ]}
-            contentContainerStyle={[styles.scroll_content_container]}
-            >
-            <Image
-              source={this.state.image}
-              style={styles.pic}
-            />
-            <Text style={styles.name_text}
-                  numberOfLines={3} >
-              {this.props.data.name}
-            </Text>
-            <Text style={styles.value_text}>
-              {this.props.data.descr}
-            </Text>
-          </ScrollView>
-        </View>
+        <ScrollView>
+          <View style={styles.body_container}>
+            <ScrollView
+              style={[styles.scroll_container, ]}
+              contentContainerStyle={[styles.scroll_content_container]}
+              >
+              <Image
+                source={this.state.image}
+                style={styles.pic}
+              />
+              <Text style={[styles.name_text, {color: _cvals.skkellygreen}]}
+                    numberOfLines={3} >
+                {this.props.data.name}
+              </Text>
+              <Text style={styles.value_text}>
+                {this.props.data.descr}
+              </Text>
+              <Text style={[styles.name_text, {color: _cvals.skkellygreen}]}>
+                {"Ingredients"}
+              </Text>
+              <View>
+                {this.state.ingredients.map(this.renderIngredientRow)}
+              </View>
+            </ScrollView>
+          </View>
+        </ScrollView>
       </View>
     </View>
+    
     );
+  },
+
+  renderIngredientRow(rowData) {
+    return (
+        <View style={styles.rowStyle} key={_ctools.randomKey()}>
+          <View style={styles.rowPart}>
+            <Text style={_cstyles.detail_text_black}>
+              {rowData[1]}
+            </Text>
+          </View>
+
+          <View style={styles.rowPart2}>
+            <Text style={_cstyles.detail_text_black}>
+              {rowData[2]}
+            </Text>
+          </View>
+          
+          <View style={styles.rowPart3} >
+            <Text style={_cstyles.detail_text_black}
+                  numberOfLines={2} >
+              {rowData[0]}
+            </Text>
+          </View>
+
+        </View>
+    )
   },
 
   setData: function(data) {
     this.setState({image : {uri : data} })
-    console.log(data)
+  },
+
+
+  setIngredients: function(data) {
+    var ingredients = _ctools.listify(data)
+    this.setState({ingredients : ingredients})
   },
 
   componentDidMount: function() {
     ImageFetcher.GetImage('images/' + this.props.data.name, 
                             (data)=>this.setData(data))
+
+    FBaseFetcher.GetIngredients('ingredients/' + this.props.data.name, 
+                                     (data)=>this.setIngredients(data))
   },
+
 
 });
 
@@ -193,6 +243,39 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     // justifyContent: 'center',
   },
+  rowStyle: {
+    marginHorizontal: 10 * _cvals.dscale,
+    marginVertical: 5 * _cvals.dscale,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: windowSize.width,
+  },
+
+  rowPart: {
+    marginHorizontal: 5 * _cvals.dscale,
+    width: windowSize.width * .7 / 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+
+  },
+
+  rowPart2: {
+    marginHorizontal: 5 * _cvals.dscale,
+    width: windowSize.width * 1 / 8,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+
+  },
+
+  rowPart3: {
+    marginHorizontal: 5 * _cvals.dscale,
+    width: windowSize.width * 5 / 8,
+    marginLeft: 10 * _cvals.dscale,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+
+  }
 
 })
 
