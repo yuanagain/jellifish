@@ -34,9 +34,11 @@ var LoginPage = React.createClass({
     <View style={styles.container}>
 
       <View style={styles.header_container}>
-        <Text style={styles.title_text}>
-          ChefNotes
-        </Text>
+        <View style={styles.logowrap}>
+          <Image source={require('../assets/logo.png')}
+                 style={styles.logo} />
+        </View>
+
       </View>
 
       <View style={styles.inputs_container}>
@@ -89,6 +91,20 @@ var LoginPage = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  logo: {
+    width: 230,
+    height: 230,
+    marginBottom: 10,
+  },  
+  logowrap: {
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 50,
+  },
   title_text: {
     color: 'white',
     fontSize: 50,

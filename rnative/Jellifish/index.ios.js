@@ -27,7 +27,7 @@ class Jellifish extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'home',
+      selectedTab: 'loginpage',
       selection: [],
       updates_inherited: false,
       ran: false,
@@ -105,9 +105,6 @@ class Jellifish extends Component {
   }
 
   runApp(selection) {
-    console.log("selection is")
-    console.log(selection)
-    console.log("========")
 
     this.setState({selection: selection})
     this.setState({selectedTab: 'timer'})
