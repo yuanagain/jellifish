@@ -24,8 +24,11 @@ class BiteBook extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'home'
+      selectedTab: 'home',
+      selection: [],
+      updates_inherited: false,
     };
+    this.runApp.bind(this);
   }
 
 
@@ -52,7 +55,7 @@ class BiteBook extends Component {
               });
               }
             }>
-            <RecipeListingRoot runApp={(arg) => this.runApp(arg)} />
+            <RecipeListingRoot runApp={(selection)=>this.runApp(selection)} />
           </TabNavigator.Item>
           <TabNavigator.Item
             title="Timer"
@@ -67,7 +70,7 @@ class BiteBook extends Component {
             }
             }>
             <TimerPage
-              fetchData={(arg) => this.fetchData()}
+              fetchData={() => this.fetchData()}
               recipeName={"Cook"}
               selection={this.state.selection}
             />
@@ -97,6 +100,10 @@ class BiteBook extends Component {
   }
 
   runApp(selection) {
+    console.log("selection is")
+    console.log(selection)
+    console.log("========")
+
     this.setState({selection: selection})
     this.setState({selectedTab: 'timer'})
     this.setState({updates_inherited: false})
@@ -107,7 +114,7 @@ class BiteBook extends Component {
       return false
     }
     else {
-      console.log("updates not yet inherited")
+      // console.log("updates not yet inherited")
       this.setState({updates_inherited: true})
       return this.state.selection
     }

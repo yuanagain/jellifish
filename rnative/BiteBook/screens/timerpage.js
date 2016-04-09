@@ -125,11 +125,14 @@ var TimerPage = React.createClass({
               />
             </View>
 
-            <View style={styles.descr}>
-              <Text style={_cstyles.standard_text}>
-                {this.getCurrentTask().descr}
-              </Text>
-            </View>
+            <ScrollView style={{height: windowSize.width * 0.18,
+                                width: windowSize.width,
+                                paddingHorizontal: 10 * _cvals.dscale}}
+                        contentContainerstyle={styles.descr}>
+                <Text style={_cstyles.detail_text}>
+                  {this.getCurrentTask().descr}
+                </Text>
+            </ScrollView>
 
             <ScrollView
               style={[styles.scroll_container, ]}
@@ -262,9 +265,7 @@ var TimerPage = React.createClass({
       this.state.progress = 0
       this.state.paused = false
       this.state.index = 0
-      if (this.state.selection.length != 0) {
-        DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
-      }
+      DataFetcher.getOptimized(this.state.selection, (data)=>this.harvestData(data))
       return true
     }
   },
@@ -313,8 +314,6 @@ var TimerPage = React.createClass({
 
   harvestData: function(task_sequence) {
     this.setState({sequence: task_sequence.active})
-    console.log("AKSIASNDJNLAOISDS")
-    console.log(task_sequence)
     this.setState({loaded: true})
   },
 });
@@ -361,6 +360,10 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  descrContainer: {
+    height: windowSize.width * 0.18,
+    width: windowSize.width,
+  },
   timers_container: {
     marginTop: 10 * _cvals.dscale,
     width: windowSize.width,
@@ -391,7 +394,7 @@ var styles = StyleSheet.create({
   },
   timer_text: {
     color: 'white',
-    fontSize: 50 * _cvals.dscale,
+    fontSize: 40 * _cvals.dscale,
     textAlign: 'center'
   },
   big_timer_container: {

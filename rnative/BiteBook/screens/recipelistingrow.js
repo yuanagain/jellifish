@@ -38,7 +38,7 @@ var RecipeListingRow = React.createClass({
   },
   render: function() {
     var {
-      name,
+      data,
       description_text,
       onPressDetailFunction,
       onSelect,
@@ -61,11 +61,13 @@ var RecipeListingRow = React.createClass({
           <TouchableOpacity onPress={() => this.onDetail()}>
             <View style={styles.content_container}>
               <Text
-              style={styles.name_text}>
-                {this.props.name}
+              style={styles.name_text}
+              numberOfLines={1} >
+                {this.props.data.name}
               </Text>
-              <Text style={styles.description_text}>
-                {this.props.description_text}
+              <Text style={styles.description_text}
+                    numberOfLines={3} >
+                {this.props.data.descr}
               </Text>
             </View>
           </TouchableOpacity >
@@ -75,19 +77,20 @@ var RecipeListingRow = React.createClass({
       </View>
     );
   },
+  
   onSelect: function() {
     if (this.state.selected) {
-      this.props.onSelect(this.props.name)
+      this.props.onSelect(this.props.data.name)
       this.setState({selectedStyle: {}, selected: false})
     }
     else {
-      this.props.onSelect(this.props.name)
+      this.props.onSelect(this.props.data.name)
       this.setState({selectedStyle: styles.selectedStyle, selected: true})
     }
     return
   },
   onDetail: function() {
-    this.props.onDetail(this.props.name)
+    this.props.onDetail(this.props.data)
 
   }
 });

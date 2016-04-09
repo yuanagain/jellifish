@@ -1,4 +1,6 @@
-function fetchFBing(recipename, callback)
+var Firebase = require('firebase')
+
+function GetIngredients(recipename, callback)
 {
 	// Get a database reference to our posts
 	var ref = new Firebase("https://jellifish.firebaseio.com/");
@@ -25,3 +27,6 @@ function fetchFBing(recipename, callback)
 	  alert("The read failed: " + errorObject.code);
 	});
 }
+
+
+module.exports = {GetIngredients, }

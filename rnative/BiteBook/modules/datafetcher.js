@@ -25,7 +25,10 @@ var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'}
 function getRecipes(callback) {
 	fetch(BASE_URL + "/list/", {
 		headers: HEADERS
-		}).then((res) => res.json()).then(callback);
+		}).then((res) => res.json()).then(function(data) {
+			data.recipes = data.data;
+			callback(data);
+		});
 	}
 
 /*
@@ -42,7 +45,10 @@ function getOptimized(recipes, callback) {
 		body: JSON.stringify({
 			recipes: recipes
 			})
-		}).then((res) => res.json()).then(callback);
+		}).then((res) => res.json()).then(function(data) {
+			data.active = data.data;
+			callback(data);
+		});
 	}
 
 module.exports = {

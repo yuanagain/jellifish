@@ -63,6 +63,11 @@ var CustomStyles = StyleSheet.create({
     fontSize: 16 * _cvals.dscale,
     fontFamily: _cvals.mainfont,
   },
+  detail_text_black: {
+    color: 'black',
+    fontSize: 16 * _cvals.dscale,
+    fontFamily: _cvals.mainfont,
+  },
   light_text: {
     color: 'grey',
     fontSize: 12 * _cvals.dscale,

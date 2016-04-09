@@ -46,7 +46,7 @@ var RecipeListing = React.createClass({
       ...props
     } = this.props;
 
-    this.state.recipes=[] // this.state.recipes
+    //this.state.recipes=[] // this.state.recipes
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var dataSource = ds.cloneWithRows(this.state.recipes)
 
@@ -70,7 +70,7 @@ var RecipeListing = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={{color: 'grey'}}
-          onPress={()=>this.listIngredients()}
+          onPress={ () => this.listIngredients() }
           >
           {'Cook Selected'}
         </Button>
@@ -79,20 +79,21 @@ var RecipeListing = React.createClass({
     );
   },
 
+  runApp: function() {
+    this.props.runApp(this.state.selection)
+  },
+
+
   listIngredients: function() {
-    console.log("listing ingredients")
+
     this.props.navigator.push({
       id: 'ingredientslisting',
       component: IngredientsListing,
       passProps: {
-        runApp: this.runApp,
-        // ingredients:
+        runApp: this.props.runApp,
+        selection: this.state.selection
       }
     })
-  },
-
-  runApp: function() {
-    this.props.runApp(this.state.selection)
   },
 
   setData: function(data) {
@@ -103,16 +104,12 @@ var RecipeListing = React.createClass({
     DataFetcher.getRecipes((data)=>this.setData(data))
   },
 
-  runApp: function() {
-    this.props.runApp('arg')
-  },
-
   renderListingRow(rowData) {
     return (
         <RecipeListingRow
         onSelect={this.onSelect}
         onDetail={this.onDetail}
-        name={rowData}
+        data={rowData}
         description_text={rowData}
         navigator={this.props.navigator}
         />
@@ -132,14 +129,12 @@ var RecipeListing = React.createClass({
     }
   },
 
-  onDetail: function(name) {
+  onDetail: function(data) {
     this.props.navigator.push({
       id: "RecipeDetail",
       component: RecipeDetail,
       passProps: {
-        name: name,
-        imageLink: 'http://facebook.github.io/react/img/logo_og.png',
-        descr: name,
+        data: data,
         goBack: this.goBack,
       }
     })

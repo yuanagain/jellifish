@@ -5,10 +5,12 @@ var windowSize = Dimensions.get('window');
 var Button = require('react-native-button');
 var _cvals = require('../modules/customvalues')
 var _cstyles = require('../modules/customstyles')
+import * as _ctools from '../libs/customtools'
 
 var Header = require('../parts/header')
 
 var DataFetcher = require('../modules/datafetcher')
+var FBaseFetcher = require('../modules/firebasefetcher')
 
 var {
   AppRegistry,
@@ -26,22 +28,19 @@ var IngredientsListing = React.createClass({
   getInitialState: function() {
 
     return {
-      
+
+      ingredients: [['Loading', 'Loading', 0]],
     };
   },
 
   getDefaultProps: function() {
     return (
       {
-        ingredients: [[1, 'oz', 'milk'], [400, 'grams', 'whole wheat flour']],
-        runApp: function() {
-          console.log("running app")
-        },
+        
       })
   },
 
   render: function() {
-    console.log(this.props.ingredients)
     var {
       ingredients,
       runApp,
@@ -49,7 +48,7 @@ var IngredientsListing = React.createClass({
     } = this.props;
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var dataSource = ds.cloneWithRows(this.props.ingredients)
+    var dataSource = ds.cloneWithRows(_ctools.listify(this.state.ingredients))
 
     return (
     <View style={styles.container}>
@@ -72,7 +71,7 @@ var IngredientsListing = React.createClass({
         <Button
           style={styles.button}
           styleDisabled={{color: 'grey'}}
-          onPress={()=>this.runApp()}
+          onPress={ () => this.props.runApp(this.props.selection) }
           >
           {"I'm ready. Let's Cook!"}
         </Button>
@@ -82,40 +81,37 @@ var IngredientsListing = React.createClass({
   },
 
   runApp: function() {
-    this.props.runApp()
-    this.goBack()
   },
 
   setData: function(data) {
-    this.setState({recipes : data.recipes})
+    this.setState({ingredients : data})
+    console.log(data)
   },
 
   componentDidMount: function() {
-    DataFetcher.getRecipes((data)=>this.setData(data))
-  },
-
-  runApp: function() {
-    this.props.runApp('arg')
+    FBaseFetcher.GetIngredients('ingredients/'
+               + 'chicken tacos', (data)=>this.setData(data))
   },
 
   renderRow(rowData) {
     return (
         <View style={styles.rowStyle}>
           <View style={styles.rowPart}>
-            <Text style={_cstyles.standard_text_black}>
-              {rowData[0]}
+            <Text style={_cstyles.detail_text_black}>
+              {rowData[1]}
             </Text>
           </View>
 
           <View style={styles.rowPart2}>
-            <Text style={_cstyles.standard_text_black}>
-              {rowData[1]}
+            <Text style={_cstyles.detail_text_black}>
+              {rowData[2]}
             </Text>
           </View>
           
-          <View style={styles.rowPart3}>
-            <Text style={_cstyles.standard_text_black}>
-              {rowData[2]}
+          <View style={styles.rowPart3} >
+            <Text style={_cstyles.detail_text_black}
+                  numberOfLines={2} >
+              {rowData[0]}
             </Text>
           </View>
 
@@ -219,7 +215,7 @@ var styles = StyleSheet.create({
 
     rowPart: {
       marginHorizontal: 5 * _cvals.dscale,
-      width: 20 * _cvals.dscale,
+      width: windowSize.width * .7 / 8,
       flexDirection: 'row',
       justifyContent: 'center',
 
@@ -227,16 +223,17 @@ var styles = StyleSheet.create({
 
     rowPart2: {
       marginHorizontal: 5 * _cvals.dscale,
-      width: 80 * _cvals.dscale,
+      width: windowSize.width * 1 / 8,
       flexDirection: 'row',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
 
     },
 
     rowPart3: {
       marginHorizontal: 5 * _cvals.dscale,
+      width: windowSize.width * 5 / 8,
       marginLeft: 10 * _cvals.dscale,
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'flex-start',
 
     }

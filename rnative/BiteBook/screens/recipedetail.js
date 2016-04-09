@@ -29,9 +29,7 @@ var MatchPage = React.createClass({
   },
   render: function() {
     var {
-      name,
-      imageLink,
-      descr,
+      data,
       goBack,
       ...props
     } = this.props;
@@ -39,7 +37,7 @@ var MatchPage = React.createClass({
     return (
     <View style={styles.container}>
       <View style={styles.top_container}>
-        <Header title={this.props.name}
+        <Header title={this.props.data.name}
                 mode={'nav'}
                 navigator={this.props.navigator} />
         <View style={styles.body_container}>
@@ -48,11 +46,11 @@ var MatchPage = React.createClass({
             contentContainerStyle={[styles.scroll_content_container]}
             >
             <Image
-              source={{uri: this.props.imageLink}}
+              source={{uri: this.props.data.imageLink}}
               style={styles.pic}
             />
             <Text style={styles.value_text}>
-              {this.props.descr}
+              {this.props.data.descr}
             </Text>
           </ScrollView>
         </View>
