@@ -29,7 +29,7 @@ var IngredientsListing = React.createClass({
 
     return {
 
-      ingredients: [['Loading', 'Loading', 0]],
+      ingredients: [],
     };
   },
 
@@ -48,7 +48,7 @@ var IngredientsListing = React.createClass({
     } = this.props;
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var dataSource = ds.cloneWithRows(_ctools.listify(this.state.ingredients))
+    var dataSource = ds.cloneWithRows(this.state.ingredients)
 
     return (
     <View style={styles.container}>
@@ -84,13 +84,19 @@ var IngredientsListing = React.createClass({
   },
 
   setData: function(data) {
-    this.setState({ingredients : data})
-    console.log(data)
+    var ingredients = this.state.ingredients.concat(_ctools.listify(data))
+    this.setState({ingredients : ingredients})
   },
 
   componentDidMount: function() {
+    // console.log(this.props.selection)
+    for (var i = 0; i < this.props.selection.length; i++) {
+      FBaseFetcher.GetIngredients('ingredients/' + this.props.selection[i], 
+                                     (data)=>this.setData(data))
+    }
     FBaseFetcher.GetIngredients('ingredients/'
                + 'chicken tacos', (data)=>this.setData(data))
+    
   },
 
   renderRow(rowData) {

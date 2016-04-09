@@ -127,7 +127,7 @@ var styles = StyleSheet.create({
   content_container: {
     margin: 5,
     height: rowheight,
-    width: windowSize.width * 3 / 5
+    width: windowSize.width * .7
   },
   thumbnail_container: {
     height: rowheight

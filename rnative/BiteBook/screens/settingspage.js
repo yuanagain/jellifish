@@ -20,7 +20,7 @@ var {
   Image
 } = React;
 
-var LoginPage = React.createClass({
+var SettingsPage = React.createClass({
   getInitialState: function() {
     return (
       {
@@ -56,13 +56,7 @@ var LoginPage = React.createClass({
       </View>
 
       <View style={styles.buttons_container}>
-        <Button
-          style={styles.save_button}
-          styleDisabled={{color: 'grey'}}
-          onPress={this.props.loginFunction}
-          >
-          Save Changes
-        </Button>
+
       </View>
 
 
@@ -164,4 +158,4 @@ var styles = StyleSheet.create({
   }
 })
 
-module.exports = LoginPage;
+module.exports = SettingsPage;
