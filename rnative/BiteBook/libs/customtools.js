@@ -76,6 +76,16 @@ var randomKey = function() {
   return Math.random(1, _const.bignum)
 }
 
+
+// turns dict of dicts into list of dicts
+var listify = function(data) {
+  var out = []
+  for (var key in data) {
+    out.push([key, data[key].quantity, data[key].units])
+  }
+  return out
+}
+
 module.exports = {indexOf, supplementIndex, contains, inRange,
                   traceIndices, isValidScore, randomKey,
-                  selectionNeedles};
+                  selectionNeedles, listify};
