@@ -28,7 +28,7 @@ var IngredientsListing = React.createClass({
   getInitialState: function() {
 
     return {
-
+      
       ingredients: [],
     };
   },

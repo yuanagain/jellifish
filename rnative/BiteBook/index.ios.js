@@ -20,6 +20,9 @@ var SettingsRoot = require('./screens/settingsroot')
 var TimerPage = require('./screens/timerpage')
 var RecipeListingRoot = require('./screens/recipelistingroot')
 
+
+var TimerPageSwitch = require('./screens/timerpageswitch')
+
 class BiteBook extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +30,7 @@ class BiteBook extends Component {
       selectedTab: 'home',
       selection: [],
       updates_inherited: false,
+      ran: false,
     };
     this.runApp.bind(this);
   }
@@ -69,10 +73,11 @@ class BiteBook extends Component {
               });
             }
             }>
-            <TimerPage
+            <TimerPageSwitch
               fetchData={() => this.fetchData()}
               recipeName={"Cook"}
               selection={this.state.selection}
+              ran={this.state.ran}
             />
           </TabNavigator.Item>
           <TabNavigator.Item
@@ -107,6 +112,7 @@ class BiteBook extends Component {
     this.setState({selection: selection})
     this.setState({selectedTab: 'timer'})
     this.setState({updates_inherited: false})
+    this.setState({ran: true})
   }
 
   fetchData() {

@@ -171,7 +171,7 @@ var TimerPage = React.createClass({
       else return (
         <View style={styles.container}>
           <View>
-            <Header title={"Loading"}
+            <Header title={"Nothing Loaded"}
                     navigator={this.props.navigator} />
 
           </View>
