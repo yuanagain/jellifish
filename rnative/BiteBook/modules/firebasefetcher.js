@@ -5,23 +5,41 @@ function fetchFBing(recipename, callback)
 	// Attach an asynchronous callback to read the data at our posts reference
 	ref.child(recipename).on("value", function(snapshot)
 	{
-		/*
-		  var recipe = snapshot.val();
-		  for (var ing in recipe) 
-		  	{
-		    	if (recipe.hasOwnProperty(ing))
-		    	{
-		    		console.log(ing);
-		    	}
-			}
-		*/
-	    //console.log(snapshot.val());
-	    callback(snapshot.val());
-		// return snapshot.val();
+		callback(snapshot.val());
 	},
 	function (errorObject) 
 	{
-	  //console.log("The read failed: " + errorObject.code);
 	  alert("The read failed: " + errorObject.code);
 	});
+}
+
+/*recipes_ings is a list of javascript objects of ingredients for
+separate recipes*/
+function combineLikeTerms(recipes_ings)
+{
+  var ing_list = new Object();
+  var exists_list = new Object();
+  for (var i = 0; i < recipes_ings.length; i++)
+  {
+    for (var ing in recipes_ings[i])
+    {
+      if (! exists_list[ing])
+      {
+      	//console.log("new ingredient added");
+        exists_list[ing] = true;
+        ing_list[ing] = {"ing" : ing,
+        				 "qty" : recipes_ings[i][ing]["quantity"],
+        				 "units" : recipes_ings[i][ing]["units"]};
+      }
+      else
+      {
+      	//console.log("copy found");
+      	ing_list[ing]["qty"] += recipes_ings[i][ing]["quantity"];
+      }      
+    }
+  }
+  /*ing_list is a javascript object corresponding to the 
+  ingredients necessary to complete all of these recipes,
+  with quantities added together*/
+  return ing_list
 }
