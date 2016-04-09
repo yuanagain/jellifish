@@ -7,15 +7,23 @@
 	<body>
 		<script src='firebasefetcher.js'></script>
 		<script>
-			var recipename = "ingredients/roasted root vegetables with couscous";
-			var x = {};
+			var recipename1 = "ingredients/roasted root vegetables with couscous";
+			var recipename2 = "ingredients/chicken tacos";
+			var recipes = "ingredients"
 			function fetchFBingCallback(snapshot)
 			{
-				x = snapshot;
+				objects = [];
+				for (var i in snapshot)
+				{
+					objects.push(snapshot[i]);
+				}
+				var ing_list = combineLikeTerms(objects);
+				for (var i in ing_list)
+				{
+					console.log(ing_list[i]);
+				}
 			}
-			fetchFBing(recipename, fetchFBingCallback);
-			//alert(ings);
-			//console.log(x[""]);
+			fetchFBing(recipes, fetchFBingCallback);
 		</script>
 	</body>
 </html>
