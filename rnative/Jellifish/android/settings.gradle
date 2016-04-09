@@ -1,0 +1,3 @@
+rootProject.name = 'Jellifish'
+
+include ':app'
