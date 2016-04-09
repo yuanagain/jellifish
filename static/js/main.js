@@ -13,7 +13,6 @@ var GlobalHeader = require("./react/GlobalHeader.jsx"),
 	SelectionPage = require("./react/SelectionPage.jsx"),
 	IngredientsPage = require("./react/IngredientsPage.jsx"),
 	TimersPage = require("./react/TimersPage.jsx"),
-	NewRecipePage = require("./react/NewRecipePage.jsx"),
 	RecipesPage = require("./react/RecipesPage.jsx"),
 	EditRecipePage = require("./react/EditRecipePage.jsx"),
 	LoginPage = require("./react/LoginPage.jsx");
@@ -90,7 +89,7 @@ var page = {
 	new_recipe: function() {
 		main();
 		ReactDOM.render(
-			<NewRecipePage />,
+			<EditRecipePage button="Save" header="New Recipe" />,
 			utils.getElem("#new-recipe")
 			);
 		},
@@ -119,7 +118,8 @@ var page = {
 	edit_recipe: function(recipe) {
 		main();
 		ReactDOM.render(
-			<EditRecipePage recipe={recipe} />,
+			<EditRecipePage name={recipe.name} descr={recipe.descr}
+				tasks={recipe.tasks} button="Save" header={recipe.name} />,
 			utils.getElem("#edit-recipe"));
 		},
 

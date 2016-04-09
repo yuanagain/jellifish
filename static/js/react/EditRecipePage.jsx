@@ -3,6 +3,10 @@ An EditRecipePage provides the interface for editing recipes in
 the database.
 
 Required Props
+	String button - label for button
+	String header - header for interface
+
+Optional Props
 	Object recipe - contains an object representation of a recipe
 		String name - name of the recipe
 		String descr - description of the recipe
@@ -33,7 +37,7 @@ class EditRecipePage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			tasks: props.recipe.tasks, // all tasks
+			tasks: props.tasks || new Array(), // all tasks
 			updated: false, // whether or not to trigger a new update
 			};
 		/* The updated state is used to force re-rendering when the tasks
@@ -51,21 +55,21 @@ class EditRecipePage extends React.Component {
 		return (
 			<Content><Grid fluid className="center-horizontal">
 				<SectionHeaderButton
-					header={this.props.recipe.name}
-					button="Update"
+					header={this.props.header}
+					button={this.props.button}
 					type="submit"
 					data-parse-id="button-update-recipe" />
 
-				<input type="hidden" name="oldname" value={this.props.recipe.name}></input>
+				<input type="hidden" name="oldname" value={this.props.name}></input>
 				<input type="hidden" name="tasks" value={JSON.stringify(this.state.tasks)} />
 
 				<InputRow label="Name" name="name"
 					rowClass="padding-vertical" inputClass="width-full"
-					value={this.props.recipe.name} />
+					value={this.props.name} />
 				<FullRow><span>Description</span></FullRow>
 				<InputRow label="" name="description" labelSize={0}
 					rowClass="padding-vertical" inputClass="width-full"
-					value = {this.props.recipe.descr} />
+					value = {this.props.descr} />
 
 				<hr />
 				<NewStep onAdd={this._addStep} />

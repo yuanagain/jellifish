@@ -5,6 +5,8 @@ Required Props
 	String name - name of the step
 	String description - description of the step
 	int time - amount of time (in seconds) the step takes
+	int min_wait - minimum wait time
+	int max_wait - maximum wait time
 	int number - step number
 
 Optional Props
@@ -16,7 +18,7 @@ Callback Parameters
 	onEdit
 		Object state - current values of step input
 	onDelete
-			
+		N/A
 */
 
 var React = require("react"),
@@ -41,7 +43,7 @@ class StepInput extends React.Component {
 			time: props.time,
 			min_wait: props.min_wait,
 			max_wait: props.max_wait,
-			editing: false
+			editable: false
 			};
 
 		this._data = {
@@ -64,22 +66,23 @@ class StepInput extends React.Component {
 					<Col md={2}><span>{this.state.number}.</span></Col>
 					<Col md={3}><span>Name</span></Col>
 					<Col md={7}>
-						<EditableSpan name="name" editable={this.state.editing} 
+						<EditableSpan name="name" editable={this.state.editable} 
 							type="text" defaultValue={this.state.name}
 							onChange={this._updateValueState} />
 					</Col>
 				</Row>
 				<FullRow className="padding-vertical"><span>Description</span></FullRow>
 				<FullRow className="padding-vertical">
-					<EditableSpan name="descr" editable={this.state.editing} 
+					<EditableSpan name="descr" editable={this.state.editable} 
 							type="text" defaultValue={this.state.descr}
-							onChange={this._updateValueState} />
+							onChange={this._updateValueState}
+							className="full-width" />
 				</FullRow>
 				<Row>
 					<Col md={4} xs={12}>
 						<Row className="center-horizontal"><span>Time</span></Row>
 						<Row className="center-horizontal padding-vertical">
-							<EditableSpan name="time" editable={this.state.editing}
+							<EditableSpan name="time" editable={this.state.editable}
 								type="number" defaultValue={this.state.time}
 								onChange={this._updateValueState} />
 						</Row>
@@ -87,7 +90,7 @@ class StepInput extends React.Component {
 					<Col md={4} xs={12}>
 						<Row className="center-horizontal"><span>Min. Wait</span></Row>
 						<Row className="center-horizontal padding-vertical">
-							<EditableSpan name="min_wait" editable={this.state.editing}
+							<EditableSpan name="min_wait" editable={this.state.editable}
 								type="number" defaultValue={this.state.min_wait}
 								onChange={this._updateValueState} />
 						</Row>
@@ -95,7 +98,7 @@ class StepInput extends React.Component {
 					<Col md={4} xs={12}>
 						<Row className="center-horizontal"><span>Max. Wait</span></Row>
 						<Row className="center-horizontal padding-vertical">
-							<EditableSpan name="max_wait" editable={this.state.editing}
+							<EditableSpan name="max_wait" editable={this.state.editable}
 								type="number" defaultValue={this.state.max_wait}
 								onChange={this._updateValueState} />
 						</Row>
@@ -106,7 +109,7 @@ class StepInput extends React.Component {
 					<Col md={6}>
 						<ReactBootstrap.Button bsStyle="primary" type="button"
 							onClick={this._edit}>
-							{this.state.editing ? "Save" : "Edit"}
+							{this.state.editable ? "Save" : "Edit"}
 						</ReactBootstrap.Button>
 					</Col>
 					<Col md={6}>
@@ -122,6 +125,9 @@ class StepInput extends React.Component {
 			);
 		}
 
+	/*
+	Called when the value is updated.
+	*/
 	_updateValueState(event) {
 		var update = {}, value = event.target.value;
 		if (event.target.type == "number") value = Number.parseInt(value);
@@ -132,12 +138,12 @@ class StepInput extends React.Component {
 		}
 
 	/*
-	* Called when the edit (or save) button is pressed.
+	Called when the edit (or save) button is pressed.
 	*/
 	_edit() {
-		if (this.state.editing && this.props.onEdit)
+		if (this.state.editable && this.props.onEdit)
 			this.props.onEdit(this._data);
-		this.setState({editing: ! this.state.editing});
+		this.setState({editable: ! this.state.editable});
 		}
 	}
 
