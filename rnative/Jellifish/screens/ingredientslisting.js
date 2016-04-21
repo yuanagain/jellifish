@@ -80,10 +80,12 @@ var IngredientsListing = React.createClass({
     );
   },
 
-  runApp: function() {
-  },
-
   setData: function(data) {
+    // list of ingredient dicts, merge ingredient set
+    this.state.ingredientset = this.state.ingredients.concat(data)
+
+    
+
     this.state.ingredients = this.state.ingredients.concat(_ctools.listify(data))
     this.setState({dummy : 1})
   },
