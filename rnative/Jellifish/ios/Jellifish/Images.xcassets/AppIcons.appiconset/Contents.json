@@ -3,31 +3,31 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Icon-Small.png",
+      "filename" : "app_store_logo1x.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Icon-Small@2x.png",
+      "filename" : "app_store_logo2x.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "Icon-Small@3x.png",
+      "filename" : "app_store_logo3x-1.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "Icon-40@2x.png",
+      "filename" : "app_store_logo2x-1.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "Icon-40@3x.png",
+      "filename" : "app_store_logo3x-2.png",
       "scale" : "3x"
     },
     {
@@ -39,19 +39,19 @@
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "Icon-Small@2x-1.png",
+      "filename" : "app_store_logo2x-3.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "Icon-60@2x.png",
+      "filename" : "app_store_logo2x-2.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "Icon-60@3x.png",
+      "filename" : "app_store_logo3x.png",
       "scale" : "3x"
     }
   ],
