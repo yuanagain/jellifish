@@ -53,9 +53,10 @@
     - nodejs
     - nodejs-legacy
     - npm
-- name: install bundler via gem
-  command: gem install bundler
-- name: install Ruby packages via bundler
-  command: bundler install
+    - libgmp-dev
+- name: install ruby packages via gem
+  gem: name={{ item.name }} version={{ item.v }} state=present
+  with_items:
+    - {name: 'sass', 'v': 3.4.19}
 - name: install npm packages
   npm: name=browserify global=yes state=present

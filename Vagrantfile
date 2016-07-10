@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
   # see https://docs.vagrantup.com for reference.
 
   ### BOX CONFIGURATION ###
+  config.vm.hostname = "app.jelli.fish"
 
   # The starting point for the Vagrant configuration (operating system)
   config.vm.box = "ubuntu/trusty64"
@@ -36,6 +37,7 @@ Vagrant.configure(2) do |config|
 
     # Ansible configuration file
     shell.args = [ENV.fetch("ENV", "development"), "/vagrant", "server/server.yml", "../config.yml"]
+    shell.keep_color = true
   end
 
   # this configuration does not yet work because of an issue with Vagrant
@@ -86,5 +88,19 @@ Vagrant.configure(2) do |config|
 
     override.ssh.username = "ubuntu"
     override.ssh.private_key_path = ENV.fetch("SSH_KEY", "~/.ssh/aws_key.pem")
+  end
+
+  # Digital Ocean (provider) configuration
+  config.vm.provider :digital_ocean do |digitalocean, override|
+    override.vm.box = "digital_ocean"
+    override.ssh.private_key_path = ENV.fetch("SSH_KEY", "~/.ssh/id_digitalocean")
+
+    # Droplet Configuration.
+    digitalocean.image = "ubuntu-14-04-x64"
+    digitalocean.size = "512mb"
+    digitalocean.region = "nyc3"
+
+    # API Token for DigitalOcean API.
+    digitalocean.token = ENV.fetch("DO_TOKEN", nil)
   end
 end
